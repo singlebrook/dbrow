@@ -2,7 +2,7 @@
 
 	<!--- Vars supporting logging - leon 9/27/09 --->
 	<!--- Set to 0 to disable logging. - leon 9/27/09 --->
-	<cfset dbrow3mapperLogging = 1>
+	<cfset dbrow3mapperLogging = 0>
 	<cfset lastTick = getTickCount()>
 	<!--- End vars supporting logging - leon 9/27/09 --->
 
