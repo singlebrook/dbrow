@@ -4,9 +4,13 @@
   public void function can_label() {
     obj = CreateObject('arthropod');
     
-    /* Assuming that a certain label has been set in
+    /* Assuming that a label for arthropod_name has been set in
     arthropod.cfc .. -Jared 4/28/12 */
     assertEquals('Creepy crawly', obj.getLabel('arthropod_name'));
+
+    /* Assuming that a label for arthropodID has NOT been set in
+    arthropod.cfc .. -Jared 4/28/12 */
+    assertEquals('arthropodID', obj.getLabel('arthropodID'));
   }
 
 </cfscript> <!--- </script> --->
