@@ -1,18 +1,19 @@
 <cfcomponent extends="abstract_testcase">
+<cfscript> // <script type="text/javascript">
 
-<cffunction name="can_instantiate" returntype="void" output="no" access="public">
-  <cfset obj = CreateObject('arthropod')>
-  <cfset assertFalse(obj.isInited)>
-  <cfset assertFalse(obj.isInitialized)>
-  <cfset assertFalse(obj.isStored)>
-</cffunction>
+  public void function can_instantiate() {
+    obj = CreateObject('arthropod');
+    assertFalse(obj.isInited);
+    assertFalse(obj.isInitialized);
+    assertFalse(obj.isStored);
+  }
 
+  public void function can_initialize() {
+    obj = CreateObject('arthropod').init();
+    assertTrue(obj.isInited);
+    assertTrue(obj.isInitialized);
+    assertFalse(obj.isStored);
+  }
 
-<cffunction name="can_initialize" returntype="void" output="no" access="public">
-  <cfset obj = CreateObject('arthropod').init()>
-  <cfset assertTrue(obj.isInited)>
-  <cfset assertTrue(obj.isInitialized)>
-  <cfset assertFalse(obj.isStored)>
-</cffunction>
-
+</cfscript> <!--- </script> --->
 </cfcomponent>
