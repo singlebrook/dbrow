@@ -177,10 +177,33 @@ Sample constructor code for use in child component:
 			</cfif>
 		</cfif>
 
+		<!--- There are a dozen methods in dbrow3.cfc which are more
+		concerned with rendering a record (eg. in html) than they are
+		with core responsibilities like persistence.  In dbrow 3.2,
+		these methods will be delegated to a dbrow_renderer without
+		changing the behavior of dbrow or its interface (method
+		signatures).  In future versions of dbrow, these methods may be
+		deprecated, or the delegate (dbrow_renderer) could become a
+		decorator, or these methods could be removed from the dbrow api
+		entirely.  - Jared 4/28/12 --->
+		<cfset initializeRenderer()>
+
 		<cfset this.isInited = 1>
 
 		<cfreturn this>
 	</cffunction> <!--- init --->
+
+
+	<cfscript>
+
+	public void function initializeRenderer() {
+		if (NOT StructKeyExists(this, "renderer")) {
+			this.renderer = CreateObject('component', 'dbrow_renderer').init(this);
+		}
+	}
+
+	</cfscript>
+
 
 	<cffunction name="initializeObject" returnType="boolean" access="package"
 			hint="This initializes the object's properties and metadata. It is called by init(), but may
@@ -1263,11 +1286,8 @@ Sample constructor code for use in child component:
 
 	<cffunction name="getLabel" returntype="string" access="public" output="no">
 		<cfargument name="propertyname" type="string" required="yes">
-		<cfset var label = propertyname>
-		<cfif StructKeyExists(this.stLabel,propertyname)>
-			<cfset label = this.stLabel[propertyname]>
-		</cfif>
-		<cfreturn label>
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.getLabel(arguments.propertyname)>
 	</cffunction> <!--- getLabel --->
 
 
@@ -2483,6 +2503,5 @@ Sample constructor code for use in child component:
 		</cfif>
 
 	</cffunction>
-
 
 </cfcomponent>
