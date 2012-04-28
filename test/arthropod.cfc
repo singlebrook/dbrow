@@ -1,4 +1,9 @@
 <cfcomponent extends="dbrow.dbrow3_pgsql">
-  <cfset theObject = "arthropod">
-  <cfset theFieldsToSkip = "arthropodID">
+<cfscript> // <script type="text/javascript">
+
+  theObject = "arthropod";
+  theFieldsToSkip = "arthropodID";
+  setLabel('arthropod_name', 'Creepy crawly');
+
+</cfscript> <!--- </script> --->
 </cfcomponent>

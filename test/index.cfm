@@ -1,8 +1,11 @@
-<cfparam name="URL.output" default="extjs">
-<cfscript>
-  testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
-  testSuite.addAll("units.dbrow.instantiation_test");
-  testSuite.addAll("units.dbrow.load_test");
-  results = testSuite.run();
+<cfscript> // <script type="text/javascript">
+
+testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();  
+unitTestCFCs = ['instantiation_test', 'load_test', 'render_test'];
+for(i=1; i <= ArrayLen(unitTestCFCs); i++) {
+  testSuite.addAll("units.dbrow." & unitTestCFCs[i]);
+}
+results = testSuite.run();
+
 </cfscript>
-<cfoutput>#results.getResultsOutput(URL.output)#</cfoutput>
+<cfoutput>#results.getResultsOutput('extjs')#</cfoutput>
