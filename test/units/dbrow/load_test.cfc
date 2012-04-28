@@ -1,4 +1,4 @@
-<cfcomponent extends="abstract_testcase">
+<cfcomponent extends="dbrow.test.units.abstract_testcase">
 <cfscript> // <script type="text/javascript">
 
   public void function can_load() {
