@@ -1,10 +1,8 @@
-# DBRow 3.1 Technical Documentation
+# DBRow 3.2
 
 by Jared Beck and Leon Miller-Out of [Singlebrook Technology](http://www.singlebrook.com)
 
 ## Contents
-
-
 
 1. Introduction
     1. Overview
@@ -18,8 +16,6 @@ by Jared Beck and Leon Miller-Out of [Singlebrook Technology](http://www.singleb
 1. Appendix
     1. History
     1. Features that need documentation
-
-
 
 # Introduction
 
@@ -41,7 +37,7 @@ implementation of the Active Record design pattern.
 
 	<cfset w.inventor = "Emperor Carinus">
 
-	<cfset w.store(getID = 1)> 
+	<cfset w.store(getID = 1)>
 	<cfoutput>The primary key of the new record is #w.widgetid#</cfoutput>
 
 ### Updating a record
@@ -131,7 +127,7 @@ The application may have the following variables set to reduce configuration cod
 
 Create the database and the tables that will support your application.  Follow dbrow naming conventions for table and column names (see below).
 
-`CREATE TABLE tblWidget ( widgetid [whatever auto-increment your RDMS wants] primary key, widget_name text, year_invented integer, inventor text );` 
+`CREATE TABLE tblWidget ( widgetid [whatever auto-increment your RDMS wants] primary key, widget_name text, year_invented integer, inventor text );`
 
 ### Naming Conventions
 
@@ -165,7 +161,7 @@ __theTable__ - Specifies the name of the table in the database. Default is "tbl#
 
 __theDatasource__ - Specifies the ColdFusion datasource that points to the database. Default is #application.datasource#.
 
-__theFieldsToSkip__ - Comma-separated list of columns that will not be inserted/updated when an instance is store()ed. This should include the 
+__theFieldsToSkip__ - Comma-separated list of columns that will not be inserted/updated when an instance is store()ed. This should include the
 primary key column if it is an auto-incrementing field. Default is the empty string.
 
 __theNameField__ - Specifies which column will be used as an instance's name. Used in various places, but notably in loadByName(). Default is
@@ -278,7 +274,7 @@ dbset2 - Begins to encapsulate more useful functionality. Major new features inc
 
 - List view with configurable fields. Links to dbrow2's edit view for editing items.
 
-New related Singleton objects that improve performance and flexibility of dbrow2 and dbset2. 
+New related Singleton objects that improve performance and flexibility of dbrow2 and dbset2.
 
 - dbrow2mapper - Maps object names to table names, etc.
 - dbrow2cache - Caches metadata information to speed up object instantiation.
@@ -291,7 +287,7 @@ dbrow3 - Major new features include:
 - Support for many-to-many relationships (currently in code only, not yet supported in form fields).
 - Server-side data validation based on database properties and custom rules
 - Updates to dbrow3mapper to understand types
-	
+
 dbset3 - Additions include:
 
 - More filtering options in getAll()
