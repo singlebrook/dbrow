@@ -14,6 +14,11 @@
 			where lower(table_name) = '#lcase(this.theTable)#'
 		</cfquery>
 
+		<!--- Assert that at least one column was found - Jared 2012-04-30 --->
+		<cfif rsMetaData.RecordCount EQ 0>
+			<cfthrow message="Table #this.theTable# either does not exist or has zero columns">
+		</cfif>
+
 		<cfoutput query="rsMetaData">
 			<cfset stColMetaData[column_name] = structNew()>
 			<cfset thisCol = stColMetaData[column_name]>
