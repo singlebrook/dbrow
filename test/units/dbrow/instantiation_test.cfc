@@ -1,5 +1,5 @@
 <cfcomponent extends="dbrow.test.units.abstract_testcase">
-<cfscript> // <script type="text/javascript">
+<cfscript>
 
   public void function can_instantiate() {
     obj = CreateObject('arthropod');
@@ -15,5 +15,5 @@
     assertFalse(obj.isStored);
   }
 
-</cfscript> <!--- </script> --->
+</cfscript>
 </cfcomponent>

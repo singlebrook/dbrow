@@ -1,5 +1,5 @@
 <cfcomponent>
-<cfscript> // <script type="text/javascript">
+<cfscript>
 
 public component function create() {
   var obj = CreateObject('arthropod').new();
@@ -8,5 +8,5 @@ public component function create() {
   return obj;
 }
 
-</cfscript> <!--- </script> --->
+</cfscript>
 </cfcomponent>

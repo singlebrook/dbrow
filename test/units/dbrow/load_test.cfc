@@ -1,5 +1,5 @@
 <cfcomponent extends="dbrow.test.units.abstract_testcase">
-<cfscript> // <script type="text/javascript">
+<cfscript>
 
   public void function can_load() {
     var factory = CreateObject('support.factories.arthropod_factory');
@@ -10,5 +10,5 @@
     assertEquals(createdObj.arthropodID, obj.arthropodID);
   }
 
-</cfscript> <!--- </script> --->
+</cfscript>
 </cfcomponent>
