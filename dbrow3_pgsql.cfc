@@ -25,9 +25,6 @@
 			<cfset thisCol.sortorder = ordinal_position>
 		</cfoutput>
 
-		<!--- <cfdump var="#rsMetaData#">
-		<cfdump var="#stColMetaData#"> - leon 2/3/06 --->
-
 		<cfreturn stColMetaData>
 	</cffunction> <!--- getColumnMetaData --->
 
