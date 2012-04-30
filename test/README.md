@@ -1,11 +1,7 @@
 Setup dbrow Unit Tests
 ================
 
-1. Download mxunit and put it in a reasonable place, like `/Users/jared/git/mxunit/`
-1. In CF Admin, add two mappings:
-  1. Map `/mxunit` to `/Users/jared/git/mxunit`
-  1. Map `/dbrow` to `/Users/jared/git/dbrow`
-1. In apache vhosts, add something like this:    
+1. In apache vhosts, add something like this:
 
         <VirtualHost *:80>
           ServerName dbrow.localhost
@@ -14,6 +10,11 @@ Setup dbrow Unit Tests
           Alias /CFIDE/ "/Library/WebServer/Documents/ColdFusion9/CFIDE/"
           Alias /mxunit/ "/Users/jared/git/mxunit/"
         </VirtualHost>
+
+1. Download mxunit and put it in a reasonable place, like `/Users/jared/git/mxunit/`
+1. In CF Admin, add two mappings:
+  1. Map `/mxunit` to `/Users/jared/git/mxunit`, or wherever
+  1. Map `/dbrow` to `/Users/jared/git/singlebrook/dbrow`, or wherever
 
 Setup dbrow_test database
 -------------------------
