@@ -116,7 +116,7 @@ Tombstoning
 - usesTombstoning
 - usesTombstoningTimestamp
 - usesTombstoningUserID
--
+
 Tracking Changes
 ----------------
 - getChanges
