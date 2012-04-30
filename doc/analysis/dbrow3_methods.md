@@ -6,127 +6,127 @@ by Jared Beck
 
 Associations
 --------------
-clearThisToManyData
-getForeignKeyCol
-getLinkingTableInfo - Returns a structure with information about the important columns in a linking table
-getManyRelatedArray
-getManyRelatedIDs
-getManyRelatedRS
-hasMany - Relationship name that we can use to retrieve the related elements later
-lookupColLinkingTo - Determines which column in a table refers to a specified column in a specified table
-setManyRelatedIDs
+- clearThisToManyData
+- getForeignKeyCol
+- getLinkingTableInfo - Returns a structure with information about the important columns in a linking table
+- getManyRelatedArray
+- getManyRelatedIDs
+- getManyRelatedRS
+- hasMany - Relationship name that we can use to retrieve the related elements later
+- lookupColLinkingTo - Determines which column in a table refers to a specified column in a specified table
+- setManyRelatedIDs
 
 Callbacks
 -----------
-afterDelete
-afterLoad
-afterStore
-beforeDelete
-beforeLoad
-beforeStore
+- afterDelete
+- afterLoad
+- afterStore
+- beforeDelete
+- beforeLoad
+- beforeStore
 
 Constructor
 ------------
-init
-initializeObject
-setDefaults
+- init
+- initializeObject
+- setDefaults
 
 Controller
 -----------
-checkRemoteMethodAuthorization
-saveForm - Accesses the form scope to populate and save this object. Form must include [theID] and goto
+- checkRemoteMethodAuthorization
+- saveForm - Accesses the form scope to populate and save this object. Form must include [theID] and goto
 
 Database Adapter Configuration
 ------------------------------
-useEscapedBackslashes
-useIntForBool
-useQueryParamForText
+- useEscapedBackslashes
+- useIntForBool
+- useQueryParamForText
 
 Loading
 -----------
-cacheTimeout
-cacheTimeoutDefault
-load
-loadBy
-loadByName
-queryToArray - Takes a query containing rows from theTable and returns an array of theObject objects
+- cacheTimeout
+- cacheTimeoutDefault
+- load
+- loadBy
+- loadByName
+- queryToArray - Takes a query containing rows from theTable and returns an array of theObject objects
 
 Logging
 -----------
-elapsed
-logIt
+- elapsed
+- logIt
 
 Mass Assignment
 ----------------
-loadForm
-loadStruct
-
-Math
-----------
-listIntersection - Returns the case-sensitive intersection of two lists
+- loadForm
+- loadStruct
+-
+- Math
+- ----------
+- listIntersection - Returns the case-sensitive intersection of two lists
 
 Persistence
 ------------
-clear - Clears this object's properties so that it can be safely load()ed again with a new ID
-delete - Delete this object's data from the database
-getIsStored
-getTableName
-new - Sets up default values for this object (only theID by default). Used when creating a new row.
-store
+- clear - Clears this object's properties so that it can be safely load()ed again with a new ID
+- delete - Delete this object's data from the database
+- getIsStored
+- getTableName
+- new - Sets up default values for this object (only theID by default). Used when creating a new row.
+- store
 
 Polymorphism
 ------------
-setTypeByID
-setTypeByImmutableName
+- setTypeByID
+- setTypeByImmutableName
 
 Properties
 -----------
-getCachedColumnMetaData
-getCachedForeignKeyMetaData
-getColDataType
-getIDColumn
-getNameColumn
-getNotNull
-getPropertyList
-getPropertyValue
-getProperty
-hasProperty
-setProperty
+- getCachedColumnMetaData
+- getCachedForeignKeyMetaData
+- getColDataType
+- getIDColumn
+- getNameColumn
+- getNotNull
+- getPropertyList
+- getPropertyValue
+- getProperty
+- hasProperty
+- setProperty
 
 Rendering
 ------------
-drawPropertyValue
-drawForm
-drawFormEnd
-drawFormField
-drawFormErrorSummary
-drawFormStart
-drawStandardFormField
-drawErrorField
-edit
-getLabel
-getDefaultTabIndex
-getTabIndexAttr
-setField - Override default form fields. Custom fields can include the standard fields with drawStandardFormField(propertyname).
-setLabel
+- drawPropertyValue
+- drawForm
+- drawFormEnd
+- drawFormField
+- drawFormErrorSummary
+- drawFormStart
+- drawStandardFormField
+- drawErrorField
+- edit
+- getLabel
+- getDefaultTabIndex
+- getTabIndexAttr
+- setField - Override default form fields. Custom fields can include the standard fields with drawStandardFormField(propertyname).
+- setLabel
 
 Tombstoning
 -----------
-isDeleted
-usesTombstoning
-usesTombstoningTimestamp
-usesTombstoningUserID
-
+- isDeleted
+- usesTombstoning
+- usesTombstoningTimestamp
+- usesTombstoningUserID
+-
 Tracking Changes
 ----------------
-getChanges
-setOrigState
+- getChanges
+- setOrigState
 
 Validation
 -----------
-addValidation
-getError
-getErrorArray
-getErrorStruct
-getValidationAttribs - Returns attributes to be used in form field tag. These attributes are processed by formvalidation.js
-newError
+- addValidation
+- getError
+- getErrorArray
+- getErrorStruct
+- getValidationAttribs - Returns attributes to be used in form field tag. These attributes are processed by formvalidation.js
+- newError
