@@ -60,9 +60,9 @@ Mass Assignment
 ----------------
 - loadForm
 - loadStruct
--
-- Math
-- ----------
+
+Math
+----------
 - listIntersection - Returns the case-sensitive intersection of two lists
 
 Persistence
