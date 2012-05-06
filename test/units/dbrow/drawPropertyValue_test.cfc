@@ -11,6 +11,15 @@
 	}
 
 
+	public void function afterTests() {
+		qryService = new Query(datasource = application.datasource);
+		qryService.setSQL("truncate tblArthropod;");
+		qryService.execute();
+		qryService.setSQL("delete from tblSubphylum;");
+		qryService.execute();
+	}
+
+
 	public void function drawPropertyValue_bit() {
 		arthropod.venemous = '';
 		assertEquals('No', arthropod.drawPropertyValue('venemous'));
