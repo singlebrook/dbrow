@@ -17,10 +17,12 @@ come anywhere near to complete coverage of drawStandardFormField().
 -Jared 2012-05-06 */
 
 public void function drawStandardFormField_bit() {
-	var expected = '<input type="checkbox" name="venemous_checkbox" id="venemous_checkbox" value="1" tabindex="16383" desc="Venemous"  onclick="document.getElementById(''venemous'').value=this.checked;" />
+	var expected = HTMLEditFormat('<input type="checkbox" name="venemous_checkbox" id="venemous_checkbox" value="1" tabindex="16383" desc="Venemous"  onclick="document.getElementById(''venemous'').value=this.checked;" />
 							<input type="hidden" name="venemous" id="venemous" value="0" />
-						<span id="venemous_error" class="error hidden"></span>';
-	var actual = Trim(arthropod.drawStandardFormField('venemous'));
+						<span id="venemous_error" class="error hidden"></span>');
+	var actual = HTMLEditFormat(Trim(arthropod.drawStandardFormField('venemous')));
+	expected = normalizeWhitespace(expected);
+	actual = normalizeWhitespace(actual);
 	assertEquals(expected, actual);
 }
 
@@ -45,6 +47,11 @@ public void function drawStandardFormField_varchar() {
 	var expected = '<input type="text" size="40" name="arthropod_name" id="arthropod_name" tabindex="16383" value="Honey Bee"  desc="Creepy crawly" maxlength="50" /><span id="arthropod_name_error" class="error hidden"></span>';
 	var actual = arthropod.drawStandardFormField('arthropod_name');
 	assertEquals(expected, actual);
+}
+
+
+private string function normalizeWhitespace(required string str) {
+	return REReplace(str, '\s{2,}', ' ', 'all');
 }
 
 </cfscript>
