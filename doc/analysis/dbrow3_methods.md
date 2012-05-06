@@ -107,7 +107,7 @@ Rendering
 - getLabel *
 - getDefaultTabIndex
 - getTabIndexAttr
-- setField - Override default form fields. Custom fields can include the standard fields with drawStandardFormField(propertyname).
+- setField
 - setLabel *
 
 \* These methods have been delegated to the `dbrow_renderer`

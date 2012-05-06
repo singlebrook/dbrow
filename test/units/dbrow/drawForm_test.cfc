@@ -45,7 +45,7 @@ public void function drawForm() {
 
 				<tr>
 					<th class="fieldLabel">Legs</th>
-					<td><input type="text" size="20" name="legs" id="legs" tabindex="16383" value=""  desc="Legs" onChange="if (this.value != '') this.value=Math.round(Math.pow(10,0) * this.value) / Math.pow(10,0);" pattern="integer" /><span id="legs_error" class="error hidden"></span></td>
+					<td>Hexapods rule!  Everyone must have 6 legs.</td>
 				</tr>
 
 				<tr>
