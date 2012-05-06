@@ -608,27 +608,9 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="drawFormField" returnType="string" output="no" access="public">
-		<cfargument name="propertyname" type="string" required="yes">
-		<cfargument name="errorText" type="string" required="no" default="">
-		<cfargument name="identifierPrefix" type="string" required="no" default="">
-		<cfargument name="appendErrorSpan" type="boolean" required="no" default="yes">
-		<cfargument name="filterField" type="string" required="no">
-		<cfargument name="filterValue" type="string" required="no">
-		<cfargument name="filterSet" type="struct" required="no">
-
-		<cfset var formField = "">
-
-		<cfif structKeyExists(this, 'stCustomField') and structKeyExists(this.stCustomField, arguments.propertyname)>
-			<!--- A custom form field has been defined for this property - leon 2/18/06 --->
-			<cfset formField = evaluate(de(this.stCustomField[arguments.propertyname]))>
-
-		<cfelse>
-			<cfset formField = drawStandardFormField(argumentCollection = arguments)>
-		</cfif>
-
-		<cfreturn formField>
-
-	</cffunction> <!--- drawFormField --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.drawFormField(argumentCollection = arguments)>
+	</cffunction>
 
 
 	<cffunction name="drawFormErrorSummary" returnType="string" output="no" access="public">
@@ -1849,32 +1831,10 @@ Sample constructor code for use in child component:
 	</cffunction> <!--- setDefaults --->
 
 
-	<cffunction name="setField" returntype="void" access="package"
-			hint="Override default form fields. Custom fields can include the standard fields with drawStandardFormField(propertyname).">
-
-		<cfargument name="propertyname" type="string" required="yes">
-		<cfargument name="formfield" type="string" required="yes">
-		<cfargument name="escapePoundsigns" type="boolean" required="no" default="no">
-
-		<cfset var formFieldHtml = arguments.formfield>
-
-		<!--- Use the escapePoundsigns argument to double-up the poundsigns in
-		arugments.formfield. This prevents CF syntax errors when
-		drawFormField() calls evaluate().  This is useful when your custom form
-		field contains user input with poundsigns. Example: A custom field with
-		a WYSIWYG editor. (The user input stored in the database may have
-		poundsigns, especially if the pasted from Word) - Jared 2/3/11 --->
-		<cfif arguments.escapePoundsigns>
-			<cfset formFieldHtml = REReplace(arguments.formfield, '##', '####', 'all')>
-		</cfif>
-
-		<!--- Add or replace this custom form field --->
-		<cfif not(structKeyExists(this, 'stCustomField'))>
-			<cfset this.stCustomField = structNew()>
-		</cfif>
-		<cfset this.stCustomField[arguments.propertyname] = formFieldHtml>
-
-	</cffunction> <!--- setField --->
+	<cffunction name="setField" returntype="void" access="package">
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.setField(argumentCollection = arguments)>
+	</cffunction>
 
 
 	<cffunction name="setLabel" returntype="void" access="package">

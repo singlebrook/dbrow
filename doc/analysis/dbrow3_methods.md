@@ -98,7 +98,7 @@ Rendering
 - drawPropertyValue *
 - drawForm *
 - drawFormEnd
-- drawFormField
+- drawFormField *
 - drawFormErrorSummary
 - drawFormStart
 - drawStandardFormField *
@@ -107,7 +107,7 @@ Rendering
 - getLabel *
 - getDefaultTabIndex
 - getTabIndexAttr
-- setField
+- setField *
 - setLabel *
 
 \* These methods have been delegated to the `dbrow_renderer`
