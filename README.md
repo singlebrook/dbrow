@@ -68,6 +68,11 @@ Dbrow also supports soft-deletion (tombstoning) if the underlying table has a
 	</thead>
 	<tbody>
 		<tr>
+			<td>3.2</td>
+			<td>9+</td>
+			<td>MSSQL,PostgreSQL,MySQL</td>
+		</tr>
+		<tr>
 			<td>3.1</td>
 			<td>8+</td>
 			<td>MSSQL,PostgreSQL,MySQL</td>
