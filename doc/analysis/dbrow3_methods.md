@@ -96,7 +96,7 @@ Properties
 Rendering
 ------------
 - drawPropertyValue *
-- drawForm
+- drawForm *
 - drawFormEnd
 - drawFormField
 - drawFormErrorSummary
