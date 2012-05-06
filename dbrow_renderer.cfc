@@ -37,9 +37,6 @@ public component function init(required component dbrowObj) {
 			<cfcase value="bit">
 				<cfset formField = YesNoFormat( this.dbrowObj[arguments.propertyname] ) >
 			</cfcase>
-			<!--- <cfcase value="binary">
-				<cfset formField = '<input type="file" name="#arguments.propertyname#" id="#arguments.propertyname#" #this.dbrowObj.getValidationAttribs(arguments.propertyname)# />'>
-			</cfcase> --->
 			<cfdefaultcase>
 				<cfthrow message="dbrow3.drawPropertyValue() doesn't know how to handle the datatype '#stMD.datatype#'">
 			</cfdefaultcase>
