@@ -592,10 +592,9 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="drawFormEnd" returnType="string" output="no" access="public">
-		<cfset var formEndHTML = "</form>">
-
-		<cfreturn formEndHTML>
-	</cffunction> <!--- drawFormEnd --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.drawFormEnd()>
+	</cffunction>
 
 
 	<cffunction name="drawFormField" returnType="string" output="no" access="public">

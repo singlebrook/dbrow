@@ -23,6 +23,11 @@ public void function drawForm() {
 	assert(actual contains remainder);
 }
 
+
+public void function drawFormEnd() {
+	assertEquals('</form>', arthropod.drawFormEnd());
+}
+
 </cfscript>
 
 

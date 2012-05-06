@@ -94,6 +94,11 @@ public component function init(required component dbrowObj) {
 </cffunction> <!--- drawForm --->
 
 
+<cffunction name="drawFormEnd" returnType="string" output="no" access="public">
+	<cfreturn "</form>">
+</cffunction>
+
+
 <cffunction name="drawFormField" returnType="string" output="no" access="public">
 	<cfargument name="propertyname" type="string" required="yes">
 	<cfargument name="errorText" type="string" required="no" default="">
