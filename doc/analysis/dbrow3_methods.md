@@ -95,7 +95,7 @@ Properties
 
 Rendering
 ------------
-- drawPropertyValue
+- drawPropertyValue *
 - drawForm
 - drawFormEnd
 - drawFormField
@@ -104,11 +104,13 @@ Rendering
 - drawStandardFormField
 - drawErrorField
 - edit
-- getLabel
+- getLabel *
 - getDefaultTabIndex
 - getTabIndexAttr
 - setField - Override default form fields. Custom fields can include the standard fields with drawStandardFormField(propertyname).
 - setLabel
+
+\* These methods have been delegated to the `dbrow_renderer`
 
 Tombstoning
 -----------
