@@ -2078,18 +2078,12 @@ Sample constructor code for use in child component:
 	</cffunction> <!--- setField --->
 
 
-	<cffunction name="setLabel" returntype="void" access="package"
-			hint="Override default field labels">
-
+	<cffunction name="setLabel" returntype="void" access="package">
 		<cfargument name="propertyname" type="string" required="yes">
 		<cfargument name="label" type="string" required="yes">
-
-		<cfif not(structKeyExists(this, 'stLabel'))>
-			<cfset this.stLabel = structNew()>
-		</cfif>
-		<cfset this.stLabel[arguments.propertyname] = arguments.label>
-
-	</cffunction> <!--- setLabel --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.setLabel(arguments.propertyname, arguments.label)>
+	</cffunction>
 
 
 	<cffunction name="setManyRelatedIDs" returntype="void" output="no" access="public"

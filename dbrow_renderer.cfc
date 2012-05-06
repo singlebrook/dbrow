@@ -78,4 +78,16 @@ public component function init(required component dbrowObj) {
 	<cfreturn CreateObject('component', '#foreignObjPath#').new()>
 </cffunction>
 
+
+<cfscript>
+
+public void function setLabel(required string propertyname, required string label) {
+	if (NOT StructKeyExists(this.dbrowObj, 'stLabel')) {
+		this.dbrowObj.stLabel = {};
+	}
+	this.dbrowObj.stLabel[arguments.propertyname] = arguments.label;
+}
+
+</cfscript>
+
 </cfcomponent>
