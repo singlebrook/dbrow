@@ -710,7 +710,7 @@ Sample constructor code for use in child component:
 		<cfset var divClassList = "dbrow-error-summary error">
 
 		<cfif StructKeyExists(arguments, "formID")>
-			<cfset divIdAttr = 'id="' & formID & '"_error'>
+			<cfset divIdAttr = 'id' & '="' & formID & '"_error'>
 		</cfif>
 		<cfif NOT ArrayLen(arguments.arErrors)>
 			<cfset divClassList = ListAppend(divClassList, "hidden")>
