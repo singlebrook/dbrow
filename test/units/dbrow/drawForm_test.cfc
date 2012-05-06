@@ -1,11 +1,6 @@
 <cfcomponent extends="dbrow.test.units.abstract_testcase">
 <cfscript>
 
-public void function beforeTests() {
-	arthropod_factory = CreateObject('support.factories.arthropod_factory');
-}
-
-
 public void function setUp() {
 	arthropod = arthropod_factory.create();
 }
