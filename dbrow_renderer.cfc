@@ -12,16 +12,18 @@ public component function init(required component dbrowObj) {
 <cffunction name="drawPropertyValue" returnType="string" output="no" access="public">
 	<cfargument name="propertyname" type="string" required="yes">
 
-	<cfset var formField = "">
-	<cfset var stMD = this.dbrowObj.stColMetaData[arguments.propertyname]>
-	<cfset var foreignColumn = "">
-	<cfset var foreignTable = "">
-	<cfset var foreignNameColumn = "">
-	<cfset var foreignObjPath = "">
-	<cfset var objForeign = "">
+	<cfscript>
+		var formField = "";
+		var stMD = this.dbrowObj.stColMetaData[arguments.propertyname];
+		var foreignColumn = "";
+		var foreignTable = "";
+		var foreignNameColumn = "";
+		var foreignObjPath = "";
+		var objForeign = "";
+		var isForeignKey = structKeyExists(this.dbrowObj.stFKMetaData, arguments.propertyname);
+	</cfscript>
 
-	<cfif structKeyExists(this.dbrowObj.stFKMetaData, arguments.propertyname)>
-		<!--- This is a foreign key field. Load up a set of the related items and draw a dropdown. - leon 2/7/06 --->
+	<cfif isForeignKey>
 		<cfset foreignColumn = this.dbrowObj.stFKMetaData[arguments.propertyname].foreignColumn>
 		<cfset foreignTable = this.dbrowObj.stFKMetaData[arguments.propertyname].foreignTable>
 
