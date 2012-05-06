@@ -49,10 +49,5 @@ public void function drawStandardFormField_varchar() {
 	assertEquals(expected, actual);
 }
 
-
-private string function normalizeWhitespace(required string str) {
-	return REReplace(str, '\s{2,}', ' ', 'all');
-}
-
 </cfscript>
 </cfcomponent>
