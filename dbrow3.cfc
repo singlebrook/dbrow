@@ -586,15 +586,6 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="drawForm" returnType="string" output="no" access="public">
-		<cfargument name="handlerScript" type="string" required="no" default="#cgi.script_name#?method=saveform">
-		<cfargument name="bIncludeValScript" type="boolean" required="no" default="0">
-		<cfargument name="jsIncludePath" type="string" required="no" default="/js/">
-		<cfargument name="goto" type="string" required="no" default="#replace(cgi.script_name, '.cfc', '_set.cfc')#.cfc?method=list">
-		<cfargument name="deleteLink" type="string" required="no" default="#cgi.script_name#?method=delete">
-		<cfargument name="showDeleteButton" type="boolean" required="no" default="Yes">
-		<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
-		<cfargument name="fieldList" type="string" required="no">
-
 		<cfset initializeRenderer()>
 		<cfreturn this.renderer.drawForm(argumentCollection = arguments)>
 	</cffunction>
@@ -684,15 +675,6 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="drawStandardFormField" returnType="string" output="no" access="public">
-		<cfargument name="propertyname" type="string" required="yes">
-		<cfargument name="errorText" type="string" required="no" default="">
-		<cfargument name="identifierPrefix" type="string" required="no" default="">
-		<cfargument name="appendErrorSpan" type="boolean" required="no" default="yes">
-		<cfargument name="filterField" type="string" required="no">
-		<cfargument name="filterValue" type="string" required="no">
-		<cfargument name="filterSet" type="struct" required="no">
-		<cfargument name="drawEmptyOption" type="boolean" required="no" default="yes" hint="controls the presence of empty (aka default) option on selects">
-
 		<cfset initializeRenderer()>
 		<cfreturn this.renderer.drawStandardFormField(argumentCollection = arguments)>
 	</cffunction>
@@ -1838,10 +1820,8 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="setLabel" returntype="void" access="package">
-		<cfargument name="propertyname" type="string" required="yes">
-		<cfargument name="label" type="string" required="yes">
 		<cfset initializeRenderer()>
-		<cfreturn this.renderer.setLabel(arguments.propertyname, arguments.label)>
+		<cfreturn this.renderer.setLabel(argumentCollection = arguments)>
 	</cffunction>
 
 
