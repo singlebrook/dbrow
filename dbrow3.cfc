@@ -595,79 +595,9 @@ Sample constructor code for use in child component:
 		<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
 		<cfargument name="fieldList" type="string" required="no">
 
-		<cfset var theFormHTML = "">
-		<cfset var v = structNew()>
-
-		<cfif arguments.bIncludeValScript and not(len(arguments.jsIncludePath))>
-			<cfthrow message="dbrow3.drawForm() requires jsIncludePath if bIncludeValScript is true">
-		</cfif>
-
-		<cfif find('?', deleteLink)>
-			<cfset deleteLink = deleteLink & "&amp;">
-		<cfelse>
-			<cfset deleteLink = deleteLink & "?">
-		</cfif>
-
-		<!--- Use arguments.fieldList to override the typical property list - Jared 1/19/09 --->
-		<cfif StructKeyExists(arguments,"fieldList")>
-			<cfset v.fieldList = arguments.fieldList>
-		<cfelse>
-			<cfset v.fieldList = this.propertyList>
-		</cfif>
-
-		<cfsavecontent variable="theFormHTML">
-			<cfoutput>
-			#this.drawFormStart(argumentCollection = arguments)#
-
-			<input type="hidden" name="goto" value="#HTMLEditFormat(arguments.goto)#">
-
-			#this.drawFormField(this.theID)#
-
-			<table border="1">
-
-			<cfloop list="#v.fieldList#" index="i">
-				<cfset v.stError = getError(arErrors, i)>
-				<cfset v.errorMsg = trim(v.stError.propertyLabel & " " & v.stError.errorText)>
-
-				<cfif listFindNoCase(this.hiddenFieldList, i)>
-					<input type="hidden" name="#i#" id="#i#" value="#HTMLEditFormat(this[i])#">
-				<cfelseif i neq theID and not(listFindNoCase(theFieldsToSkip, i))>
-					<tr>
-						<th class="fieldLabel">#this.getLabel(i)#</th>
-						<td>#this.drawFormField(i, v.errorMsg)#</td>
-					</tr>
-				</cfif>
-			</cfloop>
-
-			<cfloop list="#structKeyList(this.stMany)#" index="i">
-				<cfif structKeyExists(this.stLabel, i) and structKeyExists(this.stCustomField, i)>
-					<tr>
-						<th class="fieldLabel">#this.getLabel(i)#</th>
-						<td>#this.drawFormField(i, v.errorMsg)#</td>
-					</tr>
-				</cfif>
-			</cfloop>
-
-			<tr>
-				<td colspan="2">
-					<div class="formsubmit">
-					<input type="submit" value="Save" id="submitbutton" #this.getTabindexAttr('submitbutton')#>
-					<cfif this.isStored and arguments.showDeleteButton>
-						<input type="button" value="Delete" #this.getTabindexAttr('submitbutton')# onclick="if (confirm('Are you sure?')) document.location='#deleteLink#id=#this[theID]#';">
-					</cfif>
-					</div>
-				</td>
-			</tr>
-
-			</table>
-
-			#this.drawFormEnd()#
-			</cfoutput>
-		</cfsavecontent>
-
-		<cfreturn theFormHTML>
-
-	</cffunction> <!--- drawForm --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.drawForm(argumentCollection = arguments)>
+	</cffunction>
 
 
 	<cffunction name="drawFormEnd" returnType="string" output="no" access="public">

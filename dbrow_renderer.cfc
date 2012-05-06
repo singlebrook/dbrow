@@ -9,6 +9,91 @@ public component function init(required component dbrowObj) {
 </cfscript>
 
 
+<cffunction name="drawForm" returnType="string" output="no" access="public">
+	<cfargument name="handlerScript" type="string" required="no" default="#cgi.script_name#?method=saveform">
+	<cfargument name="bIncludeValScript" type="boolean" required="no" default="0">
+	<cfargument name="jsIncludePath" type="string" required="no" default="/js/">
+	<cfargument name="goto" type="string" required="no" default="#replace(cgi.script_name, '.cfc', '_set.cfc')#.cfc?method=list">
+	<cfargument name="deleteLink" type="string" required="no" default="#cgi.script_name#?method=delete">
+	<cfargument name="showDeleteButton" type="boolean" required="no" default="Yes">
+	<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
+	<cfargument name="fieldList" type="string" required="no">
+
+	<cfset var theFormHTML = "">
+	<cfset var v = structNew()>
+
+	<cfif arguments.bIncludeValScript and not(len(arguments.jsIncludePath))>
+		<cfthrow message="dbrow3.drawForm() requires jsIncludePath if bIncludeValScript is true">
+	</cfif>
+
+	<cfif find('?', deleteLink)>
+		<cfset deleteLink = deleteLink & "&amp;">
+	<cfelse>
+		<cfset deleteLink = deleteLink & "?">
+	</cfif>
+
+	<!--- Use arguments.fieldList to override the typical property list - Jared 1/19/09 --->
+	<cfif StructKeyExists(arguments,"fieldList")>
+		<cfset v.fieldList = arguments.fieldList>
+	<cfelse>
+		<cfset v.fieldList = this.dbrowObj.propertyList>
+	</cfif>
+
+	<cfsavecontent variable="theFormHTML">
+		<cfoutput>
+		#this.dbrowObj.drawFormStart(argumentCollection = arguments)#
+
+		<input type="hidden" name="goto" value="#HTMLEditFormat(arguments.goto)#">
+
+		#this.dbrowObj.drawFormField(this.dbrowObj.theID)#
+
+		<table border="1">
+
+		<cfloop list="#v.fieldList#" index="i">
+			<cfset v.stError = this.dbrowObj.getError(arErrors, i)>
+			<cfset v.errorMsg = trim(v.stError.propertyLabel & " " & v.stError.errorText)>
+
+			<cfif listFindNoCase(this.dbrowObj.hiddenFieldList, i)>
+				<input type="hidden" name="#i#" id="#i#" value="#HTMLEditFormat(this.dbrowObj[i])#">
+			<cfelseif i neq this.dbrowObj.theID and not(listFindNoCase(this.dbrowObj.theFieldsToSkip, i))>
+				<tr>
+					<th class="fieldLabel">#this.getLabel(i)#</th>
+					<td>#this.dbrowObj.drawFormField(i, v.errorMsg)#</td>
+				</tr>
+			</cfif>
+		</cfloop>
+
+		<cfloop list="#structKeyList(this.dbrowObj.stMany)#" index="i">
+			<cfif structKeyExists(this.dbrowObj.stLabel, i) and structKeyExists(this.dbrowObj.stCustomField, i)>
+				<tr>
+					<th class="fieldLabel">#this.getLabel(i)#</th>
+					<td>#this.dbrowObj.drawFormField(i, v.errorMsg)#</td>
+				</tr>
+			</cfif>
+		</cfloop>
+
+		<tr>
+			<td colspan="2">
+				<div class="formsubmit">
+				<input type="submit" value="Save" id="submitbutton" #this.dbrowObj.getTabindexAttr('submitbutton')#>
+				<cfif this.dbrowObj.isStored and arguments.showDeleteButton>
+					<input type="button" value="Delete" #this.dbrowObj.getTabindexAttr('submitbutton')# onclick="if (confirm('Are you sure?')) document.location='#deleteLink#id=#this.dbrowObj[this.dbrowObj.theID]#';">
+				</cfif>
+				</div>
+			</td>
+		</tr>
+
+		</table>
+
+		#this.dbrowObj.drawFormEnd()#
+		</cfoutput>
+	</cfsavecontent>
+
+	<cfreturn theFormHTML>
+
+</cffunction> <!--- drawForm --->
+
+
 <cffunction name="drawPropertyValue" returnType="string" output="no" access="public">
 	<cfargument name="propertyname" type="string" required="yes">
 
