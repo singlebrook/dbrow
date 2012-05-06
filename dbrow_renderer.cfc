@@ -3,6 +3,7 @@
 
 public component function init(required component dbrowObj) {
 	this.dbrowObj = arguments.dbrowObj;
+	this.stCustomField = {};
 	return this;
 }
 
@@ -64,7 +65,7 @@ public component function init(required component dbrowObj) {
 		</cfloop>
 
 		<cfloop list="#structKeyList(this.dbrowObj.stMany)#" index="i">
-			<cfif structKeyExists(this.dbrowObj.stLabel, i) and structKeyExists(this.dbrowObj.stCustomField, i)>
+			<cfif structKeyExists(this.dbrowObj.stLabel, i) and structKeyExists(this.stCustomField, i)>
 				<tr>
 					<th class="fieldLabel">#this.getLabel(i)#</th>
 					<td>#this.dbrowObj.drawFormField(i, v.errorMsg)#</td>
@@ -111,8 +112,8 @@ public component function init(required component dbrowObj) {
 	<cfset var formField = "">
 
 	<!--- If a custom form field has been defined for this property .. - leon 2/18/06 --->
-	<cfif structKeyExists(this.dbrowObj, 'stCustomField') and structKeyExists(this.dbrowObj.stCustomField, arguments.propertyname)>
-		<cfset formField = Evaluate(DE(this.dbrowObj.stCustomField[arguments.propertyname]))>
+	<cfif StructKeyExists(this.stCustomField, arguments.propertyname)>
+		<cfset formField = Evaluate(DE(this.stCustomField[arguments.propertyname]))>
 	<cfelse>
 		<cfset formField = drawStandardFormField(argumentCollection = arguments)>
 	</cfif>
@@ -357,10 +358,7 @@ public component function init(required component dbrowObj) {
 	</cfif>
 
 	<!--- Add or replace this custom form field --->
-	<cfif not(structKeyExists(this.dbrowObj, 'stCustomField'))>
-		<cfset this.dbrowObj.stCustomField = structNew()>
-	</cfif>
-	<cfset this.dbrowObj.stCustomField[arguments.propertyname] = formFieldHtml>
+	<cfset this.stCustomField[arguments.propertyname] = formFieldHtml>
 </cffunction>
 
 
