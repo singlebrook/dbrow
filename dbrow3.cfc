@@ -72,8 +72,6 @@ Sample constructor code for use in child component:
 		<cfset init()>
 	</cfif> - leon 10/24/06 --->
 
-	<!--- Add new methods here, in alphabetic order --->
-
 	<!--- This used to have returntype="dbrow3", but that doesn't seem to work
 		when you have grandchildren in another directory. - leon 7/25/07 --->
 	<cffunction name="init" access="public"
