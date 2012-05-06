@@ -1,27 +1,42 @@
 <cfcomponent extends="dbrow.test.units.abstract_testcase">
-
-<!---
-	Given a propertyname,
-	If that propertyname represents a foreign key,
-		Then I want to see a dropdown menu of related items
-	Else,
-		If the property's datatype is "bit"
-			Then I want to see YesNoFormat
-		Else if the property is a simple varchar,
-			Then I want to see its value, entity-encoded
-- Jared 2012-04-30 --->
-
 <cfscript>
 
-  public void function draw_varchar_property_value() {
-    var factory = CreateObject('support.factories.arthropod_factory');
-    var arthropod = factory.create();
+	public void function beforeTests() {
+		arthropod_factory = CreateObject('support.factories.arthropod_factory');
+	}
+
+
+	public void function setUp() {
+		arthropod = arthropod_factory.create();
+	}
+
+
+	public void function drawPropertyValue_bit() {
+		arthropod.venemous = '';
+		assertEquals('No', arthropod.drawPropertyValue('venemous'));
+		arthropod.venemous = true;
+		assertEquals('Yes', arthropod.drawPropertyValue('venemous'));
+		arthropod.venemous = false;
+		assertEquals('No', arthropod.drawPropertyValue('venemous'));
+	}
+
+
+	public void function drawPropertyValue_foreignkey() {
+		var subphylum_factory = CreateObject('support.factories.subphylum_factory');
+		var subphylum = subphylum_factory.create();
+		arthropod.subphylumID = subphylum.subphylumID;
+		var expected = subphylum.subphylum_name;
+		var actual = arthropod.drawPropertyValue('subphylumid');
+		assertEquals(expected, actual);
+	}
+
+	public void function drawPropertyValue_varchar() {
 		var nasty_string = '<script type="text/javascript">alert("gotcha");</script>';
 		arthropod.arthropod_name = nasty_string;
 		var expected = HTMLEditFormat(nasty_string);
 		var actual = arthropod.drawPropertyValue('arthropod_name');
-    assertEquals(expected, actual);
-  }
+		assertEquals(expected, actual);
+	}
 
 </cfscript>
 </cfcomponent>
