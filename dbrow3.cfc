@@ -1484,7 +1484,9 @@ Sample constructor code for use in child component:
 			</cfquery>
 
 			<cfif not(arguments.rsValues.recordcount)>
-				<cfthrow message="#theObject# with #theID# (#arguments.ID#) could not be loaded." detail="The ID does not exist.">
+				<cfthrow type="com.singlebrook.dbrow3.RecordNotFoundException"
+					message="#theObject# with #theID# (#arguments.ID#) could not be loaded."
+					detail="The ID does not exist.">
 			</cfif>
 
 		</cfif>
