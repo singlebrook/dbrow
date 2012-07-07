@@ -106,7 +106,7 @@ Rendering
 - edit
 - getLabel *
 - getDefaultTabIndex *
-- getTabIndexAttr
+- getTabIndexAttr *
 - setField *
 - setLabel *
 

@@ -11,6 +11,13 @@ public void function getDefaultTabIndex() {
 }
 
 
+public void function getTabIndexAttr() {
+	var expected = 'tabindex="' & arthropod.getDefaultTabindex() & '"';
+	actual = arthropod.getTabIndexAttr('venemous');
+	assertEquals(expected, actual);
+}
+
+
 /* `drawForm()` is another brittle, trivial test. It is intended to
 provide a modicum of coverage so that we can delegate
 dbrow3.drawForm() to dbrow_renderer.drawForm(). -Jared 2012-05-06 */

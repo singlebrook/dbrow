@@ -351,6 +351,12 @@ this default as a method to allow child classes to override it.
 </cffunction>
 
 
+<cffunction name="getTabIndexAttr" returntype="string" output="no" access="public">
+	<cfargument name="propertyname" type="string" required="yes">
+	<cfreturn 'tabindex="' & this.getDefaultTabindex() & '"'>
+</cffunction>
+
+
 <cffunction name="setField" returntype="void" access="public"
 		hint="Override default form fields. Custom fields can include
 			the standard fields with drawStandardFormField(propertyname).">

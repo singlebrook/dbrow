@@ -1238,12 +1238,9 @@ Sample constructor code for use in child component:
 
 	<cffunction name="getTabIndexAttr" returntype="string" output="no" access="public">
 		<cfargument name="propertyname" type="string" required="yes">
-
-		<!--- The base implementation is to simply use a default tabindex,
-		regardless of arguments.propertyname. Child classes are of course
-		welcome to override this implementation. - Jared 5/25/11 --->
-		<cfreturn 'tabindex="' & this.getDefaultTabindex() & '"'>
-	</cffunction> <!--- getTabIndexAttr --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.getTabIndexAttr(arguments.propertyname)>
+	</cffunction>
 
 
 	<cffunction name="getTableName" returntype="string" output="no" access="public">
