@@ -11,9 +11,9 @@ public void function getDefaultTabIndex() {
 }
 
 
-/* This is another brittle, trivial test. It is intended to provide a
-modicum of coverage so that we can delegate dbrow3.drawForm() to
-dbrow_renderer.drawForm(). -Jared 2012-05-06 */
+/* `drawForm()` is another brittle, trivial test. It is intended to
+provide a modicum of coverage so that we can delegate
+dbrow3.drawForm() to dbrow_renderer.drawForm(). -Jared 2012-05-06 */
 
 public void function drawForm() {
 	var actual = normalizeWhitespace(Trim(arthropod.drawForm()));
