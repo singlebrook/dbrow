@@ -33,7 +33,6 @@
 	<cfset lastTick = getTickCount()>
 	<!--- End vars supporting logging - leon 9/27/09 --->
 
-
 	<!--- Flag indicates whether initializeObject() has run - leon 8/31/06 --->
 	<cfparam name="this.isInitialized" default="0">
 	<!--- Flag indicates whether init() has run - leon 8/31/06 --->
@@ -41,12 +40,10 @@
 	<!--- Flag indicates whether object has ever been stored in database - leon 3/12/07 --->
 	<cfparam name="this.isStored" default="0">
 
-	<!--- This doesn't work - it complains about theObject not being defined.
-		I think this has something to do with the order in which constructors
-		are called in child/parent objects. - leon 12/27/07 --->
-	<!--- <cfif not(this.isInited)>
-		<cfset init()>
-	</cfif> - leon 10/24/06 --->
+	<!--- Automatically calling `init()` from the pseudoconstructor
+	doesn't work - it complains about theObject not being defined. I
+	think this has something to do with the order in which constructors
+	are called in child/parent objects. - leon 12/27/07 --->
 
 	<!--- This used to have returntype="dbrow3", but that doesn't seem to work
 		when you have grandchildren in another directory. - leon 7/25/07 --->
