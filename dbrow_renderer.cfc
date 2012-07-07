@@ -4,6 +4,7 @@
 public component function init(required component dbrowObj) {
 	this.dbrowObj = arguments.dbrowObj;
 	this.stCustomField = {};
+	initValAttrPatterns();
 	return this;
 }
 
@@ -509,7 +510,7 @@ this default as a method to allow child classes to override it.
 				"disallowEmptyValue" instead of "required". - leon 2/7/06 --->
 			<cfset arrayAppend(arAttribs, 'disallowEmptyValue="1"')>
 		<cfelse>
-			<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_required#="1"')>
+			<cfset arrayAppend(arAttribs, '#this.valAttr_required#="1"')>
 		</cfif>
 	</cfif>
 
@@ -529,20 +530,20 @@ this default as a method to allow child classes to override it.
 			<!--- ALL: char,bigint,integer,bit,binary,date,float,decimal,varchar,time,timestamp - leon 2/4/06 --->
 			<!--- LEFT: char,bit,binary,other,varchar - don't think these need validation for now. - leon 2/4/06 --->
 			<cfcase value="float,decimal" delimiters=",">
-				<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="numeric"')>
+				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="numeric"')>
 			</cfcase>
 			<cfcase value="integer,bigint" delimiters=",">
-				<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="integer"')>
+				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="integer"')>
 			</cfcase>
 			<cfcase value="date,timestamp" delimiters=",">
-				<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="datetime"')>
+				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="datetime"')>
 			</cfcase>
 			<cfcase value="time">
-				<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="time"')>
+				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="time"')>
 			</cfcase>
 			<cfcase value="char,varchar">
 				<cfif arguments.propertyname contains "email" >
-					<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="email"')>
+					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="email"')>
 				</cfif>
 			</cfcase>
 		</cfswitch>
@@ -554,7 +555,7 @@ this default as a method to allow child classes to override it.
 				<cfset v.stRule = v.arRules[v.i]>
 				<cfif len(v.stRule.regex)>
 					<cfif not(REFind(v.stRule.regex, this[propertyname]))>
-						<cfset arrayAppend(arAttribs, '#this.dbrowObj.valAttr_pattern#="/#v.stRule.regex#/"')>
+						<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="/#v.stRule.regex#/"')>
 						<cfset arrayAppend(arAttribs, 'patternError="#getLabel(propertyname)# #v.stRule.errorText#"')>
 					</cfif>
 				</cfif>
@@ -597,6 +598,39 @@ public void function setLabel(required string propertyname, required string labe
 		this.dbrowObj.stLabel = {};
 	}
 	this.dbrowObj.stLabel[arguments.propertyname] = arguments.label;
+}
+
+
+/* Private Methods */
+
+
+/* `initValAttrPatterns()` determines which set of validation
+attribute names to use for form inputs. There are three options:
+1. Modern custom attributes, per HTML5 specs. Use these by setting
+	application.dbrow3modernValAttrs = true.
+2. Transitional attributes, implemented after original attributes
+	caused problems, but before we knew about data- "namespace" for
+	custom attributes. Use these by setting
+	application.dbrow3legacyValAttrs = false.
+3. Legacy attribute names (default). These cause problems in
+	browsers that support HTML5 form validations. Use these by not
+	setting either of the application vars mentioned above.
+- leon 3/09/11 */
+private void function initValAttrPatterns() {
+	if (NOT StructKeyExists(this, 'valAttr_pattern')) {
+		if (StructKeyExists(application, 'dbrow3modernValAttrs') and application.dbrow3modernValAttrs) {
+			this.valAttr_pattern = "data-pattern";
+			this.valAttr_required = "data-required";
+		}
+		else if (StructKeyExists(application, 'dbrow3legacyValAttrs') and not(application.dbrow3legacyValAttrs)) {
+			this.valAttr_pattern = "val_pattern";
+			this.valAttr_required = "val_required";
+		}
+		else {
+			this.valAttr_pattern = "pattern";
+			this.valAttr_required = "required";
+		}
+	}
 }
 
 </cfscript>

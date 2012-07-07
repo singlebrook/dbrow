@@ -150,34 +150,6 @@ Sample constructor code for use in child component:
 			- leon 12/11/08 --->
 		</cfif>
 
-		<!--- Determine which set of validation attribute names to use for
-			form inputs. There are three options here:
-			1. Modern custom attributes, per HTML5 specs. Use these by
-				setting application.dbrow3modernValAttrs = true.
-			2. Transitional attributes, implemented after original
-				attributes caused problems, but before we knew about data-
-				"namespace" for custom attributes. Use these by setting
-				application.dbrow3legacyValAttrs = false.
-			3. Legacy attribute names (default). These cause problems in
-				browsers that support HTML5 form validations. Use these by
-				not setting either of the application vars mentioned above.
-			- leon 3/09/11 --->
-		<cfif not(structKeyExists(this, 'valAttr_pattern'))>
-			<cfif structKeyExists(application, 'dbrow3modernValAttrs') and application.dbrow3modernValAttrs>
-				<!--- HTML5-safe attribute names. - leon 3/09/11 --->
-				<cfset this.valAttr_pattern = "data-pattern">
-				<cfset this.valAttr_required = "data-required">
-			<cfelseif structKeyExists(application, 'dbrow3legacyValAttrs') and not(application.dbrow3legacyValAttrs)>
-				<!--- Transitional attribute names. - leon 5/10/10 --->
-				<cfset this.valAttr_pattern = "val_pattern">
-				<cfset this.valAttr_required = "val_required">
-			<cfelse>
-				<!--- Legacy attribute names. - leon 5/10/10 --->
-				<cfset this.valAttr_pattern = "pattern">
-				<cfset this.valAttr_required = "required">
-			</cfif>
-		</cfif>
-
 		<!--- There are a dozen methods in dbrow3.cfc which are more
 		concerned with rendering a record (eg. in html) than they are
 		with core responsibilities like persistence.  In dbrow 3.2,
