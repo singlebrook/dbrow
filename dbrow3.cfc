@@ -820,14 +820,9 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="getDefaultTabIndex" returnType="numeric" output="no" access="public">
-		<!--- It is useful to specify a default tabindex for all form elements. If form
-		elements are drawn without a tabindex, it is difficult for custom fields (or
-		non-dbrow fields) to override the tabindex.  I have chosen the default value of
-		16383 because it is halfway through the valid tabindex range, allowing
-		overrriding either above or below the default. I have implemented this default as
-		a method to allow child classes to override it. - Jared 5/25/11 --->
-		<cfreturn 16383>
-	</cffunction> <!--- getDefaultTabIndex --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.getDefaultTabIndex()>
+	</cffunction>
 
 
 	<cffunction name="getError" returntype="struct" output="no" access="public"

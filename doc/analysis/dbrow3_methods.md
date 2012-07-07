@@ -105,7 +105,7 @@ Rendering
 - drawErrorField
 - edit
 - getLabel *
-- getDefaultTabIndex
+- getDefaultTabIndex *
 - getTabIndexAttr
 - setField *
 - setLabel *

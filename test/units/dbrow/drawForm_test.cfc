@@ -6,6 +6,11 @@ public void function setUp() {
 }
 
 
+public void function getDefaultTabIndex() {
+	assertEquals(16383, arthropod.getDefaultTabIndex());
+}
+
+
 /* This is another brittle, trivial test. It is intended to provide a
 modicum of coverage so that we can delegate dbrow3.drawForm() to
 dbrow_renderer.drawForm(). -Jared 2012-05-06 */

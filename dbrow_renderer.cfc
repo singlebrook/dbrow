@@ -305,6 +305,19 @@ public component function init(required component dbrowObj) {
 </cffunction> <!--- drawStandardFormField --->
 
 
+<!--- `getDefaultTabIndex` - It is useful to specify a default
+tabindex for all form elements. If form elements are drawn without a
+tabindex, it is difficult for custom fields (or non-dbrow fields) to
+override the tabindex. I have chosen the default value of 16383
+because it is halfway through the valid tabindex range, allowing
+overrriding either above or below the default. I have implemented
+this default as a method to allow child classes to override it.
+-Jared 5/25/11 --->
+<cffunction name="getDefaultTabIndex" returnType="numeric" output="no" access="public">
+	<cfreturn 16383>
+</cffunction>
+
+
 <cffunction name="getLabel" returntype="string" access="public" output="no">
 	<cfargument name="propertyname" type="string" required="yes">
 	<cfset var label = propertyname>
