@@ -15,6 +15,14 @@ public void function drawFormErrorSummary() {
 	assertEquals(expected, actual);
 }
 
+
+public void function drawErrorField() {
+	arthropod.legs = "giraffe sundress";
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('<span id="legs_error" class="error hidden"></span>')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.drawErrorField('legs'))));
+	assertEquals(expected, actual);
+}
+
 </cfscript>
 
 <cffunction name="expectedErrorSummary" access="private" output="no" returntype="string">

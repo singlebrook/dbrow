@@ -10,6 +10,15 @@ public component function init(required component dbrowObj) {
 </cfscript>
 
 
+<cffunction name="drawErrorField" returnType="string" output="no" access="public">
+	<cfargument name="propertyname" type="string" required="yes">
+	<cfargument name="errorText" type="string" required="no" default="">
+	<cfargument name="identifierPrefix" type="string" required="no" default="">
+
+	<cfreturn '<span id="' & arguments.identifierPrefix & propertyname & '_error" class="error#iif(len(errorText), de(''), de(' hidden'))#">#errorText#</span>'>
+</cffunction>
+
+
 <cffunction name="drawFormErrorSummary" returnType="string" output="no" access="public">
 	<cfargument name="arErrors" type="array" required="yes"
 		hint="Array of validation errors. See getErrorArray().">
