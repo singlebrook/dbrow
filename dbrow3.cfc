@@ -1146,84 +1146,11 @@ Sample constructor code for use in child component:
 	</cffunction> <!--- getTableName --->
 
 
-	<cffunction name="getValidationAttribs" returntype="string" access="public" output="no"
-			hint="Returns attributes to be used in form field tag. These attributes are processed by
-				formvalidation.js .">
+	<cffunction name="getValidationAttribs" returntype="string" access="public" output="no">
 		<cfargument name="propertyname" type="string" required="yes">
-
-		<cfset var arAttribs = arrayNew(1)>
-		<cfset var stMD = this.stColMetaData[arguments.propertyname]>
-		<cfset var isFK = 0>
-
-		<!--- Put column label into attribs. Error messages will automatically be constructed using
-			the label. - leon 2/4/06 --->
-		<cfset arrayAppend(arAttribs, 'desc="#getLabel(arguments.propertyname)#"')>
-
-		<cfif structKeyExists(this.stFKMetaData, arguments.propertyname)>
-			<cfset isFK = 1>
-		</cfif>
-
-		<cfif stMD.notNull>
-			<cfif isFK>
-				<!--- This is a foreign key field, and will be drawn as a dropdown. Dropdowns require
-					"disallowEmptyValue" instead of "required". - leon 2/7/06 --->
-				<cfset arrayAppend(arAttribs, 'disallowEmptyValue="1"')>
-			<cfelse>
-				<cfset arrayAppend(arAttribs, '#this.valAttr_required#="1"')>
-			</cfif>
-		</cfif>
-
-		<cfif not(isFK)>
-
-			<cfif val(stMD.maxLen)>
-				<cfset arrayAppend(arAttribs, 'maxlength="#stMD.maxLen#"')>
-			</cfif>
-
-			<!--- Add number formatting support for decimal places. This isn't really validation, but it
-					is a form of data cleaning. - leon 2/4/06 --->
-			<cfif len(stMD.decimalPlaces)>
-				<cfset arrayAppend(arAttribs, 'onChange="if (this.value != '''') this.value=Math.round(Math.pow(10,#val(stMD.decimalPlaces)#) * this.value) / Math.pow(10,#val(stMD.decimalPlaces)#);"')>
-			</cfif>
-
-			<cfswitch expression="#stMD.datatype#">
-				<!--- ALL: char,bigint,integer,bit,binary,date,float,decimal,varchar,time,timestamp - leon 2/4/06 --->
-				<!--- LEFT: char,bit,binary,other,varchar - don't think these need validation for now. - leon 2/4/06 --->
-				<cfcase value="float,decimal" delimiters=",">
-					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="numeric"')>
-				</cfcase>
-				<cfcase value="integer,bigint" delimiters=",">
-					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="integer"')>
-				</cfcase>
-				<cfcase value="date,timestamp" delimiters=",">
-					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="datetime"')>
-				</cfcase>
-				<cfcase value="time">
-					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="time"')>
-				</cfcase>
-				<cfcase value="char,varchar">
-					<cfif arguments.propertyname contains "email" >
-						<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="email"')>
-					</cfif>
-				</cfcase>
-			</cfswitch>
-
-			<!--- Check custom rules - leon 12/11/08 --->
-			<cfif structKeyExists(this.stCustomValidation, propertyname)>
-				<cfset v.arRules = this.stCustomValidation[propertyname]>
-				<cfloop from="1" to="#arrayLen(v.arRules)#" index="v.i">
-					<cfset v.stRule = v.arRules[v.i]>
-					<cfif len(v.stRule.regex)>
-						<cfif not(REFind(v.stRule.regex, this[propertyname]))>
-							<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="/#v.stRule.regex#/"')>
-							<cfset arrayAppend(arAttribs, 'patternError="#getLabel(propertyname)# #v.stRule.errorText#"')>
-						</cfif>
-					</cfif>
-				</cfloop>
-			</cfif>
-		</cfif>
-
-		<cfreturn arrayToList(arAttribs, ' ')>
-	</cffunction> <!--- getValidationAttribs --->
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.getValidationAttribs(arguments.propertyname)>
+	</cffunction>
 
 
 	<cffunction name="hasMany" returntype="void" output="no" access="package">

@@ -23,6 +23,44 @@ public void function drawErrorField() {
 	assertEquals(expected, actual);
 }
 
+
+/* The following five tests depend on application.dbrow3modernValAttrs = true.
+There are two other legacy options for validation attributes,
+but here we only test the most modern. - Jared 2012-07-06 */
+public void function getValidationAttribs_legs() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="legs" onchange="if (this.value != ' & "''" & ') this.value=math.round(math.pow(10,0) * this.value) / math.pow(10,0);" data-pattern="integer"')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('legs'))));
+	assertEquals(expected, actual);
+}
+
+
+public void function getValidationAttribs_arthropodID() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="arthropodid" data-required="1" onchange="if (this.value != ' & "''" & ') this.value=math.round(math.pow(10,0) * this.value) / math.pow(10,0);" data-pattern="integer"')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('arthropodID'))));
+	assertEquals(expected, actual);
+}
+
+
+public void function getValidationAttribs_arthropod_name() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="creepy crawly" maxlength="50"')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('arthropod_name'))));
+	assertEquals(expected, actual);
+}
+
+
+public void function getValidationAttribs_venemous() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="venemous"')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('venemous'))));
+	assertEquals(expected, actual);
+}
+
+
+public void function getValidationAttribs_subphylumID() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="subphylumid"')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('subphylumID'))));
+	assertEquals(expected, actual);
+}
+
 </cfscript>
 
 <cffunction name="expectedErrorSummary" access="private" output="no" returntype="string">

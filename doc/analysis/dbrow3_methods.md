@@ -111,6 +111,7 @@ All rendering methods have been delegated to the `dbrow_renderer`.
 - getLabel
 - getDefaultTabIndex
 - getTabIndexAttr
+- getValidationAttribs - Returns attributes to be used in form field tag. These attributes are processed by formvalidation.js
 - setField
 - setLabel
 
@@ -132,5 +133,4 @@ Validation
 - getError
 - getErrorArray
 - getErrorStruct
-- getValidationAttribs - Returns attributes to be used in form field tag. These attributes are processed by formvalidation.js
 - newError

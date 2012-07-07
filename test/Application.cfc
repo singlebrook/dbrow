@@ -5,9 +5,16 @@
 <cfset this.applicationtimeout = "#CreateTimeSpan(0,0,0,5)#">
 
 <cffunction name="onApplicationStart">
-  <cfset application.datasource = "dbrow_test">
-  <cfset application.objectMap = "dbrow.test">
-  <cfset application.appRootURL = cgi.server_name>
+	<cflock scope="application" throwOnTimeout="yes" timeout="1">
+		<cfset application.datasource = "dbrow_test">
+		<cfset application.objectMap = "dbrow.test">
+		<cfset application.appRootURL = cgi.server_name>
+
+		<!--- By setting dbrow3modernValAttrs to true, we are deciding
+		to test only the most modern of the three options for validation
+		attributes on form input tags. - Jared 2012-07-06 --->
+		<cfset application.dbrow3modernValAttrs = true>
+	</cflock>
 </cffunction>
 
 
