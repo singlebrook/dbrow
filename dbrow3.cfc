@@ -1,7 +1,4 @@
-<!--- The code in this file is Copyright (c) 1994-2004 Comvision, Inc and 2005-2011 Singlebrook
-	Technology, Inc. All rights reserved.
-
-Sample child component extending dbrow:
+<!--- Sample child component extending dbrow:
 
 <cfcomponent extends="dbrow3_mysql"> // choose the correct adapter
 	<cfscript>

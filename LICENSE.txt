@@ -1,0 +1,2 @@
+All dbrow source code is Copyright (c) 1994-2004 Comvision, Inc
+and 2005-2012 Singlebrook Technology, Inc. All rights reserved.

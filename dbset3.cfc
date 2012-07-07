@@ -1,6 +1,4 @@
-<!--- The code in this file is Copyright (c) 1994-2004 Comvision, Inc and 2005-2011 Singlebrook
-	Technology, Inc. All rights reserved.
----><cfcomponent name="dbset3">
+<cfcomponent name="dbset3">
 
 <!--- This is a component template. To use it, extend it via an "extends" parameter in your
 	cfcomponent tag.
