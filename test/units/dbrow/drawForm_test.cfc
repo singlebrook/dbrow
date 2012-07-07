@@ -42,6 +42,13 @@ public void function drawForm() {
 }
 
 
+public void function drawFormStart() {
+	expected = HTMLEditFormat(normalizeWhitespace(Trim('class="dbrow-error-summary error,hidden"> </div> <form action="" method="post" onsubmit="return showerrors(getformerrors(this), this);" id="')));
+	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.drawFormStart())));
+	assert(actual contains expected);
+}
+
+
 public void function drawFormEnd() {
 	assertEquals('</form>', arthropod.drawFormEnd());
 }

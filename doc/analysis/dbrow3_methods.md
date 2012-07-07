@@ -100,7 +100,7 @@ Rendering
 - drawFormEnd *
 - drawFormField *
 - drawFormErrorSummary *
-- drawFormStart
+- drawFormStart *
 - drawStandardFormField *
 - drawErrorField *
 - edit

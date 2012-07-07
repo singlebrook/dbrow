@@ -170,6 +170,37 @@ public component function init(required component dbrowObj) {
 </cffunction>
 
 
+<cffunction name="drawFormStart" returnType="string" output="no" access="public">
+	<cfargument name="handlerScript" type="string" required="no" default="">
+	<cfargument name="bIncludeValScript" type="boolean" required="no" default="0">
+	<cfargument name="jsIncludePath" type="string" required="no" default="/js/">
+	<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
+
+	<cfset var formStartHTML = "">
+	<cfset var formID = Replace(CreateUUID(), '-', '', 'all')>
+
+	<cfsavecontent variable="formStartHTML">
+		<cfoutput>
+
+		<cfif arguments.bIncludeValScript>
+			<script type="text/javascript" src="#arguments.jsIncludePath#formvalidation.js"></script>
+		</cfif>
+
+		#drawFormErrorSummary(arguments.arErrors, formID)#
+
+		<form action="#arguments.handlerScript#" method="post" onSubmit="return showErrors(getFormErrors(this), this);" id="#formID#"
+			<cfif Len(this.dbrowObj.binaryFieldList)>
+				enctype="multipart/form-data"
+			</cfif>
+		>
+
+		</cfoutput>
+	</cfsavecontent>
+
+	<cfreturn formStartHTML>
+</cffunction>
+
+
 <cffunction name="drawPropertyValue" returnType="string" output="no" access="public">
 	<cfargument name="propertyname" type="string" required="yes">
 

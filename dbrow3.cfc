@@ -610,35 +610,9 @@ Sample constructor code for use in child component:
 
 
 	<cffunction name="drawFormStart" returnType="string" output="no" access="public">
-		<cfargument name="handlerScript" type="string" required="no" default="">
-		<cfargument name="bIncludeValScript" type="boolean" required="no" default="0">
-		<cfargument name="jsIncludePath" type="string" required="no" default="/js/">
-		<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
-
-		<cfset var formStartHTML = "">
-		<cfset var formID = replace(createUUID(), '-', '', 'all')>
-
-		<cfsavecontent variable="formStartHTML">
-			<cfoutput>
-
-			<cfif arguments.bIncludeValScript>
-				<script type="text/javascript" src="#arguments.jsIncludePath#formvalidation.js"></script>
-			</cfif>
-
-			#drawFormErrorSummary(arguments.arErrors, formID)#
-
-			<form action="#arguments.handlerScript#" method="post" onSubmit="return showErrors(getFormErrors(this), this);" id="#formID#"
-				<cfif len(this.binaryFieldList)>
-					enctype="multipart/form-data"
-				</cfif>
-			>
-
-			</cfoutput>
-		</cfsavecontent>
-
-		<cfreturn formStartHTML>
-	</cffunction> <!--- drawFormStart --->
-
+		<cfset initializeRenderer()>
+		<cfreturn this.renderer.drawFormStart(argumentCollection = arguments)>
+	</cffunction>
 
 
 	<cffunction name="drawStandardFormField" returnType="string" output="no" access="public">
