@@ -28,20 +28,6 @@ Sample constructor code for use in child component:
 			hasMany(). Both one-to-many and many-to-many relationships are supported.
 		- Belongs-to-many relationships are the same this as has-many, so you can
 			define them with hasMany().
-
-
-		FIELD LABELS
-		By default, field labels will be created from the property name by
-		- replacing underscores with spaces
-		- uppercasing the first letter of each word
-		You can override the default labels with setLabel(propertyname, label).
-		e.g. setLabel('address1', 'Street Address');
-
-		FORM FIELDS
-		You may override the default form field for a property. You can use
-		evaluate(de("##varname##")) to put CF vars into the field contents
-		at runtime.
-		e.g. setField('address1', '<textarea name="blah" />');
 		*/
 	</cfscript>
 
