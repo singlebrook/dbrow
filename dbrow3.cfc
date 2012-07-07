@@ -1477,9 +1477,9 @@
 	<cffunction name="new" returnType="dbrow3"
 			hint="Sets up default values for this object (only theID by default). Used when creating a new row.">
 
-		<cfif not(this.isInited)>
-			<cfset init()>
-		</cfif>
+		<cfscript>
+			if (NOT this.isInited) { init(); }
+		</cfscript>
 
 		<!--- Set properties to database defaults - leon 2/3/06 --->
 		<cfloop list="#this.propertyList#" index="i">
