@@ -1,4 +1,4 @@
-<cfcomponent name="dbrow3renderer">
+<cfcomponent>
 <cfscript>
 
 /*
