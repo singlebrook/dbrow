@@ -1,9 +1,6 @@
 <!--- The code in this file is Copyright (c) 1994-2004 Comvision, Inc and 2005-2011 Singlebrook
 	Technology, Inc. All rights reserved.
 
-dbrow3.1 (aka dbrow3_1) is the version of dbrow3 that takes advantage of features of CF8 and
-above. It is not compatible with CF7 and below.
-
 This is a component template. To use it, extend it via an "extends" parameter in your
 	cfcomponent tag.
 
