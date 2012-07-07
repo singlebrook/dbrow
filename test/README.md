@@ -19,7 +19,7 @@ Setup dbrow Unit Tests
 Setup dbrow_test database
 -------------------------
 
-1. in `pgsql`
+1. in `psql`
   1. `create database dbrow_test`
   1. `create user dbrow_test superuser password 'derp'`
 1. in cf admin, create datasource `dbrow_test`

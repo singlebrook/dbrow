@@ -32,12 +32,9 @@ implementation of the Active Record design pattern.
 	<cfset w = CreateObject('component', 'widget')>
 	<cfset w.new()>
 	<cfset w.widget_name = "Rocket">
-
 	<cfset w.year_invented = "282">
-
 	<cfset w.inventor = "Emperor Carinus">
-
-	<cfset w.store(getID = 1)>
+	<cfset w.store(getID = true)>
 	<cfoutput>The primary key of the new record is #w.widgetid#</cfoutput>
 
 ### Updating a record
