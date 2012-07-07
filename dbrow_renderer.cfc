@@ -384,6 +384,56 @@ public component function init(required component dbrowObj) {
 </cffunction> <!--- drawStandardFormField --->
 
 
+<cffunction name="edit" returnType="void" output="yes" access="remote">
+	<cfargument name="id" required="yes">
+	<cfargument name="goto" type="string" required="no" default="#replace(cgi.script_name, '.cfc', '_set.cfc')#?method=list">
+	<cfargument name="arErrors" type="array" required="no" default="#arrayNew(1)#" hint="Array of validation errors. See getErrorArray().">
+	<cfargument name="stValues" type="struct" required="no" default="#structNew()#" hint="Previously submitted values to use instead of stored ones.">
+
+	<!--- Check to make sure the user has permissions --->
+	<cfif StructKeyExists( url, "method" ) and url.method eq "edit">
+		<cfset this.dbrowObj.checkRemoteMethodAuthorization() >
+	</cfif>
+
+	<cfif len(id)>
+		<cfset this.dbrowObj.load(id)>
+	<cfelse>
+		<cfset this.dbrowObj.new()>
+	</cfif>
+
+	<!--- Override existing values with submitted ones. This usually happens in an error condition and you want
+		to redisplay what the user entered, not what is stored. - leon 12/9/08 --->
+	<cfif not(structIsEmpty(stValues))>
+		<cfset this.dbrowObj.loadStruct(stValues)>
+	</cfif>
+
+	<cfoutput>
+
+	<html>
+		<body>
+			<!--- We used to check if the _content_header.cfm file existed with
+				fileExists(), but expandPath() doesn't understand CF mappings on Windows,
+				so we can't do it that way. - leon 3/28/07 --->
+			<cftry>
+				<cfinclude template="/#replace(this.dbrowObj.objectMap, '.', '/', 'all')#/../include/_content_header.cfm">
+				<cfcatch type="any" />
+			</cftry>
+			#drawForm(bIncludeValScript = 1, jsIncludePath = '#application.appRootURL##iif(right(application.appRootURL,1) eq '/', de(''), de('/'))#js/', goto = arguments.goto, arErrors = arErrors)#
+			<cfif 0>
+				DEBUG<br />
+				<cfdump var="#this.dbrowObj.stMany#">
+				<cfloop collection="#this.dbrowObj.stMany#" item="v.i">
+					#v.i#: #getManyRelatedIDs(v.i)#<br />
+				</cfloop>
+				<cfdump var="#this.dbrowObj.stMany#">
+			</cfif>
+		</body>
+	</html>
+
+	</cfoutput>
+</cffunction> <!--- edit --->
+
+
 <!--- `getDefaultTabIndex` - It is useful to specify a default
 tabindex for all form elements. If form elements are drawn without a
 tabindex, it is difficult for custom fields (or non-dbrow fields) to

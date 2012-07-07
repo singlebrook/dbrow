@@ -7,6 +7,7 @@
 <cffunction name="onApplicationStart">
   <cfset application.datasource = "dbrow_test">
   <cfset application.objectMap = "dbrow.test">
+  <cfset application.appRootURL = cgi.server_name>
 </cffunction>
 
 

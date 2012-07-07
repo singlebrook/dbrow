@@ -3,6 +3,7 @@ Analysis of Responsibilities within dbrow3.cfc
 
 by Jared Beck
 2012-04-28
+Updated: 2012-06-06
 
 Associations
 --------------
@@ -95,22 +96,23 @@ Properties
 
 Rendering
 ------------
-- drawPropertyValue *
-- drawForm *
-- drawFormEnd *
-- drawFormField *
-- drawFormErrorSummary *
-- drawFormStart *
-- drawStandardFormField *
-- drawErrorField *
-- edit
-- getLabel *
-- getDefaultTabIndex *
-- getTabIndexAttr *
-- setField *
-- setLabel *
 
-\* These methods have been delegated to the `dbrow_renderer`
+All rendering methods have been delegated to the `dbrow_renderer`.
+
+- drawPropertyValue
+- drawForm
+- drawFormEnd
+- drawFormField
+- drawFormErrorSummary
+- drawFormStart
+- drawStandardFormField
+- drawErrorField
+- edit
+- getLabel
+- getDefaultTabIndex
+- getTabIndexAttr
+- setField
+- setLabel
 
 Tombstoning
 -----------
