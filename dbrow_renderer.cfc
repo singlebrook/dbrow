@@ -10,6 +10,45 @@ public component function init(required component dbrowObj) {
 </cfscript>
 
 
+<cffunction name="drawFormErrorSummary" returnType="string" output="no" access="public">
+	<cfargument name="arErrors" type="array" required="yes"
+		hint="Array of validation errors. See getErrorArray().">
+	<cfargument name="formID" type="string" required="no">
+
+	<cfset var summary = "">
+	<cfset var divIdAttr = "">
+	<cfset var divClassList = "dbrow-error-summary error">
+
+	<cfif StructKeyExists(arguments, "formID")>
+		<cfset divIdAttr = 'id' & '="' & formID & '"_error'>
+	</cfif>
+	<cfif NOT ArrayLen(arguments.arErrors)>
+		<cfset divClassList = ListAppend(divClassList, "hidden")>
+	</cfif>
+
+	<cfsavecontent variable="summary">
+		<cfoutput>
+			<div #divIdAttr# class="#divClassList#">
+				<cfif arrayLen(arErrors)>
+					<span class="dbrow-error-summary-title">
+						Sorry, there is a problem with your form:
+					</span>
+					<ul>
+						<cfloop from="1" to="#arrayLen(arErrors)#" index="i">
+							<li>#arErrors[i].propertyLabel# #arErrors[i].errorText#</li>
+						</cfloop>
+					</ul>
+					Please fix <cfif arrayLen(arErrors) eq 1>this<cfelse>these</cfif>
+					problem<cfif arrayLen(arErrors) neq 1>s</cfif> and resubmit the form.
+				</cfif>
+			</div>
+		</cfoutput>
+	</cfsavecontent>
+
+	<cfreturn summary>
+</cffunction> <!--- drawFormErrorSummary --->
+
+
 <cffunction name="drawForm" returnType="string" output="no" access="public">
 	<cfargument name="handlerScript" type="string" required="no" default="#cgi.script_name#?method=saveform">
 	<cfargument name="bIncludeValScript" type="boolean" required="no" default="0">
