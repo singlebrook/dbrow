@@ -18,18 +18,18 @@ public void function getTabIndexAttr() {
 }
 
 
-/* `drawForm()` is another brittle, trivial test. It is intended to
-provide a modicum of coverage so that we can delegate
+/* `drawForm()` is a very brittle, trivial test. It is only
+intended to provide a modicum of coverage so that we can delegate
 dbrow3.drawForm() to dbrow_renderer.drawForm(). -Jared 2012-05-06 */
 
 public void function drawForm() {
 	var actual = normalizeWhitespace(Trim(arthropod.drawForm()));
 
-	var mkp_beginning = '<form action="/index.cfm?method=saveform" method="post" onSubmit="return showErrors(getFormErrors(this), this);" id="';
-	assert(actual contains mkp_beginning);
+	var mkp_beginning = 'method=saveform" method="post" onSubmit="return showErrors(getFormErrors(this), this);" id="';
+	assert(actual contains mkp_beginning, "expected #HTMLEditFormat(actual)# to contain #HTMLEditFormat(mkp_beginning)#");
 
 	var mkp_formsubmit = normalizeWhitespace(Trim(expectedField_formsubmit(arthropod)));
-	assert(actual contains mkp_formsubmit);
+	assert(actual contains mkp_formsubmit, "expected #HTMLEditFormat(actual)# to contain #HTMLEditFormat(mkp_formsubmit)#");
 
 	var mkp_subphylumid = normalizeWhitespace(Trim(expectedField_subphylumid()));
 	assert(actual contains mkp_subphylumid, "expected #HTMLEditFormat(actual)# to contain #HTMLEditFormat(mkp_subphylumid)#");
@@ -54,7 +54,6 @@ public void function drawFormEnd() {
 
 	<cfsavecontent variable="local.remainder">
 	<cfoutput>
-		<input type="hidden" name="goto" value="/index.cfm.cfc?method=list">
 		<input type="hidden" name="arthropodID" id="arthropodID" value="#arthropod.arthropodID#" /><span id="arthropodID_error" class="error hidden"></span>
 		<table border="1">
 			<tr>
@@ -79,12 +78,6 @@ public void function drawFormEnd() {
 			<td colspan="2">
 				<div class="formsubmit">
 				<input type="submit" value="Save" id="submitbutton" tabindex="16383">
-
-					<input type="button" value="Delete" tabindex="16383" onclick="if (confirm('Are you sure?')) document.location='/index.cfm?method=delete&amp;id=#arthropod.arthropodID#';">
-
-				</div>
-			</td>
-		</tr>
 	</cfoutput>
 	</cfsavecontent>
 	<cfreturn local.markup>
