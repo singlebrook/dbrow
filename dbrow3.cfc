@@ -23,12 +23,9 @@
 		*/
 	</cfscript>
 </cfcomponent>
-
 --->
 
-<!--- Basic Database Row component --->
-<cfcomponent name="dbrow3"
-		hint="This object represents a database row of a particular type of object">
+<cfcomponent name="dbrow3" hint="represents a database record">
 
 	<!--- Vars supporting logging - leon 9/27/09 --->
 	<!--- Set to 0 to disable logging. - leon 9/27/09 --->
