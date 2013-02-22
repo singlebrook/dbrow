@@ -1,3 +1,4 @@
+<cfsetting showdebugoutput="no">
 <cfscript>
 
 testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
