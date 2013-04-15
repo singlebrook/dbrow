@@ -250,7 +250,7 @@
 
 		<cfset v.newRule = structNew()>
 		<cfset v.newRule.regex = arguments.regex>
-		<cfset v.newRule.function = arguments.function>
+		<cfset v.newRule['function'] = arguments['function']>
 		<cfset v.newRule.errorText = arguments.errorText>
 
 		<!--- Create stCustomValidation if it doesn't exist yet. - leon 4/21/08 --->
@@ -759,8 +759,8 @@
 									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))>
 								</cfif>
 							</cfif>
-							<cfif len(v.stRule.function)>
-								<cfif not(evaluate('#v.stRule.function#("#this[v.thisProp]#")'))>
+							<cfif Len(v.stRule['function'])>
+								<cfif NOT Evaluate('#v.stRule["function"]#("#this[v.thisProp]#")')>
 									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))>
 								</cfif>
 							</cfif>
