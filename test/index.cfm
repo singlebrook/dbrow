@@ -3,7 +3,8 @@
 
 testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
 
-unitTestCFCs = ['instantiation_test', 'load_test', 'label_test',
+unitTestCFCs = ['addValidation_test', 'instantiation_test',
+	'load_test', 'label_test',
 	'drawForm_test', 'drawFormField_test', 'drawPropertyValue_test',
 	'drawStandardFormField_test', 'edit_test', 'formValidation_test'];
 
