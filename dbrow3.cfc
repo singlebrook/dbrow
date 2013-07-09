@@ -741,7 +741,7 @@
 						<cfcase value="char,varchar">
 							<!--- IsValid is only available on CF7 or greater - dave 10/20/09 --->
 							<cfif listFirst(Server.ColdFusion.ProductVersion) gte 7 >
-								<cfif v.thisProp contains "email" and not(isValid('email', this[v.thisProp]))>
+								<cfif v.thisProp EQ "email" AND NOT IsValid('email', this[v.thisProp])>
 									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid email address'))>
 								</cfif>
 							</cfif>
