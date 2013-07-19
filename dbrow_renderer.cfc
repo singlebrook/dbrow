@@ -570,13 +570,13 @@ this default as a method to allow child classes to override it.
 			</cfcase>
 		</cfswitch>
 
-		<!--- Check custom rules - leon 12/11/08 --->
+		<!--- custom rules - leon 12/11/08 --->
 		<cfif structKeyExists(this.dbrowObj.stCustomValidation, propertyname)>
 			<cfset v.arRules = this.dbrowObj.stCustomValidation[propertyname]>
 			<cfloop from="1" to="#arrayLen(v.arRules)#" index="v.i">
 				<cfset v.stRule = v.arRules[v.i]>
 				<cfif len(v.stRule.regex)>
-					<cfif not(REFind(v.stRule.regex, this[propertyname]))>
+					<cfif NOT REFind(v.stRule.regex, this.dbrowObj[propertyname])>
 						<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="/#v.stRule.regex#/"')>
 						<cfset arrayAppend(arAttribs, 'patternError="#getLabel(propertyname)# #v.stRule.errorText#"')>
 					</cfif>
