@@ -575,11 +575,9 @@ this default as a method to allow child classes to override it.
 			<cfset v.arRules = this.dbrowObj.stCustomValidation[propertyname]>
 			<cfloop from="1" to="#arrayLen(v.arRules)#" index="v.i">
 				<cfset v.stRule = v.arRules[v.i]>
-				<cfif len(v.stRule.regex)>
-					<cfif NOT REFind(v.stRule.regex, this.dbrowObj[propertyname])>
-						<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="/#v.stRule.regex#/"')>
-						<cfset arrayAppend(arAttribs, 'patternError="#getLabel(propertyname)# #v.stRule.errorText#"')>
-					</cfif>
+				<cfif Len(v.stRule.regex)>
+					<cfset ArrayAppend(arAttribs, '#this.valAttr_pattern#="/#v.stRule.regex#/"')>
+					<cfset ArrayAppend(arAttribs, 'patternError="#getLabel(propertyname)# #v.stRule.errorText#"')>
 				</cfif>
 			</cfloop>
 		</cfif>
