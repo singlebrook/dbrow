@@ -131,6 +131,7 @@
 				case "date" : return "date"; break;
 				case "double precision" : return "float"; break;
 				case "integer" : return "integer"; break;
+				case "json" : return "varchar"; break;
 				case "money" : return "decimal"; break;
 				case "numeric" : return "decimal"; break;
 				case "real" : return "float"; break;
