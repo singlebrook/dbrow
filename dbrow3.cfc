@@ -1201,6 +1201,10 @@
 		<cfset var thisVal = "">
 		<cfset var thisDataType = "">
 
+		<cfif not(this.isInited)>
+			<cfset init()>
+		</cfif>
+
 		<!--- Begin validating arguments --->
 		<cfif iif(structKeyExists(arguments, 'ID'),1,0) + iif(structKeyExists(arguments, 'stValues'),1,0) + iif(structKeyExists(arguments, 'rsValues'),1,0) neq 1>
 			<cfthrow message="dbrow3.load() requires exactly one of (ID, stValues, rsValues)">
@@ -1220,10 +1224,6 @@
 			</cfif>
 		</cfif>
 		<!--- End validating arguments --->
-
-		<cfif not(this.isInited)>
-			<cfset init()>
-		</cfif>
 
 		<cfset beforeLoad()>
 
