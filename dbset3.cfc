@@ -20,9 +20,6 @@ Sample constructor code for use in child component:
 		this.init()
 	</cfscript>
 
-This component depends on having the timespans request.timeLong and request.timeNone defined
-	for caching purposes.
-
 --->
 
 	<cffunction name="init" returntype="void" access="public"
@@ -53,6 +50,13 @@ This component depends on having the timespans request.timeLong and request.time
 		<cfelse>
 			<cfset this.objectMap = application.objectMap>
 		</cfif>
+
+		<cfscript>
+			/* Define cache timespans.  Do not depend on request.timeLong
+			to be defined. - Jared 2013 */
+			this.timeLong = StructKeyExists(request, "timeLong") ? request.timeLong : cacheTimeoutDefault();
+			this.timeNone = StructKeyExists(request, "timeNone") ? request.timeNone : CreateTimeSpan(0,0,0,0);
+		</cfscript>
 
 	</cffunction> <!--- init --->
 
@@ -86,6 +90,12 @@ This component depends on having the timespans request.timeLong and request.time
 		<cfset this.isInitialized = 1>
 
 	</cffunction> <!--- initializeObject --->
+
+
+	<cffunction name="cacheTimeoutDefault" returntype="date" output="no" access="public"
+			hint="See dbrow3.cacheTimeoutDefault()">
+		<cfreturn CreateTimeSpan(0,2,0,0)>
+	</cffunction>
 
 
 	<cffunction name="checkRemoteMethodAuthorization" returntype="void" output="false" access="public"
@@ -135,9 +145,9 @@ This component depends on having the timespans request.timeLong and request.time
 		</cfif>
 
 		<cfif bUseCache>
-			<cfset cacheTime = request.timeLong>
+			<cfset cacheTime = this.timeLong>
 		<cfelse>
-			<cfset cacheTime = request.timeNone>
+			<cfset cacheTime = this.timeNone>
 		</cfif>
 
 		<!--- Roll filterField and filterValue in filterSet so we can just deal with the latter. - leon 6/3/08 --->
