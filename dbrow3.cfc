@@ -76,19 +76,12 @@
 		<cfparam name="this.typeObj" default="">
 		<cfparam name="hiddenFieldList" default="">
 
-		<!--- Define cache timespans.  Do not depend on request.timeLong
-			to be defined. - Jared 2012-02-16 --->
-		<cfif StructKeyExists(request, "timeLong")>
-			<cfset this.timeLong = request.timeLong>
-		<cfelse>
-			<cfset this.timeLong = cacheTimeoutDefault()>
-		</cfif>
-
-		<cfif StructKeyExists(request, "timeNone")>
-			<cfset this.timeNone = request.timeNone>
-		<cfelse>
-			<cfset this.timeNone = CreateTimeSpan(0,0,0,0)>
-		</cfif>
+		<cfscript>
+			/* Define cache timespans.  Do not depend on request.timeLong
+			to be defined. - Jared 2012-02-16 */
+			this.timeLong = StructKeyExists(request, "timeLong") ? request.timeLong : cacheTimeoutDefault();
+			this.timeNone = StructKeyExists(request, "timeNone") ? request.timeNone : CreateTimeSpan(0,0,0,0);
+		</cfscript>
 
 		<cfset logIt('init() called on dbrow object #theNameField#. Generating classUniqueID...')>
 
