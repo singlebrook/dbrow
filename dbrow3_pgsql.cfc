@@ -45,63 +45,43 @@
 		<!--- Load single-column foreign keys only - leon 4/21/08 --->
 		<!--- WARNING: Name your foreign key constraints uniquely!  This query does
 		not support schema with duplicate FK names.  (see below) - Jared 10/2/09 --->
-		<!--- NOTE: This query is slow. Most of the time it gets cached by the
-		mapper, but if you have a lot of objects, your application startup time can
-		be quite long. The information_schema is known to be slow, as each relation
-		is really a fairly complex view. - leon 9/28/09 --->
 		<cfquery name="rsFKs" datasource="#this.datasource#" cachedwithin="#this.timeLong#">
-			SELECT kcu.column_name,
-				ccu.table_name AS references_table,
-				ccu.column_name AS references_field
-			FROM information_schema.table_constraints tc
-				LEFT JOIN information_schema.key_column_usage kcu
-					ON tc.constraint_catalog = kcu.constraint_catalog
-						AND tc.constraint_schema = kcu.constraint_schema
-						AND tc.table_name = kcu.table_name
-						AND tc.constraint_name = kcu.constraint_name
+			select a1.attname as column_name, c2.relname as references_table, a2.attname as references_field
 
-				<!--- The join between table_constraints and referential_constraints is
-				flawed, because it uses only the constraint name, and not the table name
-				(on which the constraint is defined). This means that if you do not name
-				your foreign key constraints uniquely, you can get the wrong data back.
-				I don't know how to fix this while still using the information_schema
-				because referential_constraints doesn't contain table_name and
-				table_constraints doesn't contain unique_constraint_name. - leon 9/28/09 --->
-				LEFT JOIN information_schema.referential_constraints rc
-					ON tc.constraint_catalog = rc.constraint_catalog
-						AND tc.constraint_schema = rc.constraint_schema
-						AND tc.constraint_name = rc.constraint_name
-				LEFT JOIN information_schema.constraint_column_usage ccu
-					ON rc.unique_constraint_catalog = ccu.constraint_catalog
-						AND rc.unique_constraint_schema = ccu.constraint_schema
-						AND rc.unique_constraint_name = ccu.constraint_name
-			WHERE tc.table_name = lower('#tableName#')
-				AND tc.constraint_type = 'FOREIGN KEY'
+			/* The catalog pg_constraint stores check, primary key, unique, foreign
+			key, and exclusion constraints on tables. */
+			from pg_constraint t
 
-				AND tc.constraint_name in (
+			/* pg_attribute stores information about table columns.  The join's
+			on-clause (specifically the `ANY()`) supports compound FKCs, however
+			see the note below about why compound FKCs are omitted. -Jared 2013-10-18 */
+			inner join pg_attribute a1
+				on a1.attnum = ANY(t.conkey) /* conkey - constrained columns */
+				and a1.attrelid = t.conrelid
 
-					<!--- This subquery identifies the single-key foreign keys - leon 4/21/08 --->
-					SELECT tc.constraint_name
-					FROM information_schema.table_constraints tc
-						LEFT JOIN information_schema.key_column_usage kcu
-							ON tc.constraint_catalog = kcu.constraint_catalog
-								AND tc.constraint_schema = kcu.constraint_schema
-								AND tc.table_name = kcu.table_name
-								AND tc.constraint_name = kcu.constraint_name
-						LEFT JOIN information_schema.referential_constraints rc
-							ON tc.constraint_catalog = rc.constraint_catalog
-								AND tc.constraint_schema = rc.constraint_schema
-								AND tc.constraint_name = rc.constraint_name
-						LEFT JOIN information_schema.constraint_column_usage ccu
-							ON rc.unique_constraint_catalog = ccu.constraint_catalog
-								AND rc.unique_constraint_schema = ccu.constraint_schema
-								AND rc.unique_constraint_name = ccu.constraint_name
-					WHERE tc.table_name = lower('#tableName#')
-						and tc.constraint_type = 'FOREIGN KEY'
-					GROUP BY tc.constraint_name
-					HAVING count(kcu.column_name) = 1
+			inner join pg_attribute a2
+				on a2.attnum = ANY(t.confkey) /* confkey - referenced columns */
+				and a2.attrelid = t.confrelid
 
-				)
+			/* conrelid - The table this constraint is on */
+			inner join pg_class c1 on c1.oid = t.conrelid
+
+			/* confrelid - the referenced table */
+			inner join pg_class c2 on c2.oid = t.confrelid
+
+			where c1.relname = lower(<cfqueryparam value="#arguments.tableName#" cfsqltype="cf_sql_varchar">)
+				and t.contype = 'f' /* f = foreign key constraint */
+
+				/* To preserve backwards compatability, omit FKCs with "system
+				names" like $1, $2.  In the future, we should consider including
+				these. -Jared 2013-10-18 */
+				and t.conname !~ '^[$]'
+
+				/* Omit compound FKCs.  This is primarily to preserve backwards
+				compatability.  Secondarily, I suspect that dbrow does not support
+				compound FKCs. -Jared 2013-10-18 */
+				and array_length(t.conkey, 1) = 1
+				and array_length(t.confkey, 1) = 1
 		</cfquery>
 
 		<cfoutput query="rsFKs">
