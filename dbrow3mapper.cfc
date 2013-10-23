@@ -1,22 +1,29 @@
 <cfcomponent name="dbrow3mapper">
 
-	<!--- Vars supporting logging - leon 9/27/09 --->
-	<!--- Set to 0 to disable logging. - leon 9/27/09 --->
-	<cfset dbrow3mapperLogging = 0>
-	<cfset lastTick = getTickCount()>
-	<!--- End vars supporting logging - leon 9/27/09 --->
+	<cfscript>
+		dbrow3mapperLogging = false;
+		lastTick = getTickCount();
 
+		private string function getCacheFilePath(required string applicationName) {
+			return getTempDirectory() & '/dbrow3mapper_#arguments.applicationName#.xml';
+		}
 
-	<cfif not(isdefined('this.isInited') and this.isInited)>
-		<cfset this.init()>
-	</cfif>
+		private void function deleteFileIfExists(required string path) {
+			if (FileExists(arguments.path)) { FileDelete(arguments.path); }
+		}
+	</cfscript>
 
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
+		<cfargument name="applicationName" type="string" required="true">
+		<cfargument name="useCacheFile" type="boolean" required="true">
+		<cfargument name="deleteCacheFile" type="boolean" required="true" hint="delete first, then rebuild">
 
-		<cfset var uniqueID = iif(structKeyExists(application, 'applicationName'), 'application.applicationName', de('')) />
-		<cfset var cacheFile = getTempDirectory() & '/dbrow3mapper_#uniqueID#.xml' />
+		<cfset var cacheFile = getCacheFilePath(arguments.applicationName)>
 		<cfset var cacheXML = "">
-		<cfset var useCacheFile = false>
+
+		<cfif arguments.deleteCacheFile>
+			<cfset deleteFileIfExists(cacheFile)>
+		</cfif>
 
 		<!--- Private variables - leon 12/12/07 --->
 		<cfset stObjInfo = structNew() />
@@ -28,26 +35,17 @@
 		<cfset stObjInfo.rsTypeTable = QueryNew( "tableName,immutableName,id,objPath" ) >
 
 		<!--- Figure out if we should use the cache file instead of instantiating
-			all of the objects. We do this by looking for a "true" value in the
-			variable application.dbrow3mapper_useCacheFile.
+			all of the objects.
 
 			This is much faster than instantiation, but won't include objects/
 			tables created after the cache file was last built. As such, the
 			default behavior is to not use the cache file. - leon 2/21/11 --->
-		<cfif structKeyExists(application, 'dbrow3mapper_useCacheFile') and application.dbrow3mapper_useCacheFile>
-			<!--- The application has indicated that it wants to use the cache file --->
-			<cfif len(uniqueID)>
-				<cfset useCacheFile = true>
-			<cfelse>
-				<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
-					but application.applicationName is not present, so we can't name the cache file and won't use it.">
-			</cfif>
+		<cfif arguments.useCacheFile AND NOT Len(Trim(arguments.applicationName))>
+			<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
+				but application.applicationName is not present, so we can't name the cache file and won't use it.">
 		</cfif>
 
-		<cfif useCacheFile>
-			<cfset logIt('Looking for cache file') />
-		</cfif>
-		<cfif useCacheFile and fileExists(cacheFile)>
+		<cfif arguments.useCacheFile and fileExists(cacheFile)>
 			<cfset logIt("Reading cache file: #cacheFile#") />
 			<cffile action="read" file="#cacheFile#" variable="cacheXML" />
 
@@ -58,7 +56,7 @@
 			<cfset logIt('Cache file not present or being ignored. Scanning for objects.') />
 			<cfset this.scanForObjects()>
 
-			<cfif useCacheFile>
+			<cfif arguments.useCacheFile>
 				<cfset logIt('Serializing stObjInfo scope to XML') />
 				<cfwddx action="cfml2wddx" input="#stObjInfo#" output="cacheXML" />
 
@@ -75,7 +73,6 @@
 				detail="Check your database connection.  (It could be that the objects are there, but dbrow can't get their metatdata.)">
 		</cfif>
 
-		<cfset this.isInited = 1>
 		<cfreturn this>
 	</cffunction> <!--- init --->
 
