@@ -1,11 +1,24 @@
 <cfcomponent name="dbrow3mapper">
 
-	<!--- Vars supporting logging - leon 9/27/09 --->
-	<!--- Set to 0 to disable logging. - leon 9/27/09 --->
-	<cfset dbrow3mapperLogging = 0>
-	<cfset lastTick = getTickCount()>
-	<!--- End vars supporting logging - leon 9/27/09 --->
+	<cfscript>
+		/*  Vars supporting logging - leon 9/27/09
+			Set to 0 to disable logging. - leon 9/27/09 */
+		dbrow3mapperLogging = 0;
+		lastTick = getTickCount();
+		//	End vars supporting logging - leon 9/27/09
 
+		private string function getCacheFilePath() {
+			return getTempDirectory() & '/dbrow3mapper_#getUniqueCachingID()#.xml';
+		}
+
+		private string function getUniqueCachingID() {
+			return structKeyExists(application, 'applicationName') ? application.applicationName : '';
+		}
+
+		public void function deleteCacheFile() {
+			FileDelete(getCacheFilePath());
+		}
+	</cfscript>
 
 	<cfif not(isdefined('this.isInited') and this.isInited)>
 		<cfset this.init()>
@@ -13,8 +26,8 @@
 
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
 
-		<cfset var uniqueID = iif(structKeyExists(application, 'applicationName'), 'application.applicationName', de('')) />
-		<cfset var cacheFile = getTempDirectory() & '/dbrow3mapper_#uniqueID#.xml' />
+		<cfset var uniqueID = getUniqueCachingID() />
+		<cfset var cacheFile = getCacheFilePath() />
 		<cfset var cacheXML = "">
 		<cfset var useCacheFile = false>
 
