@@ -1,11 +1,8 @@
 <cfcomponent name="dbrow3mapper">
 
 	<cfscript>
-		/*  Vars supporting logging - leon 9/27/09
-		    Set to 0 to disable logging. - leon 9/27/09 */
-		dbrow3mapperLogging = 0;
+		dbrow3mapperLogging = false;
 		lastTick = getTickCount();
-		// End vars supporting logging - leon 9/27/09
 
 		private string function getCacheFilePath() {
 			return getTempDirectory() & '/dbrow3mapper_#variables.applicationName#.xml';
