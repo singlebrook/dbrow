@@ -16,7 +16,9 @@
 		}
 
 		public void function deleteCacheFile() {
-			FileDelete(getCacheFilePath());
+			if (FileExists(getCacheFilePath())) {
+				FileDelete(getCacheFilePath());
+			}
 		}
 	</cfscript>
 
