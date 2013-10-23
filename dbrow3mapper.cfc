@@ -4,24 +4,26 @@
 		dbrow3mapperLogging = false;
 		lastTick = getTickCount();
 
-		private string function getCacheFilePath() {
-			return getTempDirectory() & '/dbrow3mapper_#variables.applicationName#.xml';
+		private string function getCacheFilePath(required string applicationName) {
+			return getTempDirectory() & '/dbrow3mapper_#arguments.applicationName#.xml';
 		}
 
-		public void function deleteCacheFile() {
-			if (FileExists(getCacheFilePath())) {
-				FileDelete(getCacheFilePath());
-			}
+		private void function deleteFileIfExists(required string path) {
+			if (FileExists(arguments.path)) { FileDelete(arguments.path); }
 		}
 	</cfscript>
 
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
 		<cfargument name="applicationName" type="string" required="true">
 		<cfargument name="useCacheFile" type="boolean" required="true">
+		<cfargument name="deleteCacheFile" type="boolean" required="true" hint="delete first, then rebuild">
 
-		<cfset variables.applicationName = arguments.applicationName>
-		<cfset var cacheFile = getCacheFilePath()>
+		<cfset var cacheFile = getCacheFilePath(arguments.applicationName)>
 		<cfset var cacheXML = "">
+
+		<cfif arguments.deleteCacheFile>
+			<cfset deleteFileIfExists(cacheFile)>
+		</cfif>
 
 		<!--- Private variables - leon 12/12/07 --->
 		<cfset stObjInfo = structNew() />
@@ -38,7 +40,7 @@
 			This is much faster than instantiation, but won't include objects/
 			tables created after the cache file was last built. As such, the
 			default behavior is to not use the cache file. - leon 2/21/11 --->
-		<cfif arguments.useCacheFile AND NOT Len(Trim(variables.applicationName))>
+		<cfif arguments.useCacheFile AND NOT Len(Trim(arguments.applicationName))>
 			<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
 				but application.applicationName is not present, so we can't name the cache file and won't use it.">
 		</cfif>
