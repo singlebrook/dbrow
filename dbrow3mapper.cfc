@@ -20,11 +20,11 @@
 
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
 		<cfargument name="applicationName" type="string" required="true">
+		<cfargument name="useCacheFile" type="boolean" required="true">
 
 		<cfset variables.applicationName = arguments.applicationName>
 		<cfset var cacheFile = getCacheFilePath()>
 		<cfset var cacheXML = "">
-		<cfset var useCacheFile = false>
 
 		<!--- Private variables - leon 12/12/07 --->
 		<cfset stObjInfo = structNew() />
@@ -36,26 +36,17 @@
 		<cfset stObjInfo.rsTypeTable = QueryNew( "tableName,immutableName,id,objPath" ) >
 
 		<!--- Figure out if we should use the cache file instead of instantiating
-			all of the objects. We do this by looking for a "true" value in the
-			variable application.dbrow3mapper_useCacheFile.
+			all of the objects.
 
 			This is much faster than instantiation, but won't include objects/
 			tables created after the cache file was last built. As such, the
 			default behavior is to not use the cache file. - leon 2/21/11 --->
-		<cfif structKeyExists(application, 'dbrow3mapper_useCacheFile') and application.dbrow3mapper_useCacheFile>
-			<!--- The application has indicated that it wants to use the cache file --->
-			<cfif Len(variables.applicationName)>
-				<cfset useCacheFile = true>
-			<cfelse>
-				<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
-					but application.applicationName is not present, so we can't name the cache file and won't use it.">
-			</cfif>
+		<cfif arguments.useCacheFile AND NOT Len(Trim(variables.applicationName))>
+			<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
+				but application.applicationName is not present, so we can't name the cache file and won't use it.">
 		</cfif>
 
-		<cfif useCacheFile>
-			<cfset logIt('Looking for cache file') />
-		</cfif>
-		<cfif useCacheFile and fileExists(cacheFile)>
+		<cfif arguments.useCacheFile and fileExists(cacheFile)>
 			<cfset logIt("Reading cache file: #cacheFile#") />
 			<cffile action="read" file="#cacheFile#" variable="cacheXML" />
 
@@ -66,7 +57,7 @@
 			<cfset logIt('Cache file not present or being ignored. Scanning for objects.') />
 			<cfset this.scanForObjects()>
 
-			<cfif useCacheFile>
+			<cfif arguments.useCacheFile>
 				<cfset logIt('Serializing stObjInfo scope to XML') />
 				<cfwddx action="cfml2wddx" input="#stObjInfo#" output="cacheXML" />
 
