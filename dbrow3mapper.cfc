@@ -22,10 +22,6 @@
 		}
 	</cfscript>
 
-	<cfif not(isdefined('this.isInited') and this.isInited)>
-		<cfset this.init()>
-	</cfif>
-
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
 
 		<cfset var uniqueID = getUniqueCachingID() />
@@ -90,7 +86,6 @@
 				detail="Check your database connection.  (It could be that the objects are there, but dbrow can't get their metatdata.)">
 		</cfif>
 
-		<cfset this.isInited = 1>
 		<cfreturn this>
 	</cffunction> <!--- init --->
 
