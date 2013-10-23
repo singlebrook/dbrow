@@ -2,10 +2,10 @@
 
 	<cfscript>
 		/*  Vars supporting logging - leon 9/27/09
-			Set to 0 to disable logging. - leon 9/27/09 */
+		    Set to 0 to disable logging. - leon 9/27/09 */
 		dbrow3mapperLogging = 0;
 		lastTick = getTickCount();
-		//	End vars supporting logging - leon 9/27/09
+		// End vars supporting logging - leon 9/27/09
 
 		private string function getCacheFilePath() {
 			return getTempDirectory() & '/dbrow3mapper_#getUniqueCachingID()#.xml';
