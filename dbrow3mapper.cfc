@@ -8,11 +8,7 @@
 		// End vars supporting logging - leon 9/27/09
 
 		private string function getCacheFilePath() {
-			return getTempDirectory() & '/dbrow3mapper_#getUniqueCachingID()#.xml';
-		}
-
-		private string function getUniqueCachingID() {
-			return structKeyExists(application, 'applicationName') ? application.applicationName : '';
+			return getTempDirectory() & '/dbrow3mapper_#variables.applicationName#.xml';
 		}
 
 		public void function deleteCacheFile() {
@@ -23,9 +19,10 @@
 	</cfscript>
 
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
+		<cfargument name="applicationName" type="string" required="true">
 
-		<cfset var uniqueID = getUniqueCachingID() />
-		<cfset var cacheFile = getCacheFilePath() />
+		<cfset variables.applicationName = arguments.applicationName>
+		<cfset var cacheFile = getCacheFilePath()>
 		<cfset var cacheXML = "">
 		<cfset var useCacheFile = false>
 
@@ -47,7 +44,7 @@
 			default behavior is to not use the cache file. - leon 2/21/11 --->
 		<cfif structKeyExists(application, 'dbrow3mapper_useCacheFile') and application.dbrow3mapper_useCacheFile>
 			<!--- The application has indicated that it wants to use the cache file --->
-			<cfif len(uniqueID)>
+			<cfif Len(variables.applicationName)>
 				<cfset useCacheFile = true>
 			<cfelse>
 				<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
