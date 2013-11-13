@@ -1270,8 +1270,17 @@
 			<cfif isStruct( thisVal ) and StructKeyExists( thisVal, "value" ) >
 				<cfset thisVal = thisVal.value >
 			</cfif>
+
+			<cfif thisDataType eq 'json' and Len(thisVal)>
+				<cftry>
+					<cfset thisVal = DeserializeJSON(thisVal)>
+					<cfcatch type="any"></cfcatch>
+				</cftry>
+			</cfif>
+
 			<cfset structUpdate(this, i, thisVal)>
 			<cfset structUpdate(this.stOrigState, i, thisVal)>
+
 		</cfloop>
 
 		<!--- If this object has a non-empty ID, assume that it has been stored in the database. - leon 5/8/08 --->
@@ -1346,16 +1355,16 @@
 							and (1=0
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
-										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
+									<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
+										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_varchar" list="#NOT valueIsNull#">
 									<cfelse>
 										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									</cfif>
 								</cfloop>
 							)
 						<cfelse>
-							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
-								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
+							<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
+								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_varchar" list="yes"> )
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							</cfif>
@@ -1406,8 +1415,8 @@
 			from #theTable#
 			where lower(#theNameField#) = '#lcase(arguments.name)#'
 				<cfif structKeyExists(arguments, 'filterField')>
-					<cfif this.stColMetaData[filterField].datatype eq "varchar">
-						and lower(#filterField#) in ( <cfqueryparam value="#lcase(filterValue)#" cfsqltype="cf_sql_#this.stColMetaData[filterField].datatype#" list="yes"> )
+					<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
+						and lower(#filterField#) in ( <cfqueryparam value="#lcase(filterValue)#" cfsqltype="cf_sql_varchar" list="yes"> )
 					<cfelse>
 						and #filterField# in ( <cfqueryparam value="#filterValue#" cfsqltype="cf_sql_#this.stColMetaData[filterField].datatype#" list="yes"> )
 					</cfif>
@@ -1661,7 +1670,7 @@
 						<cfloop list="#this.propertyList#" index="i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
-								<cfif not(isBinary(thisVal))>
+								<cfif not(isBinary(thisVal) or this.stColMetaData[i].datatype eq "json")>
 									<!--- The following preserveSingleQuotes is necessary in CF 6 and below - Jared 2/5/07 --->
 									<cfset thisVal = trim(preserveSingleQuotes(thisVal))>
 								</cfif>
@@ -1687,6 +1696,13 @@
 												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_integer">
 											<cfelse>
 												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_bit">
+											</cfif>
+										<cfelseif this.stColMetaData[i].datatype eq "json">
+											<cfset var serializedVal = IsJson(thisVal) ? thisVal : SerializeJSON(thisVal)>
+											<cfif useQueryParamForText()>
+												<cfqueryparam value="#serializedVal#" cfsqltype="cf_sql_varchar">
+											<cfelse>
+												'#serializedVal#'
 											</cfif>
 										<cfelse>
 											<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_#this.stColMetaData[i].datatype#">
@@ -1749,6 +1765,15 @@
 											<cfelse>
 												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_bit">
 											</cfif>
+
+										<cfelseif this.stColMetaData[i].datatype eq "json">
+											<cfset var serializedVal = IsJson(thisVal) ? thisVal : SerializeJSON(thisVal)>
+											<cfif useQueryParamForText()>
+												<cfqueryparam value="#serializedVal#" cfsqltype="cf_sql_varchar">
+											<cfelse>
+												'#serializedVal#'
+											</cfif>
+
 										<cfelse>
 											<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_#this.stColMetaData[i].datatype#">
 
