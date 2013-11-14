@@ -1759,7 +1759,7 @@
 										<cfset thisVal = trim(thisVal)>
 									</cfif>
 									<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
-									<cfif len(thisVal)>
+									<cfif NOT IsSimpleValue(thisVal) OR Len(thisVal)>
 
 										<cfif listFindNoCase('char,varchar,text', this.stColMetaData[i].datatype)>
 											<!--- This is a workaround for MySQL, which seems to double single-quotes
