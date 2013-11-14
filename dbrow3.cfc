@@ -704,7 +704,7 @@
 				</cfif>
 
 				<!--- These checks don't get run on blank values - leon 12/9/08 --->
-				<cfif IsSimpleValue(this[v.thisProp]) AND len(this[v.thisProp])>
+				<cfif NOT IsSimpleValue(this[v.thisProp]) OR len(this[v.thisProp])>
 
 					<!--- Check datatype - leon 12/11/08 --->
 					<cfswitch expression="#stMD.datatype#">
