@@ -1688,7 +1688,7 @@
 						<cfloop list="#this.propertyList#" index="i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
-								<cfif not(isBinary(thisVal) or this.stColMetaData[i].datatype eq "json")>
+								<cfif NOT isBinary(thisVal)>
 									<!--- The following preserveSingleQuotes is necessary in CF 6 and below - Jared 2/5/07 --->
 									<cfset thisVal = trim(preserveSingleQuotes(thisVal))>
 								</cfif>
