@@ -1354,27 +1354,26 @@
 						and #v.currentKey# is not null
 					<cfelse>
 
-						<cfif filterSet[v.currentKey] contains "*">
+						<cfif this.stColMetaData[v.currentKey].datatype eq "json">
+							<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
+								message="JSON Fields are not supported for filtering at this time.">
+
+						<cfelseif filterSet[v.currentKey] contains "*">
 							<!--- Use LIKE instead of IN for wildcard support - leon 6/3/08 --->
 							and (1=0
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
 									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
 										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
-								<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
-									<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
-										message="JSON Fields are not supported for filtering at this time.">
 									<cfelse>
 										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									</cfif>
 								</cfloop>
 							)
+
 						<cfelse>
 							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
 								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="yes"> )
-							<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
-								<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
-									message="JSON Fields are not supported for filtering at this time.">
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							</cfif>
