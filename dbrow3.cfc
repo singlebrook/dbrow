@@ -694,7 +694,7 @@
 
 				<!--- Check not null constraint - leon 12/9/08 --->
 				<cfif stMD.notNull and NOT isBinary(this[v.thisProp])
-						and IsSimpleValue(ths[v.thisProp]) and this[v.thisProp] eq "">
+						and IsSimpleValue(this[v.thisProp]) and this[v.thisProp] eq "">
 					<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'cannot be blank'))>
 				</cfif>
 
