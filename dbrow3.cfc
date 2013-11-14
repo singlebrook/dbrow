@@ -1365,16 +1365,16 @@
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
 									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
-										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
+										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									<cfelse>
-										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
+										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									</cfif>
 								</cfloop>
 							)
 
 						<cfelse>
 							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
-								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="yes"> )
+								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							</cfif>
@@ -1428,7 +1428,7 @@
 					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar">
 						and lower(#arguments.filterField#) in (
 							<cfqueryparam value="#lcase(arguments.filterValue)#"
-								cfsqltype="cf_sql_#objObj.stColMetaData[arguments.filterField].datatype#"
+								cfsqltype="cf_sql_#this.stColMetaData[arguments.filterField].datatype#"
 								list="yes">
 							)
 
