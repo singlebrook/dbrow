@@ -1424,13 +1424,19 @@
 			from #theTable#
 			where lower(#theNameField#) = '#lcase(arguments.name)#'
 				<cfif structKeyExists(arguments, 'filterField')>
-					<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
-						and lower(#filterField#) in ( <cfqueryparam value="#lcase(filterValue)#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="yes"> )
-					<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
+					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar">
+						and lower(#arguments.filterField#) in (
+							<cfqueryparam value="#lcase(arguments.filterValue)#"
+								cfsqltype="cf_sql_#objObj.stColMetaData[arguments.filterField].datatype#"
+								list="yes">
+							)
+
+					<cfelseif this.stColMetaData[arguments.filterField].datatype eq "json">
 						<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
 							message="JSON Fields are not supported for filtering at this time.">
+
 					<cfelse>
-						and #filterField# in ( <cfqueryparam value="#filterValue#" cfsqltype="cf_sql_#this.stColMetaData[filterField].datatype#" list="yes"> )
+						and #arguments.filterField# in ( <cfqueryparam value="#arguments.filterValue#" cfsqltype="cf_sql_#this.stColMetaData[arguments.filterField].datatype#" list="yes"> )
 					</cfif>
 				</cfif>
 				<cfif usesTombstoning() and not arguments.includeDeleted >
