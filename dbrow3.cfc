@@ -693,7 +693,8 @@
 				<cfset stMD = this.stColMetaData[v.thisProp]>
 
 				<!--- Check not null constraint - leon 12/9/08 --->
-				<cfif stMD.notNull and Not( isBinary(this[v.thisProp]) ) and this[v.thisProp] eq "">
+				<cfif stMD.notNull and NOT isBinary(this[v.thisProp])
+						and IsSimpleValue(ths[v.thisProp]) and this[v.thisProp] eq "">
 					<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'cannot be blank'))>
 				</cfif>
 
@@ -1754,7 +1755,7 @@
 							<cfloop list="#this.propertyList#" index="i">
 								<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
 									<cfset thisVal = this[i]>
-									<cfif not(isBinary(thisVal))>
+									<cfif NOT isBinary(thisVal) AND IsSimpleValue(thisVal)>
 										<cfset thisVal = trim(thisVal)>
 									</cfif>
 									<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
