@@ -1355,16 +1355,22 @@
 							and (1=0
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-									<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
-										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_varchar" list="#NOT valueIsNull#">
+									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
+										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
+								<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
+									<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
+										message="JSON Fields are not supported for filtering at this time.">
 									<cfelse>
 										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									</cfif>
 								</cfloop>
 							)
 						<cfelse>
-							<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
-								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_varchar" list="yes"> )
+							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
+								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="yes"> )
+							<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
+								<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
+									message="JSON Fields are not supported for filtering at this time.">
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							</cfif>
@@ -1415,8 +1421,11 @@
 			from #theTable#
 			where lower(#theNameField#) = '#lcase(arguments.name)#'
 				<cfif structKeyExists(arguments, 'filterField')>
-					<cfif ArrayFind(["varchar", "json"], this.stColMetaData[v.currentKey].datatype)>
-						and lower(#filterField#) in ( <cfqueryparam value="#lcase(filterValue)#" cfsqltype="cf_sql_varchar" list="yes"> )
+					<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
+						and lower(#filterField#) in ( <cfqueryparam value="#lcase(filterValue)#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="yes"> )
+					<cfelseif this.stColMetaData[v.currentKey].datatype eq "json">
+						<cfthrow type="com.singlebrook.dbrow3.unsupportedFilterException"
+							message="JSON Fields are not supported for filtering at this time.">
 					<cfelse>
 						and #filterField# in ( <cfqueryparam value="#filterValue#" cfsqltype="cf_sql_#this.stColMetaData[filterField].datatype#" list="yes"> )
 					</cfif>
