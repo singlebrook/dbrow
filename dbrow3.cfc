@@ -1274,7 +1274,11 @@
 			<cfif thisDataType eq 'json' and Len(thisVal)>
 				<cftry>
 					<cfset thisVal = DeserializeJSON(thisVal)>
-					<cfcatch type="any"></cfcatch>
+					<cfcatch type="any">
+						<cfthrow type="com.singlebrook.dbrow3.malformedJSONException"
+							message="There was a problem deserializing the JSON for the property '#i#'"
+							detail="#i#">
+					</cfcatch>
 				</cftry>
 			</cfif>
 
