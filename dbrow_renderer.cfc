@@ -108,7 +108,7 @@ public component function init(required component dbrowObj) {
 	<cfif StructKeyExists(arguments,"fieldList")>
 		<cfset v.fieldList = arguments.fieldList>
 	<cfelse>
-		<cfset v.fieldList = this.dbrowObj.propertyList>
+		<cfset v.fieldList = this.dbrowObj.getPropertyList(true,true)>
 	</cfif>
 
 	<cfsavecontent variable="theFormHTML">
