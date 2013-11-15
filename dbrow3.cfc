@@ -1920,23 +1920,18 @@
 	</cffunction> <!--- loadForm --->
 
 
-	<cffunction name="loadStruct"
-			output="false"
-			returntype="void"
-			hint="Populates instance fields with values from a structure. If this object has a field that is in the structure, it is updated.">
-
-		<cfargument name="stProperties" type="struct" required="true">
-
-		<cfloop collection="#stProperties#" item="propertyName">
-			<cfif structKeyExists(this, propertyName)>
-				<cfif isDefined("stProperties.#propertyName#")>
-					<!--- The above cfif protects against "[undefined struct element]" - Jared 1/13/09 --->
-					<cfset this[propertyName] = stProperties[propertyName]>
-				</cfif>
-			</cfif>
-		</cfloop>
-
-	</cffunction> <!--- loadStruct --->
+	<cfscript>
+	/* Populates the properties of this instance with values from the provided struct. */
+	public void function loadStruct(required struct stProperties){
+		for( var prop in arguments.stProperties ) {
+			/* The IsDefined protects against "[undefined struct element]" - Jared 1/13/09 */
+			if( ArrayFindNoCase(this.properties, prop)
+					AND IsDefined("arguments.stProperties[prop]") ){
+				this[prop] = arguments.stProperties[prop];
+			}
+		}
+	}
+	</cfscript>
 
 
 	<cffunction name="setTypeByID"
