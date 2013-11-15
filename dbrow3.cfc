@@ -201,21 +201,25 @@
 				<cfset structInsert(this.stOrigState, i, '')>
 			</cfloop>
 
-			<cfset this.propertyList = arrayToList(structSort(this.stColMetaData, 'numeric', 'asc', 'sortorder'))>
+			<cfset this.properties = StructSort(this.stColMetaData, 'numeric', 'asc', 'sortorder')>
+			<!--- this.propertyList is deprecated, please use this.properties --->
+			<cfset this.propertyList = ArrayToList(this.properties)>
 			<cfset this.isInitialized = 1>
 			<cfset this.isStored = 0>
 
-			<!--- Set up labels for properties - leon 2/4/06 --->
-			<cfset logIt('Populating stLabel')>
-			<cfif not(structKeyExists(this, 'stLabel'))>
-				<cfset this.stLabel = structNew()>
-			</cfif>
-			<cfloop list="#this.propertylist#" index="i">
-				<cfif not(structKeyExists(this.stLabel, i))>
-					<cfset this.stLabel[i] = REreplace(replace(i, '_', ' ', 'all'), '((^| ))([a-zA-Z])', '\1\u\3', 'all')>
-				</cfif>
-			</cfloop>
-			<!--- Done setting up labels - leon 2/4/06 --->
+			<cfscript>
+			/* Set up labels for properties - leon 2/4/06 */
+			logIt('Populating stLabel');
+			if ( NOT StructKeyExists(this, 'stLabel') ) {
+				this.stLabel = StructNew();
+			}
+			for( var i in this.properties ){
+				if (NOT StructKeyExists(this.stLabel, i) ) {
+					this.stLabel[i] = REReplace(Replace(i, '_', ' ', 'all'), '((^| ))([a-zA-Z])', '\1\u\3', 'all');
+				}
+			}
+			/* Done setting up labels - leon 2/4/06 */
+			</cfscript>
 
 		</cfif>
 
@@ -431,23 +435,21 @@
 	</cffunction>
 
 
-	<cffunction name="clear" returnType="void" access="public"
-			hint="Clears this object's properties so that it can be safely load()ed again with a new ID">
-
-		<cfif not(this.isInited)>
-			<cfset init()>
-		</cfif>
-
-		<cfloop list="#this.propertyList#" index="i">
-			<cfset structUpdate(this, i, '')>
-			<cfset structUpdate(this.stOrigState, i, '')>
-		</cfloop>
-
-		<cfset this.isStored = 0>
-
-		<cfset clearThisToManyData()>
-
-	</cffunction> <!--- clear --->
+	<cfscript>
+	/* Clears this object's properties so that it can be safely
+		load()ed again with a new ID */
+	public void function clear(){
+		if ( NOT this.isInited ) {
+			init();
+		}
+		for (var i in this.properties)) {
+			StructUpdate(this, i, '');
+			StructUpdate(this.stOrigState, i, '');
+		}
+		this.isStored = 0;
+		clearThisToManyData();
+	}
+	</cfscript>
 
 
 	<cffunction name="clearThisToManyData" returntype="void" output="no" access="public">
@@ -687,7 +689,7 @@
 
 		<cfset v.arErrors = arrayNew(1)>
 
-		<cfloop list="#this.propertyList#" index="v.thisProp">
+		<cfloop array="#this.properties#" index="v.thisProp">
 			<cfif v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp))>
 
 				<cfset stMD = this.stColMetaData[v.thisProp]>
@@ -764,7 +766,7 @@
 				</cfif> <!--- len(this[v.thisProp]) --->
 
 			</cfif> <!--- v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp)) --->
-		</cfloop> <!--- this.propertyList --->
+		</cfloop> <!--- this.properties --->
 
 		<cfreturn v.arErrors>
 
@@ -1043,26 +1045,30 @@
 	</cffunction> <!--- getNotNull --->
 
 
+	<cfscript>
+	public array function getProperties(
+		boolean includeTheID = false
+		, boolean includeFieldsToSkip = false){
+
+		var props = [];
+		for( var p in this.properties ){
+			if( (NOT p EQ this.theID OR arguments.includeTheID)
+					AND (NOT ListContainsNoCase(this.theFieldsToSkip, p)
+						OR arguments.includeFieldsToSkip) ){
+				ArrayAppend(props, p);
+			}
+		}
+
+		return props;
+	}
+	</cfscript>
+
+
 	<cffunction name="getPropertyList" returntype="string" access="public" output="no">
 		<cfargument name="includeTheID" type="boolean" required="no" default="no">
 		<cfargument name="includeFieldsToSkip" type="boolean" required="no" default="no">
 
-		<cfset var returnList = "">
-		<cfset var p = "">
-		<cfset var isID = "">
-		<cfset var isSkipped = "">
-
-		<cfloop list="#this.propertyList#" index="p">
-			<cfset isID = p EQ this.theID>
-			<cfset isSkipped = ListContainsNoCase(this.theFieldsToSkip, p)>
-			<cfif (NOT isSkipped AND NOT isID)
-					OR (isID AND arguments.includeTheID)
-					OR (arguments.includeFieldsToSkip AND NOT isID)>
-				<cfset returnList = ListAppend(returnList, p)>
-			</cfif>
-		</cfloop>
-
-		<cfreturn returnList>
+		<cfreturn ArrayToList(getProperties(argumentCollection = arguments))>
 	</cffunction> <!--- getPropertyList --->
 
 
@@ -1204,16 +1210,20 @@
 			<cfthrow message="dbrow3.load() requires exactly one of (ID, stValues, rsValues)">
 		</cfif>
 
-		<cfif structKeyExists(arguments, 'stValues') and listSort(lcase(structKeyList(stValues)), 'text') neq listSort(lcase(this.propertyList), 'text')>
-			<cfthrow message="stValues must contain exactly the keys (#this.propertylist#)">
+		<cfset var propList = ArrayToList(this.properties)>
+
+		<cfif StructKeyExists(arguments, 'stValues')
+				AND ListSort(LCase(StructKeyList(stValues)), 'text')
+					NEQ ListSort(LCase(propList), 'text')>
+			<cfthrow message="stValues must contain exactly the keys (#propList#)">
 		</cfif>
 
 		<cfif structKeyExists(arguments, 'rsValues')>
 			<cfif rsValues.recordcount neq 1>
 				<cfthrow message="rsValues must have exactly one row">
 			</cfif>
-			<cfif listSort(rsValues.columnlist, 'textnocase') neq listSort(this.propertyList, 'textnocase')>
-				<cfthrow message="rsValues must contain exactly the columns (#this.propertylist#)"
+			<cfif ListSort(rsValues.columnlist, 'textnocase') neq ListSort(propList, 'textnocase')>
+				<cfthrow message="rsValues must contain exactly the columns (#propList#)"
 					detail="rsValues.Columnlist = #rsValues.Columnlist#">
 			</cfif>
 		</cfif>
@@ -1248,7 +1258,7 @@
 		</cfif>
 
 
-		<cfloop list="#this.propertyList#" index="i">
+		<cfloop array="#this.properties#" index="i">
 			<cfif structKeyExists(arguments, 'rsValues')>
 				<cfset thisVal = arguments.rsValues[i][1]>
 			<cfelse>
@@ -1492,31 +1502,29 @@
 	</cffunction> <!--- lookupColLinkingTo --->
 
 
-	<cffunction name="new" returnType="dbrow3"
-			hint="Sets up default values for this object (only theID by default). Used when creating a new row.">
+	<cfscript>
+	/* Sets up default values for this object (only theID
+		by default). Used when creating a new row. */
+	public dbrow3 function new(){
+		if (NOT this.isInited) { init(); }
 
-		<cfscript>
-			if (NOT this.isInited) { init(); }
-		</cfscript>
+		/* Set properties to database defaults - leon 2/3/06 */
+		for( var i in this.properties ){
+			if( Len(this.stColMetaData[i].default) ) {
+				this[i] = this.stColMetaData[i].default;
+			}
+		}
 
-		<!--- Set properties to database defaults - leon 2/3/06 --->
-		<cfloop list="#this.propertyList#" index="i">
-			<cfif len(this.stColMetaData[i].default)>
-				<cfset this[i] = this.stColMetaData[i].default>
-			</cfif>
-		</cfloop>
+		this.isStored = 0;
 
-		<cfset this.isStored = 0>
+		/* Set "custom" defaults that aren't defined in the database - leon 2/3/06 */
+		setDefaults();
 
-		<!--- Set "custom" defaults that aren't defined in the database - leon 2/3/06 --->
-		<cfset setDefaults()>
+		clearThisToManyData();
 
-		<cfset clearThisToManyData()>
-
-		<cfreturn this>
-
-	</cffunction> <!--- new --->
-
+		return this;
+	}
+	</cfscript>
 
 	<cffunction name="newError" returntype="struct" output="no" access="public">
 		<cfargument name="propertyName" type="string" required="yes">
@@ -1638,17 +1646,17 @@
 	</cffunction> <!--- setManyRelatedIDs --->
 
 
-	<cffunction name="setOrigState" returnType="boolean" access="package"
-			hint="Updates the stOrigState struct, containing the original (empty or database) state of the object">
+	<cfscript>
+	/* Updates the stOrigState struct, containing the original
+		(empty or database) state of the object */
+	package boolean function setOrigState(){
+		for (i in this.properties) {
+			StructUpdate(this.stOrigState, i, StructFind(this, i));
+		}
 
-		<cfloop list="#this.propertyList#" index="i">
-			<cfset structUpdate(this.stOrigState, i, structFind(this, i))>
-		</cfloop>
-
-		<cfreturn true>
-
-	</cffunction> <!--- setOrigState --->
-
+		return true;
+	}
+	</cfscript>
 
 	<cffunction name="store"
 			returnType="boolean"
@@ -1686,7 +1694,7 @@
 				<cfquery name="update#theObject#" datasource="#this.datasource#">
 					update #theTable#
 					set
-						<cfloop list="#this.propertyList#" index="i">
+						<cfloop array="#this.properties#" index="i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
 								<cfif NOT IsBinary(thisVal) AND IsSimpleValue(thisVal)>
@@ -1737,22 +1745,24 @@
 			<!--- INSERT --->
 			<cfelse>
 
-				<!--- Populate fieldsToInsertList --->
-				<cfif not(isdefined('this.fieldsToInsertList'))>
-					<cfset this.fieldsToInsertList = "">
-					<cfloop list="#this.propertyList#" index="i">
-						<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
-							<cfset this.fieldsToInsertList = listAppend(this.fieldsToInsertList, i)>
-						</cfif>
-					</cfloop>
-				</cfif>
+				<cfscript>
+				/* Populate fieldsToInsertList */
+				if ( NOT IsDefined('this.fieldsToInsertList') ) {
+					this.fieldsToInsertList = "";
+					for ( var i in this.properties ) {
+						if ( NOT ListFindNoCase(this.theFieldsToSkip, i) ) {
+							this.fieldsToInsertList = ListAppend(this.fieldsToInsertList, i);
+						}
+					}
+				}
+				</cfscript>
 
 				<cflock name="create#theObject#" type="exclusive" timeout="30">
 
 					<cfquery name="insert#theObject#" datasource="#this.datasource#">
 						insert into #theTable# (#this.fieldsToInsertList#)
 						values(
-							<cfloop list="#this.propertyList#" index="i">
+							<cfloop array="#this.properties#" index="i">
 								<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
 									<cfset thisVal = this[i]>
 									<cfif NOT isBinary(thisVal) AND IsSimpleValue(thisVal)>
@@ -1829,7 +1839,7 @@
 
 
 	<cffunction name="useEscapedBackslashes" returnType="boolean" access="public" output="no">
-	 <cfreturn 0>
+		<cfreturn 0>
 	</cffunction> <!--- useEscapedBackslashes --->
 
 
@@ -1842,22 +1852,22 @@
 
 
 	<cffunction name="usesTombstoning" returnType="boolean" access="public" output="no">
-	 	<cfreturn ListContainsNoCase(this.propertyList,"deleted") GT 0>
+		<cfreturn ArrayFindNoCase(this.properties,"deleted") GT 0>
 	</cffunction> <!--- usesTombstoning --->
 
 
 	<cffunction name="usesTombstoningTimestamp" returnType="boolean" access="public" output="no">
-	 	<cfreturn ListContainsNoCase(this.propertyList,"deleted_timestamp") GT 0>
+		<cfreturn ArrayFindNoCase(this.properties,"deleted_timestamp") GT 0>
 	</cffunction> <!--- usesTombstoningTimestamp --->
 
 
 	<cffunction name="usesTombstoningUserID" returnType="boolean" access="public" output="no">
-	 	<cfreturn ListContainsNoCase(this.propertyList,"deleted_user_id") GT 0>
+		<cfreturn ArrayFindNoCase(this.properties,"deleted_user_id") GT 0>
 	</cffunction> <!--- usesTombstoningUserID --->
 
 
 	<cffunction name="useQueryParamForText" returnType="boolean" access="public" output="no">
-	 <cfreturn 1>
+		<cfreturn 1>
 	</cffunction> <!--- useQueryParamForText --->
 
 
@@ -1870,11 +1880,7 @@
 
 	<cffunction name="hasProperty" returnType="boolean">
 		<cfargument name="property" required="true" type="string">
-		<cfset var isValidProperty = false>
-		<cfif ListContainsNoCase( this.propertyList, arguments.property )>
-			<cfset isValidProperty = true>
-		</cfif>
-		<cfreturn isValidProperty>
+		<cfreturn ArrayFindNoCase( this.properties, arguments.property ) GT 0 >
 	</cffunction> <!--- hasProperty --->
 
 
@@ -1891,7 +1897,7 @@
 			hint="Populates instance fields with values from HTML form. Assumes corresponding
 			form fields and properties have the same names.">
 
-    <cfargument name="fieldNameList" type="string" required="true">
+		<cfargument name="fieldNameList" type="string" required="true">
 
 		<cfset var listPos = "">
 		<cfset var propertyName = "">
