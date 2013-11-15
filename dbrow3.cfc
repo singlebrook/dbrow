@@ -201,7 +201,7 @@
 				<cfset structInsert(this.stOrigState, i, '')>
 			</cfloop>
 
-			<cfset this.properties = StructSort(this.stColMetaData, 'numeric', 'asc', 'sortorder')>
+			<cfset this._properties = StructSort(this.stColMetaData, 'numeric', 'asc', 'sortorder')>
 			<cfset this.isInitialized = 1>
 			<cfset this.isStored = 0>
 
@@ -211,7 +211,7 @@
 			if ( NOT StructKeyExists(this, 'stLabel') ) {
 				this.stLabel = StructNew();
 			}
-			for( var i in this.properties ){
+			for( var i in this._properties ){
 				if (NOT StructKeyExists(this.stLabel, i) ) {
 					this.stLabel[i] = REReplace(Replace(i, '_', ' ', 'all'), '((^| ))([a-zA-Z])', '\1\u\3', 'all');
 				}
@@ -440,7 +440,7 @@
 		if ( NOT this.isInited ) {
 			init();
 		}
-		for (var i in this.properties)) {
+		for (var i in this._properties)) {
 			StructUpdate(this, i, '');
 			StructUpdate(this.stOrigState, i, '');
 		}
@@ -687,7 +687,7 @@
 
 		<cfset v.arErrors = arrayNew(1)>
 
-		<cfloop array="#this.properties#" index="v.thisProp">
+		<cfloop array="#this._properties#" index="v.thisProp">
 			<cfif v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp))>
 
 				<cfset stMD = this.stColMetaData[v.thisProp]>
@@ -764,7 +764,7 @@
 				</cfif> <!--- len(this[v.thisProp]) --->
 
 			</cfif> <!--- v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp)) --->
-		</cfloop> <!--- this.properties --->
+		</cfloop> <!--- this._properties --->
 
 		<cfreturn v.arErrors>
 
@@ -1049,7 +1049,7 @@
 		, boolean includeFieldsToSkip = false){
 
 		var props = [];
-		for( var p in this.properties ){
+		for( var p in this._properties ){
 			if( (NOT p EQ this.theID OR arguments.includeTheID)
 					AND (NOT ListContainsNoCase(this.theFieldsToSkip, p)
 						OR arguments.includeFieldsToSkip) ){
@@ -1208,7 +1208,7 @@
 			<cfthrow message="dbrow3.load() requires exactly one of (ID, stValues, rsValues)">
 		</cfif>
 
-		<cfset var propList = ArrayToList(this.properties)>
+		<cfset var propList = ArrayToList(this._properties)>
 
 		<cfif StructKeyExists(arguments, 'stValues')
 				AND ListSort(LCase(StructKeyList(stValues)), 'text')
@@ -1256,7 +1256,7 @@
 		</cfif>
 
 
-		<cfloop array="#this.properties#" index="i">
+		<cfloop array="#this._properties#" index="i">
 			<cfif structKeyExists(arguments, 'rsValues')>
 				<cfset thisVal = arguments.rsValues[i][1]>
 			<cfelse>
@@ -1507,7 +1507,7 @@
 		if (NOT this.isInited) { init(); }
 
 		/* Set properties to database defaults - leon 2/3/06 */
-		for( var i in this.properties ){
+		for( var i in this._properties ){
 			if( Len(this.stColMetaData[i].default) ) {
 				this[i] = this.stColMetaData[i].default;
 			}
@@ -1648,7 +1648,7 @@
 	/* Updates the stOrigState struct, containing the original
 		(empty or database) state of the object */
 	package boolean function setOrigState(){
-		for (i in this.properties) {
+		for (i in this._properties) {
 			StructUpdate(this.stOrigState, i, StructFind(this, i));
 		}
 
@@ -1692,7 +1692,7 @@
 				<cfquery name="update#theObject#" datasource="#this.datasource#">
 					update #theTable#
 					set
-						<cfloop array="#this.properties#" index="i">
+						<cfloop array="#this._properties#" index="i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
 								<cfif NOT IsBinary(thisVal) AND IsSimpleValue(thisVal)>
@@ -1747,7 +1747,7 @@
 				/* Populate fieldsToInsertList */
 				if ( NOT IsDefined('this.fieldsToInsertList') ) {
 					this.fieldsToInsertList = "";
-					for ( var i in this.properties ) {
+					for ( var i in this._properties ) {
 						if ( NOT ListFindNoCase(this.theFieldsToSkip, i) ) {
 							this.fieldsToInsertList = ListAppend(this.fieldsToInsertList, i);
 						}
@@ -1760,7 +1760,7 @@
 					<cfquery name="insert#theObject#" datasource="#this.datasource#">
 						insert into #theTable# (#this.fieldsToInsertList#)
 						values(
-							<cfloop array="#this.properties#" index="i">
+							<cfloop array="#this._properties#" index="i">
 								<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
 									<cfset thisVal = this[i]>
 									<cfif NOT isBinary(thisVal) AND IsSimpleValue(thisVal)>
@@ -1850,17 +1850,17 @@
 
 
 	<cffunction name="usesTombstoning" returnType="boolean" access="public" output="no">
-		<cfreturn ArrayFindNoCase(this.properties,"deleted") GT 0>
+		<cfreturn ArrayFindNoCase(this._properties,"deleted") GT 0>
 	</cffunction> <!--- usesTombstoning --->
 
 
 	<cffunction name="usesTombstoningTimestamp" returnType="boolean" access="public" output="no">
-		<cfreturn ArrayFindNoCase(this.properties,"deleted_timestamp") GT 0>
+		<cfreturn ArrayFindNoCase(this._properties,"deleted_timestamp") GT 0>
 	</cffunction> <!--- usesTombstoningTimestamp --->
 
 
 	<cffunction name="usesTombstoningUserID" returnType="boolean" access="public" output="no">
-		<cfreturn ArrayFindNoCase(this.properties,"deleted_user_id") GT 0>
+		<cfreturn ArrayFindNoCase(this._properties,"deleted_user_id") GT 0>
 	</cffunction> <!--- usesTombstoningUserID --->
 
 
@@ -1878,7 +1878,7 @@
 
 	<cffunction name="hasProperty" returnType="boolean">
 		<cfargument name="property" required="true" type="string">
-		<cfreturn ArrayFindNoCase( this.properties, arguments.property ) GT 0 >
+		<cfreturn ArrayFindNoCase( this._properties, arguments.property ) GT 0 >
 	</cffunction> <!--- hasProperty --->
 
 
@@ -1923,7 +1923,7 @@
 	public void function loadStruct(required struct stProperties){
 		for( var prop in arguments.stProperties ) {
 			/* The IsDefined protects against "[undefined struct element]" - Jared 1/13/09 */
-			if( ArrayFindNoCase(this.properties, prop)
+			if( ArrayFindNoCase(this._properties, prop)
 					AND StructKeyExists(arguments.stProperties, prop) ){
 				this[prop] = arguments.stProperties[prop];
 			}
