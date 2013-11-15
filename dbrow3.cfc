@@ -1926,7 +1926,7 @@
 		for( var prop in arguments.stProperties ) {
 			/* The IsDefined protects against "[undefined struct element]" - Jared 1/13/09 */
 			if( ArrayFindNoCase(this.properties, prop)
-					AND IsDefined("arguments.stProperties[prop]") ){
+					AND StructKeyExists(arguments.stProperties, prop) ){
 				this[prop] = arguments.stProperties[prop];
 			}
 		}
