@@ -202,8 +202,6 @@
 			</cfloop>
 
 			<cfset this.properties = StructSort(this.stColMetaData, 'numeric', 'asc', 'sortorder')>
-			<!--- this.propertyList is deprecated, please use this.properties --->
-			<cfset this.propertyList = ArrayToList(this.properties)>
 			<cfset this.isInitialized = 1>
 			<cfset this.isStored = 0>
 
