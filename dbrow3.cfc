@@ -440,7 +440,7 @@
 		if ( NOT this.isInited ) {
 			init();
 		}
-		for (var i in variables.properties)) {
+		for (var i in variables.properties) {
 			StructUpdate(this, i, '');
 			StructUpdate(this.stOrigState, i, '');
 		}
