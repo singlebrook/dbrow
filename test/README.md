@@ -7,8 +7,8 @@ Setup dbrow Unit Tests
           ServerName dbrow.localhost
           DocumentRoot /Users/jared/git/singlebrook/dbrow/test
           Include /private/etc/apache2/extra/cf9.conf
-          Alias /CFIDE/ "/Library/WebServer/Documents/ColdFusion9/CFIDE/"
-          Alias /mxunit/ "/Users/jared/git/mxunit/"
+          Alias /CFIDE "/Library/WebServer/Documents/ColdFusion9/CFIDE/"
+          Alias /mxunit "/Users/jared/git/mxunit/"
         </VirtualHost>
 
 1. Download mxunit and put it in a reasonable place, like `/Users/jared/git/mxunit/`
