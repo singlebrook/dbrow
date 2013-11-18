@@ -779,7 +779,7 @@
 		<cfset var stErrors = structNew()>
 		<cfset var i = "">
 
-		<cfloop from="1" to="#arrayLen(arErrors)#" index="i">
+		<cfloop from="1" to="#arrayLen(arErrors)#" index="local.i">
 			<cfif not(structKeyExists(stErrors, arErrors[i].propertyName))>
 				<cfset structInsert(stErrors, arErrors[i].propertyName, arErrors[i])>
 			</cfif>
@@ -1173,7 +1173,7 @@
 		<cfset var newList = "">
 		<cfset var i = "">
 
-		<cfloop list="#list1#" index="i" delimiters="#delimiters#">
+		<cfloop list="#list1#" index="local.i" delimiters="#delimiters#">
 			<cfif listFind(list2, i)>
 				<cfset newList = listAppend(newList, i)>
 			</cfif>
@@ -1256,7 +1256,7 @@
 		</cfif>
 
 
-		<cfloop array="#variables.properties#" index="i">
+		<cfloop array="#variables.properties#" index="local.i">
 			<cfif structKeyExists(arguments, 'rsValues')>
 				<cfset thisVal = arguments.rsValues[i][1]>
 			<cfelse>
@@ -1692,7 +1692,7 @@
 				<cfquery name="update#theObject#" datasource="#this.datasource#">
 					update #theTable#
 					set
-						<cfloop array="#variables.properties#" index="i">
+						<cfloop array="#variables.properties#" index="local.i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
 								<cfif NOT IsBinary(thisVal) AND IsSimpleValue(thisVal)>
@@ -1760,7 +1760,7 @@
 					<cfquery name="insert#theObject#" datasource="#this.datasource#">
 						insert into #theTable# (#this.fieldsToInsertList#)
 						values(
-							<cfloop array="#variables.properties#" index="i">
+							<cfloop array="#variables.properties#" index="local.i">
 								<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
 									<cfset thisVal = this[i]>
 									<cfif NOT isBinary(thisVal) AND IsSimpleValue(thisVal)>
