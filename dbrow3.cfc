@@ -1921,6 +1921,9 @@
 	<cfscript>
 	/* Populates the properties of this instance with values from the provided struct. */
 	public void function loadStruct(required struct stProperties){
+		if ( NOT this.isInited ) {
+			init();
+		}
 		for( var prop in arguments.stProperties ) {
 			/* The IsDefined protects against "[undefined struct element]" - Jared 1/13/09 */
 			if( ArrayFindNoCase(variables.properties, prop)
