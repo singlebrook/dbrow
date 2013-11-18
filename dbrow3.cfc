@@ -1508,8 +1508,8 @@
 
 		/* Set properties to database defaults - leon 2/3/06 */
 		for( var i in variables.properties ){
-			if( Len(this.stColMetaData[i].default) ) {
-				this[i] = this.stColMetaData[i].default;
+			if( Len(this.stColMetaData[i]['default']) ) {
+				this[i] = this.stColMetaData[i]['default'];
 			}
 		}
 
