@@ -196,7 +196,7 @@
 
 			<cfset logIt('Populating stOrigState')>
 			<cfset this.stOrigState = structNew()>
-			<cfloop list="#structKeyList(this.stColMetaData)#" index="i">
+			<cfloop list="#structKeyList(this.stColMetaData)#" index="local.i">
 				<cfset structInsert(this, i, '')>
 				<cfset structInsert(this.stOrigState, i, '')>
 			</cfloop>
