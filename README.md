@@ -1,6 +1,6 @@
 # DBRow 4.0pre
 
-by Jared Beck and Leon Miller-Out of [Singlebrook Technology](http://www.singlebrook.com)
+by Jared Beck, Leon Miller-Out, and Isaiah Fischer of [Singlebrook Technology](http://www.singlebrook.com)
 
 ## Contents
 
