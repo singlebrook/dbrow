@@ -6,7 +6,8 @@ testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
 unitTestCFCs = ['addValidation_test', 'instantiation_test',
 	'load_test', 'label_test',
 	'drawForm_test', 'drawFormField_test', 'drawPropertyValue_test',
-	'drawStandardFormField_test', 'edit_test', 'formValidation_test'];
+	'drawStandardFormField_test', 'edit_test', 'formValidation_test',
+  'loadByName_test'];
 
 for(i=1; i <= ArrayLen(unitTestCFCs); i++) {
   testSuite.addAll("units.dbrow." & unitTestCFCs[i]);

@@ -1444,9 +1444,9 @@
 			from #theTable#
 			where
 				<cfif caseSensitiveComparisons()>
-					lower(#theNameField#) = <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
+					lower(#theNameField#) = <cfqueryparam value="#lcase(arguments.name)#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
 				<cfelse>
-					#theNameField# = <cfqueryparam value="#lcase(arguments.name)#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
+					#theNameField# = <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
 				</cfif>
 				<cfif structKeyExists(arguments, 'filterField')>
 					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar" and caseSensitiveComparisons()>
