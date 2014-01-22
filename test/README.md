@@ -7,14 +7,10 @@ Setup dbrow Unit Tests
           ServerName dbrow.localhost
           DocumentRoot /Users/jared/git/singlebrook/dbrow/test
           Include /private/etc/apache2/extra/cf9.conf
-          Alias /CFIDE/ "/Library/WebServer/Documents/ColdFusion9/CFIDE/"
-          Alias /mxunit/ "/Users/jared/git/mxunit/"
         </VirtualHost>
 
-1. Download mxunit and put it in a reasonable place, like `/Users/jared/git/mxunit/`
-1. In CF Admin, add two mappings:
-  1. Map `/mxunit` to `/Users/jared/git/mxunit`, or wherever
-  1. Map `/dbrow` to `/Users/jared/git/singlebrook/dbrow`, or wherever
+1. In CF Admin, add a mapping:
+  1. Map `/dbrow` to `/Users/jared/git/singlebrook/dbrow`, or wherever. (This is not necessary in Railo. I'm not sure why its necessary in CF because the mapping is defined in the Application.cfc.)
 
 Setup dbrow_test database
 -------------------------

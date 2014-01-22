@@ -4,6 +4,9 @@
 <cfset this.sessionmanagement = false>
 <cfset this.applicationtimeout = "#CreateTimeSpan(0,0,0,5)#">
 
+<cfset this.mappings.dbrow = ExpandPath('..')>
+<cfset this.mappings.mxunit = ExpandPath('./mxunit')>
+
 <cffunction name="onApplicationStart">
 	<cflock scope="application" throwOnTimeout="yes" timeout="1">
 		<cfset application.datasource = "dbrow_test">
