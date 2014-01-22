@@ -427,6 +427,15 @@
 	</cffunction> <!--- cacheTimeoutDefault --->
 
 
+	<cffunction name="caseSensitiveComparisons" returntype="boolean" output="no" access="public"
+			hint="Specifies whether the RDBMS uses case-sensitive comparisons for IN, LIKE, and =.
+				If an adapter returns a true value, dbrow will do extra work to make comparisons
+				case-insensitive.">
+		<!--- Most RDBMSs use case-insensitive comparisons, so make that the default here. --->
+		<cfreturn false>
+	</cffunction>
+
+
 	<cffunction name="checkRemoteMethodAuthorization" returntype="void" output="false" access="public"
 			hint="Called by all remote methods.  Override with authorization checks to get access to the methods.">
 		<cfthrow type="com.singlebrook.dbrow3.UnauthorizedAccessException" message="Unauthorized access" detail="You are not allowed to access this method">
@@ -1372,7 +1381,7 @@
 							and (1=0
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
+									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar" and caseSensitiveComparisons()>
 										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									<cfelse>
 										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
@@ -1381,7 +1390,7 @@
 							)
 
 						<cfelse>
-							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar">
+							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar" and caseSensitiveComparisons()>
 								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
@@ -1431,9 +1440,14 @@
 		<cfquery name="getID" datasource="#this.datasource#" cachedWithin="#v.cacheTime#">
 			select #theID# as ID
 			from #theTable#
-			where lower(#theNameField#) = '#lcase(arguments.name)#'
+			where
+				<cfif caseSensitiveComparisons()>
+					lower(#theNameField#) = <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
+				<cfelse>
+					#theNameField# = <cfqueryparam value="#lcase(arguments.name)#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
+				</cfif>
 				<cfif structKeyExists(arguments, 'filterField')>
-					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar">
+					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar" and caseSensitiveComparisons()>
 						and lower(#arguments.filterField#) in (
 							<cfqueryparam value="#lcase(arguments.filterValue)#"
 								cfsqltype="cf_sql_#this.stColMetaData[arguments.filterField].datatype#"

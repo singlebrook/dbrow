@@ -1,6 +1,13 @@
 <cfcomponent name="dbrow3_pgsql"
 	extends="dbrow3">
 
+	<cffunction name="caseSensitiveComparisons" returntype="boolean" output="no" access="public"
+			hint="Specifies whether the RDBMS uses case-sensitive comparisons for IN, LIKE, and =.
+				If an adapter returns a true value, dbrow will do extra work to make comparisons
+				case-insensitive.">
+		<cfreturn true>
+	</cffunction>
+
 	<cffunction name="getColumnMetaData" returntype="struct" access="public" output="yes">
 		<cfset var rsMetaData = "">
 		<cfset var stColMetaData = structNew()>
