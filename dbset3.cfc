@@ -92,7 +92,9 @@ Sample constructor code for use in child component:
 	</cffunction> <!--- initializeObject --->
 
 
-	<cffunction name="cacheTimeoutDefault" returntype="date" output="no" access="public"
+	<!--- Railo wants "timestamp" as the returntype. ACF wants "date". Just make it "any"
+		so it works with both. --->
+	<cffunction name="cacheTimeoutDefault" returntype="any" output="no" access="public"
 			hint="See dbrow3.cacheTimeoutDefault()">
 		<cfreturn CreateTimeSpan(0,2,0,0)>
 	</cffunction>
