@@ -8,24 +8,24 @@ component extends="dbrow.test.units.abstract_testcase" {
 
 
   public void function loadBy_is_case_insensitive() {
-    arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'wasp');
+    assert(arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'wasp'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 
-    arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'WASP');
+    assert(arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'WASP'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 
-    arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'w*sp');
+    assert(arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'w*sp'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 
-    arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'W*SP');
+    assert(arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'W*SP'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
   }
 
   public void function loadByName_is_case_insensitive() {
-    arthropod2.loadByName('wasp');
+    assert(arthropod2.loadByName('wasp'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 
-    arthropod2.loadByName('WASP');
+    assert(arthropod2.loadByName('WASP'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
   }
 }
