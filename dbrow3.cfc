@@ -719,8 +719,6 @@
 
 					<!--- Check datatype - leon 12/11/08 --->
 					<cfswitch expression="#stMD.datatype#">
-						<!--- ALL: char,bigint,integer,bit,binary,date,float,decimal,varchar,time,timestamp - leon 2/4/06 --->
-						<!--- LEFT: char,bit,binary,other,varchar - don't think these need validation for now. - leon 2/4/06 --->
 						<cfcase value="float,decimal" delimiters=",">
 							<cfif not(isNumeric(this[v.thisProp]))>
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a number'))>
@@ -741,7 +739,7 @@
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid time'))>
 							</cfif>
 						</cfcase>
-						<cfcase value="char,varchar">
+						<cfcase value="varchar">
 							<cfif v.thisProp EQ "email" AND NOT IsValid('email', this[v.thisProp])>
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid email address'))>
 							</cfif>
@@ -1715,7 +1713,7 @@
 								<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
 								#i# =
 									<cfif len(thisVal)>
-										<cfif listFindNoCase('char,varchar,text', this.stColMetaData[i].datatype)>
+										<cfif this.stColMetaData[i].datatype eq "varchar">
 											<!--- This is a workaround for MySQL, which seems to double single-quotes when strings are passed in via
 												cfqueryparam, regardless of the preserveSingleQuotes(). - leon 2/18/06 --->
 											<cfif useQueryParamForText()>
@@ -1782,7 +1780,7 @@
 									<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
 									<cfif NOT IsSimpleValue(thisVal) OR Len(thisVal)>
 
-										<cfif listFindNoCase('char,varchar,text', this.stColMetaData[i].datatype)>
+										<cfif this.stColMetaData[i].datatype eq "varchar">
 											<!--- This is a workaround for MySQL, which seems to double single-quotes
 												when strings are passed in via cfqueryparam, regardless of
 												the preserveSingleQuotes(). - leon 2/18/06 --->
