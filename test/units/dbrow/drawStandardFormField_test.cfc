@@ -2,6 +2,7 @@
 <cfscript>
 
 public void function setUp() {
+	Super.setUp();
 	arthropod = arthropod_factory.create();
 }
 
