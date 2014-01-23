@@ -172,7 +172,7 @@ Sample constructor code for use in child component:
 						<!--- Use LIKE instead of IN for wildcard support - leon 6/3/08 --->
 						and (1=0
 							<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
-								<cfif objObj.stColMetaData[v.currentKey].datatype eq "varchar">
+								<cfif objObj.stColMetaData[v.currentKey].datatype eq "varchar" and objObj.caseSensitiveComparisons()>
 									or lower(#v.currentKey#) like
 								<cfelse>
 									or #v.currentKey# like
@@ -187,7 +187,7 @@ Sample constructor code for use in child component:
 						)
 					<cfelse>
 						and
-							<cfif objObj.stColMetaData[v.currentKey].datatype eq "varchar">
+							<cfif objObj.stColMetaData[v.currentKey].datatype eq "varchar" and objObj.caseSensitiveComparisons()>
 								lower(#v.currentKey#) in
 							<cfelse>
 								#v.currentKey# in
