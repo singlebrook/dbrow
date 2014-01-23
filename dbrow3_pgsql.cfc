@@ -109,7 +109,7 @@
 
 		<cfscript>
 			switch (nativeType) {
-				case "char" : return "char"; break;
+				case "char" : return "varchar"; break;
 				case "bigint" : return "bigint"; break;
 				case "boolean" : return "bit"; break;
 				case "bytea" : return "blob"; break;

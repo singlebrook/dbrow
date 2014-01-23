@@ -95,9 +95,9 @@
 				// String Type
 				case "binary" : return "binary";
 				case "blob" : return "binary";
-				case "char" : return "char";
+				case "char" : return "varchar";
 				case "image" : return "binary";
-				case "nchar" : return "char";
+				case "nchar" : return "varchar";
 				case "ntext" : return "varchar";
 				case "nvarchar" : return "varchar";
 				case "text" : return "varchar";
