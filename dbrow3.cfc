@@ -716,10 +716,8 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="integer,bigint" delimiters=",">
-							<cfif listFirst(Server.ColdFusion.ProductVersion) gte 7 >
-								<cfif not(isValid('integer', this[v.thisProp]))>
-									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be an integer'))>
-								</cfif>
+							<cfif not(isValid('integer', this[v.thisProp]))>
+								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be an integer'))>
 							</cfif>
 						</cfcase>
 						<cfcase value="date,timestamp" delimiters=",">
@@ -733,11 +731,8 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="char,varchar">
-							<!--- IsValid is only available on CF7 or greater - dave 10/20/09 --->
-							<cfif listFirst(Server.ColdFusion.ProductVersion) gte 7 >
-								<cfif v.thisProp EQ "email" AND NOT IsValid('email', this[v.thisProp])>
-									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid email address'))>
-								</cfif>
+							<cfif v.thisProp EQ "email" AND NOT IsValid('email', this[v.thisProp])>
+								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid email address'))>
 							</cfif>
 						</cfcase>
 					</cfswitch>
