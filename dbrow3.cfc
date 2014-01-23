@@ -739,7 +739,7 @@
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid time'))>
 							</cfif>
 						</cfcase>
-						<cfcase value="varchar">
+						<cfcase value="varchar,nvarchar" delimiters=",">
 							<cfif v.thisProp EQ "email" AND NOT IsValid('email', this[v.thisProp])>
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be a valid email address'))>
 							</cfif>
@@ -1378,7 +1378,7 @@
 							and (1=0
 								<cfloop list="#filterSet[v.currentKey]#" index="v.currentValue">
 									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-									<cfif this.stColMetaData[v.currentKey].datatype eq "varchar" and caseSensitiveComparisons()>
+									<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[v.currentKey].datatype) and caseSensitiveComparisons()>
 										or lower(#v.currentKey#) like <cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 									<cfelse>
 										or #v.currentKey# like <cfqueryparam value="#replace(v.currentValue, '*', '%', 'all')#" null="#valueIsNull#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
@@ -1387,7 +1387,7 @@
 							)
 
 						<cfelse>
-							<cfif this.stColMetaData[v.currentKey].datatype eq "varchar" and caseSensitiveComparisons()>
+							<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[v.currentKey].datatype) and caseSensitiveComparisons()>
 								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							<cfelse>
 								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
@@ -1444,7 +1444,7 @@
 					#theNameField# = <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
 				</cfif>
 				<cfif structKeyExists(arguments, 'filterField')>
-					<cfif this.stColMetaData[arguments.filterField].datatype eq "varchar" and caseSensitiveComparisons()>
+					<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[arguments.filterField].datatype) and caseSensitiveComparisons()>
 						and lower(#arguments.filterField#) in (
 							<cfqueryparam value="#lcase(arguments.filterValue)#"
 								cfsqltype="cf_sql_#this.stColMetaData[arguments.filterField].datatype#"
@@ -1713,11 +1713,11 @@
 								<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
 								#i# =
 									<cfif len(thisVal)>
-										<cfif this.stColMetaData[i].datatype eq "varchar">
+										<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[i].datatype)>
 											<!--- This is a workaround for MySQL, which seems to double single-quotes when strings are passed in via
 												cfqueryparam, regardless of the preserveSingleQuotes(). - leon 2/18/06 --->
 											<cfif useQueryParamForText()>
-												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_varchar">
+												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_#this.stColMetaData[i].datatype#">
 											<cfelseif useEscapedBackslashes()>
 												'#replace(thisVal, '\', '\\', 'all')#'
 											<cfelse>
@@ -1780,12 +1780,12 @@
 									<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
 									<cfif NOT IsSimpleValue(thisVal) OR Len(thisVal)>
 
-										<cfif this.stColMetaData[i].datatype eq "varchar">
+										<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[i].datatype)>
 											<!--- This is a workaround for MySQL, which seems to double single-quotes
 												when strings are passed in via cfqueryparam, regardless of
 												the preserveSingleQuotes(). - leon 2/18/06 --->
 											<cfif useQueryParamForText()>
-												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_varchar">
+												<cfqueryparam value="#thisVal#" cfsqltype="cf_sql_#this.stColMetaData[i].datatype#">
 											<cfelseif useEscapedBackslashes()>
 												'#replace(thisVal, '\', '\\', 'all')#'
 											<cfelse>

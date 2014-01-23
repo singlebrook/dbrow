@@ -97,9 +97,9 @@
 				case "blob" : return "binary";
 				case "char" : return "varchar";
 				case "image" : return "binary";
-				case "nchar" : return "varchar";
-				case "ntext" : return "varchar";
-				case "nvarchar" : return "varchar";
+				case "nchar" : return "nvarchar";
+				case "ntext" : return "nvarchar";
+				case "nvarchar" : return "nvarchar";
 				case "text" : return "varchar";
 				case "varbinary" : return "binary";
 				case "varchar" : return "varchar";
@@ -138,7 +138,9 @@
 	</cffunction>	<!--- translateDefault --->
 
 	<cffunction name="useQueryParamForText" returnType="boolean" access="public" output="no">
-	 <cfreturn 0>
+		<!--- This was off until now, but it needs to be on for nvarchar support.
+			Leon - 2014/01/22 --->
+	  <cfreturn true>
 	</cffunction> <!--- useQueryParamForText --->
 
 </cfcomponent>
