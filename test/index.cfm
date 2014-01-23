@@ -3,15 +3,18 @@
 
 testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
 
-unitTestCFCs = ['addValidation_test', 'instantiation_test',
-	'load_test', 'label_test',
-	'drawForm_test', 'drawFormField_test', 'drawPropertyValue_test',
-	'drawStandardFormField_test', 'edit_test', 'formValidation_test',
-  'loadByName_test'];
+files = DirectoryList(ExpandPath('.') & '/units', true, 'path');
 
-for(i=1; i <= ArrayLen(unitTestCFCs); i++) {
-  testSuite.addAll("units.dbrow." & unitTestCFCs[i]);
+for (i = 1; i <= ArrayLen(files); i++) {
+  if (files[i] contains "_test.cfc") {
+    relative_file = ReReplace(files[i], '^.*/units', 'units');
+    relative_file_no_ext = ReReplace(relative_file, '.cfc$', '');
+    component = Replace(relative_file_no_ext, '/', '.', 'all');
+    // This needs to be a component path like ''
+    testSuite.addAll(component);
+  }
 }
+
 results = testSuite.run();
 
 </cfscript>
