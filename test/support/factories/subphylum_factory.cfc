@@ -1,9 +1,13 @@
 <cfcomponent>
 <cfscript>
 
-public component function create() {
+public component function create(subphylum_name = "") {
   var obj = CreateObject('subphylum').new();
-  obj.subphylum_name = random_subphylum_name();
+
+  if (arguments.subphylum_name == "")
+    arguments.subphylum_name = random_subphylum_name();
+
+  obj.subphylum_name = arguments.subphylum_name;
   obj.store(getID = true);
   return obj;
 }
