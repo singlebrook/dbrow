@@ -177,12 +177,8 @@ Sample constructor code for use in child component:
 								<cfelse>
 									or #v.currentKey# like
 								</cfif>
-								<cfif listFirst(Server.ColdFusion.ProductVersion) gte 8>
-									<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-									<cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
-								<cfelse>
-									'#lcase(replace(replace(v.currentValue, '*', '%', 'all'), '\', '\\', 'all'))#'
-								</cfif>
+								<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
+								<cfqueryparam value="#lcase(replace(v.currentValue, '*', '%', 'all'))#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 							</cfloop>
 						)
 					<cfelse>
@@ -193,21 +189,8 @@ Sample constructor code for use in child component:
 								#v.currentKey# in
 							</cfif>
 							(
-							<cfif listFirst(Server.ColdFusion.ProductVersion) gte 8>
-								<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
-								<cfqueryparam value="#lcase(filterSet[v.currentKey])#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
-							<cfelse>
-								<!--- Version 7 and earlier did not support cfqueryparam in combination with cachedwithin - leon 5/8/08 --->
-								<cfif len(filterSet[v.currentKey])>
-									<cfif REFind("[^\d,\.]", filterSet[v.currentKey])>
-										#lcase(listQualify(filterSet[v.currentKey], "'"))#
-									<cfelse>
-										#lcase(filterSet[v.currentKey])#
-									</cfif>
-								<cfelse>
-									null
-								</cfif>
-							</cfif>
+							<cfset valueIsNull = iif(len(filterSet[v.currentKey]),0,1)>
+							<cfqueryparam value="#lcase(filterSet[v.currentKey])#" null="#valueIsNull#" cfsqltype="cf_sql_#objObj.stColMetaData[v.currentKey].datatype#" list="#NOT valueIsNull#">
 						)
 					</cfif>
 				</cfif>
