@@ -1,10 +1,10 @@
 <cfcomponent>
 <cfscript>
 
-public component function create(subphylum_name = "") {
+public component function create(string subphylum_name) {
 	var obj = CreateObject('subphylum').new();
 
-	if (arguments.subphylum_name == "")
+	if (NOT StructKeyExists(arguments, 'subphylum_name'))
 		arguments.subphylum_name = random_subphylum_name();
 
 	obj.subphylum_name = arguments.subphylum_name;
