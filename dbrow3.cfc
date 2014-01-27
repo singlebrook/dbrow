@@ -904,6 +904,8 @@
 			<cfthrow message="#theObject#.stMany has no information about the relationship #relName#">
 		</cfif>
 
+		<cfset v.cacheTime = cacheTimeout(arguments.bUseCache)>
+
 		<cfset v.stRel = this.stMany[arguments.relName]>
 		<!--- If reloading but the relation is dirty, throw an error - dave 5/19/08 --->
 		<cfif v.stRel.dirty and arguments.reload >
@@ -936,7 +938,7 @@
 					<cfset v.linksToMyID = v.stLTInfo.linksToMyID>
 					<cfset v.linksToForeignID = v.stLTInfo.linksToForeignID>
 
-					<cfquery name="v.rsForeign" datasource="#this.datasource#" cachedwithin="#this.timeLong#">
+					<cfquery name="v.rsForeign" datasource="#this.datasource#" cachedwithin="#v.cacheTime#">
 						select #v.linksToForeignID# as ID
 						from #v.stRel.linkTable#
 						where #v.linksToMyID# = <cfqueryparam value="#this[v.myID]#" cfsqltype="cf_sql_#this.stColMetaData[v.myID].datatype#">
