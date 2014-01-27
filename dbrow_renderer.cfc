@@ -242,7 +242,7 @@ public component function init(required component dbrowObj) {
 	<cfelse>
 
 		<cfswitch expression="#stMD.datatype#">
-			<cfcase value="bigint,char,date,decimal,float,integer,smallint,time,timestamp,uuid,varchar" delimiters=",">
+			<cfcase value="bigint,date,decimal,float,integer,smallint,time,timestamp,uuid,varchar" delimiters=",">
 				<cfif arguments.propertyname contains "password">
 					<cfset formField = "(hidden)">
 				<cfelse>
@@ -355,7 +355,7 @@ public component function init(required component dbrowObj) {
 
 		<cfset stMD = this.dbrowObj.stColMetaData[arguments.propertyname]>
 		<cfswitch expression="#stMD.datatype#">
-			<cfcase value="bigint,char,date,decimal,float,integer,smallint,time,timestamp,varchar" delimiters=",">
+			<cfcase value="bigint,date,decimal,float,integer,smallint,time,timestamp,varchar" delimiters=",">
 				<cfif (not(val(stMD.maxLen)) and stMD.datatype eq "varchar") or (stMD.maxLen gte 300)>
 					<cfset formField = '<textarea rows="4" cols="50" name="#arguments.identifierPrefix##arguments.propertyname#" id="#arguments.identifierPrefix##arguments.propertyname#" #this.dbrowObj.getTabIndexAttr(arguments.propertyname)# #this.dbrowObj.getValidationAttribs(arguments.propertyname)#>#this.dbrowObj[arguments.propertyname]#</textarea>'>
 				<cfelse>
@@ -549,8 +549,6 @@ this default as a method to allow child classes to override it.
 		</cfif>
 
 		<cfswitch expression="#stMD.datatype#">
-			<!--- ALL: char,bigint,integer,bit,binary,date,float,decimal,varchar,time,timestamp - leon 2/4/06 --->
-			<!--- LEFT: char,bit,binary,other,varchar - don't think these need validation for now. - leon 2/4/06 --->
 			<cfcase value="float,decimal" delimiters=",">
 				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="numeric"')>
 			</cfcase>
@@ -563,7 +561,7 @@ this default as a method to allow child classes to override it.
 			<cfcase value="time">
 				<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="time"')>
 			</cfcase>
-			<cfcase value="char,varchar">
+			<cfcase value="varchar">
 				<cfif arguments.propertyname contains "email" >
 					<cfset arrayAppend(arAttribs, '#this.valAttr_pattern#="email"')>
 				</cfif>

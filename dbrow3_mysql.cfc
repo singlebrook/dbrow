@@ -99,7 +99,7 @@
 				// String Type
 				case "binary" : return "binary"; break;
 				case "blob" : return "binary"; break;
-				case "char" : return "char"; break;
+				case "char" : return "varchar"; break;
 				case "longblob" : return "binary"; break;
 				case "longtext" : return "varchar"; break;
 				case "mediumblob" : return "binary"; break;
