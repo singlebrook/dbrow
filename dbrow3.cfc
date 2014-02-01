@@ -14,12 +14,11 @@
 		theNameField = "User_name";
 
 		/* RELATIONSHIPS
-		- Belongs-to-one relationships will be automatically detected based on
-			foreign key constraints
 		- Has-many relationships can be defined in the constructor by using
 			hasMany(). Both one-to-many and many-to-many relationships are supported.
 		- Belongs-to-many relationships are the same this as has-many, so you can
 			define them with hasMany().
+		- Belongs-to-one relationships are currently unsupported.
 		*/
 	</cfscript>
 </cfcomponent>
