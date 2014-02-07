@@ -950,8 +950,15 @@
 					<!--- Load related IDs from foreign table - leon 4/21/08 --->
 					<cfset v.objForeignSet = createObject('component', '#application.objectMap#.#v.stRel.objectType#_set')>
 
+					<!--- Identify the foreign key column --->
+					<cfif Len(v.stRel.linksToMyID)>
+						<cfset v.fkField = v.stRel.linksToMyID>
+					<cfelse>
+						<cfset v.fkField = v.objForeignObj.getForeignKeyCol(v.myID, theTable)>
+					</cfif>
+
 					<cfset v.rsForeign = v.objForeignSet.getAll(
-							filterField = v.objForeignObj.getForeignKeyCol(v.myID, theTable),
+							filterField = v.fkField,
 							filterValue = this[v.myID],
 							IDOnly = 1,
 							bUseCache = bUseCache
@@ -1111,7 +1118,7 @@
 		<cfargument name="linkTable" type="string" required="no" default=""
 				hint="Linking table in a many-to-many relationship">
 		<cfargument name="linksToMyID" type="string" required="no" default=""
-				hint="Only needed when both id columns in linkTable reference the same table">
+				hint="Needed if there is not a single foreign key linking to my PK">
 		<cfargument name="linksToForeignID" type="string" required="no" default=""
 				hint="Only needed when both id columns in linkTable reference the same table">
 		<cfargument name="myID" type="string" required="no" default=""
@@ -1124,7 +1131,7 @@
 		<cfset var v = structNew()>
 
 		<!--- Validate arguments --->
-		<cfif (len(arguments.linksToMyID) or len(arguments.linksToForeignID)) and not len(linkTable)>
+		<cfif len(arguments.linksToForeignID) and not len(linkTable)>
 			<cfthrow message="Invalid arguments in hasMany()">
 		</cfif>
 
