@@ -10,7 +10,7 @@ Setup dbrow Unit Tests
         </VirtualHost>
 
 1. In CF Admin, add a mapping:
-  1. Map `/dbrow` to `/Users/jared/git/singlebrook/dbrow`, or wherever. (This is not necessary in Railo. I'm not sure why its necessary in CF because the mapping is defined in the Application.cfc.)
+  1. Map `/dbrow` to `/Users/jared/git/singlebrook/dbrow`, or wherever. (This is not necessary in Railo/Lucee. I'm not sure why its necessary in CF because the mapping is defined in the Application.cfc.)
 
 Setup dbrow_test database
 -------------------------

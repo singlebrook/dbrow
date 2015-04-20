@@ -18,8 +18,8 @@ public void function afterTests() {
 
 public void function drawPropertyValue_bit() {
 	arthropod.venemous = '';
-	// Railo and ACF behave differently when YesNoFormat()ing an empty value.
-	// ACF returns "No". Railo return "false". Both are falsey, so assert that.
+	// Railo/Lucee and ACF behave differently when YesNoFormat()ing an empty value.
+	// ACF returns "No". Railo/Lucee return "false". Both are falsey, so assert that.
 	assert(!arthropod.drawPropertyValue('venemous'));
 	arthropod.venemous = true;
 	assertEquals('Yes', arthropod.drawPropertyValue('venemous'));

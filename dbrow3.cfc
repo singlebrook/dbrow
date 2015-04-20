@@ -418,7 +418,7 @@
 	</cffunction> <!--- cacheTimeout --->
 
 
-	<!--- Railo wants "timestamp" as the returntype. ACF wants "date". Just make it "any"
+	<!--- Railo/Lucee want "timestamp" as the returntype. ACF wants "date". Just make it "any"
 		so it works with both. --->
 	<cffunction name="cacheTimeoutDefault" returntype="any" output="no" access="public"
 			hint="The default cache timeout.  Only used if request.timeLong is
