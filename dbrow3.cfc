@@ -757,7 +757,7 @@
 								</cfif>
 							</cfif>
 							<cfif Len(v.stRule['function'])>
-								<cfif NOT Evaluate('#v.stRule["function"]#("#this[v.thisProp]#")')>
+								<cfif NOT Evaluate('#v.stRule["function"]#("#Replace(this[v.thisProp], '"', '""', 'ALL')#")')>
 									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))>
 								</cfif>
 							</cfif>
