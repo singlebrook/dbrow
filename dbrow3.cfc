@@ -1812,7 +1812,7 @@
 
 										<cfelseif this.stColMetaData[i].datatype eq "json">
 											<cfset var serializedVal = IsJson(thisVal) ? thisVal : SerializeJSON(thisVal)>
-											<cfif useQueryParamForText()>
+											<cfif useQueryParamForJson()>
 												<cfqueryparam value="#serializedVal#" cfsqltype="cf_sql_varchar">
 											<cfelse>
 												'#serializedVal#'
@@ -1879,6 +1879,11 @@
 	<cffunction name="usesTombstoningUserID" returnType="boolean" access="public" output="no">
 		<cfreturn ArrayFindNoCase(variables.properties,"deleted_user_id") GT 0>
 	</cffunction> <!--- usesTombstoningUserID --->
+
+
+	<cffunction name="useQueryParamForJson" returnType="boolean" access="public" output="no">
+		<cfreturn useQueryParamForText()>
+	</cffunction> <!--- useQueryParamForJson --->
 
 
 	<cffunction name="useQueryParamForText" returnType="boolean" access="public" output="no">
