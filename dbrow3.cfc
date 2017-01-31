@@ -1393,10 +1393,17 @@
 							)
 
 						<cfelse>
+							<cfset v.currentValue = StructFind( filterSet, v.currentKey )>
+							<!--- Protect against invalid SQL when currentValue is a string composed only of commas, such as ",".
+							  This has the side effect of being unable to search for these strings, but that's better than running
+							  an invalid query. --->
+							<cfif not ListLen(v.currentValue)>
+								<cfset v.currentValue = ''>
+							</cfif>
 							<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[v.currentKey].datatype) and caseSensitiveComparisons()>
-								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(StructFind( filterSet, v.currentKey ))#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
+								and lower(#v.currentKey#) in ( <cfqueryparam value="#lcase(v.currentValue)#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							<cfelse>
-								and #v.currentKey# in ( <cfqueryparam value="#StructFind( filterSet, v.currentKey )#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
+								and #v.currentKey# in ( <cfqueryparam value="#v.currentValue#" cfsqltype="cf_sql_#this.stColMetaData[v.currentKey].datatype#" list="yes"> )
 							</cfif>
 						</cfif>
 
