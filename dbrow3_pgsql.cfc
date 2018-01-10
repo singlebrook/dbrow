@@ -18,7 +18,7 @@
 				interval_precision, interval_type, is_nullable, numeric_precision, numeric_precision_radix,
 				numeric_scale, ordinal_position
 			from information_schema.columns
-			where lower(table_name) = '#lcase(this.theTable)#'
+			where lower(table_name) = lower(<cfqueryparam value="#this.theTable#" cfsqltype="cf_sql_varchar">)
 		</cfquery>
 
 		<!--- Assert that at least one column was found - Jared 2012-04-30 --->
