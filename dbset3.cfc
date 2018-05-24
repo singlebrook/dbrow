@@ -128,8 +128,7 @@ Sample constructor code for use in child component:
 			<cfset this.checkRemoteMethodAuthorization() >
 		</cfif>
 
-		<cfif (structKeyExists(arguments, 'filterField') or structKeyExists(arguments, 'filterValue'))
-				and (not(structKeyExists(arguments, 'filterField')) or not(structKeyExists(arguments, 'filterValue')))>
+		<cfif structKeyExists(arguments, 'filterField') xor structKeyExists(arguments, 'filterValue')>
 			<cfthrow message="dbset3.getAll requires both filterField and filterValue if either is passed">
 		</cfif>
 
