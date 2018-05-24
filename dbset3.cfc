@@ -116,6 +116,8 @@ Sample constructor code for use in child component:
 		<cfargument name="IDOnly" type="boolean" required="no" default="no" hint="Load IDs only">
 		<cfargument name="includeDeleted" type="boolean" required="no" default="0">
 		<cfargument name="orderBy" type="string" required="no" default="#this.theOrderField#">
+		<cfargument name="limit" type="numeric" required="no">
+		<cfargument name="offset" type="numeric" required="no">
 
 		<cfset var objObj = "" >
 		<cfset var cacheTime = "">
@@ -200,6 +202,26 @@ Sample constructor code for use in child component:
 				and deleted = '0'
 			</cfif>
 			order by #orderBy#
+
+			<!--- LIMIT/OFFSET --->
+			<cfif useOffsetFetchSyntax()>
+				<cfif arguments.keyExists('offset')>
+					offset <cfqueryparam value="#arguments.offset#" cfsqltype="cf_sql_integer"> rows
+					<cfif arguments.keyExists('limit')>
+						fetch first <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer"> rows only
+					</cfif>
+				<cfelseif arguments.keyExists('limit')>
+					<cfthrow message="`limit` argument is not supported without `offset` in MS SQL Server">
+				</cfif>
+			<cfelse>
+				<cfif arguments.keyExists('limit')>
+					limit <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer">
+				</cfif>
+				<cfif arguments.keyExists('offset')>
+					offset <cfqueryparam value="#arguments.offset#" cfsqltype="cf_sql_integer">
+				</cfif>
+			</cfif>
+
 		</cfquery>
 
 		<cfreturn getSet>
@@ -454,6 +476,12 @@ Sample constructor code for use in child component:
 
 		<cfreturn v.sortedIDList>
 	</cffunction> <!--- orderBy --->
+
+
+	<cffunction name="useOffsetFetchSyntax" returnType="boolean" access="private" output="no"
+			hint="Use weird OFFSET/FETCH syntax instead of common OFFSET/LIMIT syntax">
+		<cfreturn false>
+	</cffunction>
 
 
 	<cffunction name="usesTombstoning" returnType="boolean" access="public" output="no">
