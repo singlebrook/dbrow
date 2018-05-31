@@ -106,6 +106,17 @@ Sample constructor code for use in child component:
 	</cffunction>
 
 
+	<cfscript>
+		public numeric function count() {
+			var rs = QueryExecute(
+				"select count(*) as n from #theTable#",
+				{},
+				{ datasource = theDatasource }
+			);
+			return rs.n;
+		}
+	</cfscript>
+
 	<cffunction name="getAll" returnType="query" access="remote" output="no"
 			hint="filterValue and values in filterSet can use * as a wildcard">
 		<cfargument name="bUseCache" type="boolean" required="no" default="0">
