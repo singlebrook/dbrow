@@ -228,8 +228,8 @@
 		<cfargument name="propertyName" type="string" required="yes">
 		<cfargument name="regex" type="string" required="no" default=""
 				hint="Regex checks will work client-side (if using formvalidation.js) and server-side.">
-		<cfargument name="function" type="string" required="no" default=""
-				hint="The name of a CF function that takes in a property value and
+		<cfargument name="function" type="any" required="no" default=""
+				hint="A CF function name or a closure that takes in a property value and
 					returns a boolean value indicating that the value is OK or not. These
 					obviously won't work client-side.">
 		<cfargument name="errorText" type="string" required="no"
@@ -756,11 +756,18 @@
 									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))>
 								</cfif>
 							</cfif>
-							<cfif Len(v.stRule['function'])>
-								<cfif NOT Evaluate('#v.stRule["function"]#("#Replace(this[v.thisProp], '"', '""', 'ALL')#")')>
-									<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))>
-								</cfif>
-							</cfif>
+							<cfscript>
+								var funcRef = v.stRule['function'];
+								var passed = true;
+								if (isCustomFunction(funcRef) or isClosure(funcRef)) {
+									passed = funcRef(this[v.thisProp]);
+								} else if (Len(funcRef)) {
+									passed = Evaluate('#funcRef#("#this[v.thisProp].replace('"', '""', 'all')#")');
+								}
+								if (!passed) {
+									ArrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))
+								}
+							</cfscript>
 						</cfloop>
 					</cfif>
 
