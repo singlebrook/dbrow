@@ -115,17 +115,6 @@
 			- leon 12/11/08 --->
 		</cfif>
 
-		<!--- There are a dozen methods in dbrow3.cfc which are more
-		concerned with rendering a record (eg. in html) than they are
-		with core responsibilities like persistence.  In dbrow 3.2,
-		these methods will be delegated to a dbrow_renderer without
-		changing the behavior of dbrow or its interface (method
-		signatures).  In future versions of dbrow, these methods may be
-		deprecated, or the delegate (dbrow_renderer) could become a
-		decorator, or these methods could be removed from the dbrow api
-		entirely.  - Jared 4/28/12 --->
-		<cfset initializeRenderer()>
-
 		<cfset this.isInited = 1>
 
 		<cfreturn this>
@@ -133,7 +122,15 @@
 
 
 	<cfscript>
-
+	/* There are a dozen methods in dbrow3.cfc which are more
+	concerned with rendering a record (eg. in html) than they are
+	with core responsibilities like persistence.  In dbrow 3.2,
+	these methods will be delegated to a dbrow_renderer without
+	changing the behavior of dbrow or its interface (method
+	signatures).  In future versions of dbrow, these methods may be
+	deprecated, or the delegate (dbrow_renderer) could become a
+	decorator, or these methods could be removed from the dbrow api
+	entirely.  - Jared 4/28/12 */
 	public void function initializeRenderer() {
 		if (NOT StructKeyExists(this, "renderer")) {
 			this.renderer = CreateObject('component', 'dbrow_renderer').init(this);
