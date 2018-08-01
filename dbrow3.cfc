@@ -762,7 +762,7 @@
 									passed = Evaluate('#funcRef#("#this[v.thisProp].replace('"', '""', 'all')#")');
 								}
 								if (!passed) {
-									ArrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText))
+									ArrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), v.stRule.errorText));
 								}
 							</cfscript>
 						</cfloop>
