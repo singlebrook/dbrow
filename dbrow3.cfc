@@ -1729,7 +1729,7 @@
 								</cfif>
 								<cfif firstOne><cfset firstOne = 0><cfelse>,</cfif>
 								#i# =
-									<cfif len(thisVal)>
+									<cfif NOT IsSimpleValue(thisVal) OR Len(thisVal)>
 										<cfif ListFindNoCase("varchar,nvarchar", this.stColMetaData[i].datatype)>
 											<!--- This is a workaround for MySQL, which seems to double single-quotes when strings are passed in via
 												cfqueryparam, regardless of the preserveSingleQuotes(). - leon 2/18/06 --->
