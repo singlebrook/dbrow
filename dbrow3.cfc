@@ -1701,7 +1701,7 @@
 			<cfloop from="1" to="#arrayLen(v.arErrors)#" index="v.i">
 				<cfset v.errorList = v.errorList & "* " & v.arErrors[v.i].propertyName & " " & v.arErrors[v.i].errorText & "<br />">
 			</cfloop>
-			<cfthrow message="Found data validation errors. Refusing to store(). You should check your data first." detail="#v.errorList#">
+			<cfthrow message="Found data validation errors. Refusing to store(). You should check your data first." detail="#v.errorList#" type="com.singlebrook.dbrow3.validationErrorException">
 		</cfif>
 
 		<cftransaction>
