@@ -721,7 +721,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="integer,bigint" delimiters=",">
-							<cfif not REFind('^\d+$', this[v.thisProp])>
+							<cfif not REFind('^-?\d+$', this[v.thisProp])>
 								<cfset arrayAppend(v.arErrors, newError(v.thisProp, getLabel(v.thisProp), 'must be an integer'))>
 							</cfif>
 						</cfcase>
