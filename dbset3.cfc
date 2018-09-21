@@ -133,6 +133,7 @@ Sample constructor code for use in child component:
 		<cfset var objObj = "" >
 		<cfset var cacheTime = "">
 		<cfset var valueIsNull = 0>
+		<cfset var v = {}>
 
 		<!--- Check to make sure the user has permissions --->
 		<cfif StructKeyExists( url, "method" ) and url.method eq "getAll">
