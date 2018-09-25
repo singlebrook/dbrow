@@ -348,7 +348,7 @@
 					<!--- Remove entities from the relationship where appropriate - leon 4/22/08 --->
 					<cfset v.rsForeign = v.objForeignSet.getAll(
 							filterField = v.foreignKeyCol,
-							filterValue = this[theID]
+							filterValue = this[this.theID]
 						)>
 
 					<!--- XXX - maybe we shouldn't convert them all to objects. Maybe we should test
@@ -375,8 +375,8 @@
 						<cfset v.arForeign = v.objForeignObj.queryToArray(v.rsForeign)>
 						<cfloop from="1" to="#arrayLen(v.arForeign)#" index="v.i">
 							<cfset v.thisObj = v.arForeign[v.i]>
-							<cfif v.thisObj[v.foreignKeyCol] neq this[theID]>
-								<cfset v.thisObj[v.foreignKeyCol] = this[theID]>
+							<cfif v.thisObj[v.foreignKeyCol] neq this[this.theID]>
+								<cfset v.thisObj[v.foreignKeyCol] = this[this.theID]>
 								<cfset v.thisObj.store()>
 							</cfif>
 						</cfloop>
@@ -487,7 +487,7 @@
 
 		<cfset beforeDelete()>
 
-		<cfset IDToDelete = this[theID]>
+		<cfset IDToDelete = this[this.theID]>
 
 		<!--- Tombstoning - Jared 4/23/08 --->
 		<cfif usesTombstoning()>
@@ -502,7 +502,7 @@
 			<cfquery name="delete#theObject#" datasource="#this.datasource#">
 				update #theTable#
 				set deleted = <cfqueryparam value="1" cfsqltype="cf_sql_#this.stColMetaData['deleted'].datatype#">
-				where #theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
 			</cfquery>
 
 			<!--- ... and in memory --->
@@ -512,8 +512,8 @@
 		<cfelse>
 			<cfquery name="delete#theObject#" datasource="#this.datasource#">
 				delete
-				from #theTable#
-				where #theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				from #this.theTable#
+				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
 			</cfquery>
 		</cfif>
 
@@ -1258,14 +1258,14 @@
 
 			<cfquery name="arguments.rsValues" datasource="#this.datasource#" cachedWithin="#cacheTime#">
 				select *
-				from #theTable#
-				where #theID# = <!--- <cfqueryparam value="#IDToLoad#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#"> - leon 2/7/06 --->
+				from #this.theTable#
+				where #this.theID# = <!--- <cfqueryparam value="#IDToLoad#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#"> - leon 2/7/06 --->
 					<cfif isNumeric(arguments.ID)>#arguments.ID#<cfelse>'#arguments.ID#'</cfif>
 			</cfquery>
 
 			<cfif not(arguments.rsValues.recordcount)>
 				<cfthrow type="com.singlebrook.dbrow3.RecordNotFoundException"
-					message="#theObject# with #theID# (#arguments.ID#) could not be loaded."
+					message="#theObject# with #this.theID# (#arguments.ID#) could not be loaded."
 					detail="The ID does not exist.">
 			</cfif>
 
@@ -1313,7 +1313,7 @@
 		</cfloop>
 
 		<!--- If this object has a non-empty ID, assume that it has been stored in the database. - leon 5/8/08 --->
-		<cfset this.isStored = iif(len(this[theID]), 1, 0)>
+		<cfset this.isStored = iif(len(this[this.theID]), 1, 0)>
 		<cfset setOrigState()>
 
 
@@ -1322,8 +1322,8 @@
 				and not arguments.includeDeleted
 				and isDeleted()>
 			<cfthrow type="com.singlebrook.dbrow3.LoadDeletedRecordException"
-				message="Loading #theObject# with #theID# (#arguments.ID#) failed"
-				detail="#theObject# with #theID# (#arguments.ID#) is tombstoned.  Try using arguments.includeDeleted">
+				message="Loading #theObject# with #this.theID# (#arguments.ID#) failed"
+				detail="#theObject# with #this.theID# (#arguments.ID#) is tombstoned.  Try using arguments.includeDeleted">
 		</cfif>
 
 		<!--- Clear out this-to-many relationships - leon 4/22/08 --->
@@ -1368,8 +1368,8 @@
 		</cfif>
 
 		<cfquery name="getID" datasource="#this.datasource#">
-			select #theID# as ID
-			from #theTable#
+			select #this.theID# as ID
+			from #this.theTable#
 			where 1 = 1
 				<cfset v.setKeys = StructKeyList( filterSet ) >
 				<cfloop list="#v.setKeys#" index="v.currentKey">
@@ -1452,8 +1452,8 @@
 		<cfset v.cacheTime = cacheTimeout(arguments.bUseCache)>
 
 		<cfquery name="getID" datasource="#this.datasource#" cachedWithin="#v.cacheTime#">
-			select #theID# as ID
-			from #theTable#
+			select #this.theID# as ID
+			from #this.theTable#
 			where
 				<cfif caseSensitiveComparisons()>
 					lower(#theNameField#) = <cfqueryparam value="#lcase(arguments.name)#" cfsqltype="cf_sql_#this.stColMetaData[theNameField].datatype#">
@@ -1579,7 +1579,7 @@
 		<cfloop query="theQuery">
 			<cfquery name="v.rsOneRow" dbtype="query" maxrows="1">
 				select * from theQuery
-				where #theID# = <cfqueryparam value="#theQuery[theID][currentRow]#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				where #this.theID# = <cfqueryparam value="#theQuery[theID][currentRow]#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
 			</cfquery>
 			<cfset v.oTmp = createObject('component', theObjectPath ).new()>
 			<cfset v.oTmp.load(rsValues = v.rsOneRow, includeDeleted = true )>
@@ -1710,7 +1710,7 @@
 
 			<!--- UPDATE --->
 			<cfif this.isStored>
-				<cfset IDToUpdate = this[theID]>
+				<cfset IDToUpdate = this[this.theID]>
 
 				<cfif not(len(IDToUpdate))>
 					<cfthrow type="com.singlebrook.dbrow3.updateNullIDException"
@@ -1765,7 +1765,7 @@
 									</cfif>
 							</cfif>
 						</cfloop>
-					where #theID# = <cfqueryparam value="#IDToUpdate#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+					where #this.theID# = <cfqueryparam value="#IDToUpdate#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
 				</cfquery>
 
 			<!--- INSERT --->
@@ -1843,11 +1843,11 @@
 
 					<cfif arguments.getID>
 						<cfquery name="getNewID" datasource="#this.datasource#">
-							select max(#theID#) as newID
-							from #theTable#
+							select max(#this.theID#) as newID
+							from #this.theTable#
 						</cfquery>
 
-						<cfset this[theID] = getNewID.newID>
+						<cfset this[this.theID] = getNewID.newID>
 					</cfif>
 
 				</cflock>
