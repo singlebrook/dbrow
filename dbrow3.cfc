@@ -111,7 +111,7 @@
 			<cfset this.stCustomValidation = structNew()>
 			<!--- This struct has property names for keys.
 				The value is always an array of custom rules for that property.
-				Custom rules are structs with keys (regex, function, errorText).
+				Custom rules are structs with keys (regex, fn, errorText).
 			- leon 12/11/08 --->
 		</cfif>
 
@@ -225,7 +225,7 @@
 		<cfargument name="propertyName" type="string" required="yes">
 		<cfargument name="regex" type="string" required="no" default=""
 				hint="Regex checks will work client-side (if using formvalidation.js) and server-side.">
-		<cfargument name="function" type="any" required="no" default=""
+		<cfargument name="fn" type="any" required="no" default=""
 				hint="A CF function name or a closure that takes in a property value and
 					returns a boolean value indicating that the value is OK or not. These
 					obviously won't work client-side.">
@@ -235,13 +235,13 @@
 		<cfset var v = structNew()>
 
 		<!--- Check input - leon 12/11/08 --->
-		<cfif not(structKeyExists(arguments, 'regex') or structKeyExists(arguments, 'function'))>
-			<cfthrow message="addValidation() requires either a regex or a function">
+		<cfif not(structKeyExists(arguments, 'regex') or structKeyExists(arguments, 'fn'))>
+			<cfthrow message="addValidation() requires either a regex or a fn">
 		</cfif>
 
 		<cfset v.newRule = structNew()>
 		<cfset v.newRule.regex = arguments.regex>
-		<cfset v.newRule['function'] = arguments['function']>
+		<cfset v.newRule.fn = arguments.fn>
 		<cfset v.newRule.errorText = arguments.errorText>
 
 		<!--- Create stCustomValidation if it doesn't exist yet. - leon 4/21/08 --->
@@ -754,7 +754,7 @@
 								</cfif>
 							</cfif>
 							<cfscript>
-								var funcRef = v.stRule['function'];
+								var funcRef = v.stRule.fn;
 								var passed = true;
 								if (isCustomFunction(funcRef) or isClosure(funcRef)) {
 									passed = funcRef(this[v.thisProp]);
