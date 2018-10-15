@@ -232,29 +232,27 @@
 		<cfargument name="errorText" type="string" required="no"
 				hint="Gets prepended with property label.">
 
-		<cfset var v = structNew()>
+		<cfscript>
+			/* Check input - leon 12/11/08 */
+			if (!(structKeyExists(arguments, 'regex') or structKeyExists(arguments, 'fn'))) {
+				Throw(message="addValidation() requires either a regex or a fn");
+			}
 
-		<!--- Check input - leon 12/11/08 --->
-		<cfif not(structKeyExists(arguments, 'regex') or structKeyExists(arguments, 'fn'))>
-			<cfthrow message="addValidation() requires either a regex or a fn">
-		</cfif>
+			var newRule = structNew();
+			newRule.regex = arguments.regex;
+			newRule.fn = arguments.fn;
+			newRule.errorText = arguments.errorText;
 
-		<cfset v.newRule = structNew()>
-		<cfset v.newRule.regex = arguments.regex>
-		<cfset v.newRule.fn = arguments.fn>
-		<cfset v.newRule.errorText = arguments.errorText>
+			if (!structKeyExists(this, 'stCustomValidation')) {
+				this.stCustomValidation = structNew();
+			}
 
-		<!--- Create stCustomValidation if it doesn't exist yet. - leon 4/21/08 --->
-		<cfif not(structKeyExists(this, 'stCustomValidation'))>
-			<cfset this.stCustomValidation = structNew()>
-		</cfif>
+			if (!structKeyExists(this.stCustomValidation, propertyName)) {
+				this.stCustomValidation[propertyName] = arrayNew(1);
+			}
 
-		<cfif not(structKeyExists(this.stCustomValidation, propertyName))>
-			<cfset this.stCustomValidation[propertyName] = arrayNew(1)>
-		</cfif>
-
-		<cfset arrayAppend(this.stCustomValidation[propertyName], v.newRule)>
-
+			arrayAppend(this.stCustomValidation[propertyName], newRule);
+		</cfscript>
 	</cffunction> <!--- addValidation --->
 
 
