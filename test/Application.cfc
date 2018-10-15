@@ -4,8 +4,15 @@
 <cfset this.sessionmanagement = false>
 <cfset this.applicationtimeout = "#CreateTimeSpan(0,0,0,5)#">
 
-<cfset this.mappings.dbrow = ExpandPath('..')>
-<cfset this.mappings.mxunit = ExpandPath('./mxunit')>
+<cfset this.mappings['dbrow'] = ExpandPath(GetDirectoryFromPath(GetCurrentTemplatePath()) & '/..')>
+<cfset this.mappings['mxunit'] = this.mappings.dbrow & '/test/mxunit'>
+
+<cfset this.componentPaths = [ ExpandPath('.') ]>
+
+<cfset this.datasources.dbrow_test = {
+	class: 'org.postgresql.Driver',
+	connectionString: 'jdbc:postgresql://localhost:5432/dbrow_test?user=dbrow_test&password=derp'
+}>
 
 <cffunction name="onApplicationStart">
 	<cflock scope="application" throwOnTimeout="yes" timeout="1">
@@ -21,11 +28,19 @@
 </cffunction>
 
 
-<cffunction name="onRequestStart">
+<cffunction name="onRequestStart" output="true">
 <cfscript>
 	if (StructKeyExists(URL, "resetApplication")) { onApplicationStart(); }
 	request.timeNone = CreateTimeSpan(0, 0, 0, 0);
 </cfscript>
+<!DOCTYPE html>
+<html>
+<body>
+</cffunction>
+
+<cffunction name="onRequestEnd" output="true">
+</body>
+</html>
 </cffunction>
 
 </cfcomponent>

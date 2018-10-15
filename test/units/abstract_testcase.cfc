@@ -2,6 +2,10 @@
 <cfscript>
 
 public void function setUp() {
+  // Without specifying this, we get document/xml output when running a single
+  // testcase directly.
+  cfcontent(type: 'text/html');
+
   new Query(sql = "delete from tblArthropod", datasource = application.datasource).execute();
   new Query(sql = "delete from tblSubphylum", datasource = application.datasource).execute();
 }
