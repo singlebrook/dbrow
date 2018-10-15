@@ -238,6 +238,10 @@
 				Throw(message="addValidation() requires either a regex or a fn");
 			}
 
+			if (arguments.KeyExists('function')) {
+				Throw(message="The `function` argument to `addValidation()` has been renamed to `fn`");
+			}
+
 			var newRule = structNew();
 			newRule.regex = arguments.regex;
 			newRule.fn = arguments.fn;
