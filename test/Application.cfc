@@ -4,10 +4,13 @@
 <cfset this.sessionmanagement = false>
 <cfset this.applicationtimeout = "#CreateTimeSpan(0,0,0,5)#">
 
-<cfset this.mappings['dbrow'] = ExpandPath(GetDirectoryFromPath(GetCurrentTemplatePath()) & '/..')>
-<cfset this.mappings['mxunit'] = this.mappings.dbrow & '/test/mxunit'>
+<cfset testDir = GetDirectoryFromPath(GetCurrentTemplatePath())>
+<cfset dbrowDir = ListDeleteAt(testDir, ListLen(testDir, '/'), '/')>
 
-<cfset this.componentPaths = [ ExpandPath('.') ]>
+<cfset this.mappings['dbrow'] = dbrowDir>
+<cfset this.mappings['mxunit'] = testDir & '/mxunit'>
+
+<cfset this.componentPaths = [ testDir ]>
 
 <cfset this.datasources.dbrow_test = {
 	class: 'org.postgresql.Driver',
