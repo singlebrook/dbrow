@@ -16,8 +16,9 @@ Setup dbrow_test database
 Running dbrow Unit Tests
 -----------------------
 
-In the 'dbrow/test' directory, run one of:
+In the root of the repo (i.e. the `dbrow` directory), run one of:
 
+- `box server start` (Uses Lucee 5, per server.json. It is default because it needs no config.)
 - `box server start cfengine=lucee@5` (Lucee)
 - `box server start cfengine=adobe@11` (Adobe ColdFusion 11, see config needs below)
 
