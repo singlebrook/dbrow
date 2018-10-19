@@ -1133,7 +1133,7 @@
 				hint="Filter linking table by this column">
 		<cfargument name="linkTableFilterValue" type="string" required="no" default=""
 				hint="Filter linking table by looking for this value in linkTableFilterField">
-		<cfargument name="linkTableFilterSqlType" type="string" required="no" default="varhcar"
+		<cfargument name="linkTableFilterSqlType" type="string" required="no" default="varchar"
 				hint="This is the sql type of the filter field">
 
 		<cfset var v = structNew()>
