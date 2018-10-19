@@ -304,7 +304,7 @@
 								and #v.linksToForeignID# not in (#v.stRel.idList#)
 							</cfif>
 							<cfif len(v.stRel.linkTableFilterField)>
-								and #v.stRel.linkTableFilterField# = <cfqueryparam value="#v.stRel.linkTableFilterValue#">
+								and #v.stRel.linkTableFilterField# = <cfqueryparam value="#v.stRel.linkTableFilterValue#" cfsqltype="cf_sql_#v.stRel.linkTableFilterSqlType#">
 							</cfif>
 					</cfquery>
 
@@ -319,7 +319,7 @@
 							select <cfqueryparam value="#this[v.myID]#" cfsqltype="cf_sql_#this.stColMetaData[v.myID].datatype#">,
 								#v.objForeignObj.theID#
 								<cfif len(v.stRel.linkTableFilterField)>
-									, <cfqueryparam value="#v.stRel.linkTableFilterValue#">
+									, <cfqueryparam value="#v.stRel.linkTableFilterValue#" cfsqltype="cf_sql_#v.stRel.linkTableFilterSqlType#">
 								</cfif>
 							from #v.objForeignObj.theTable# f
 							where #v.objForeignObj.theID# in (#v.stRel.idList#)
@@ -946,7 +946,7 @@
 						from #v.stRel.linkTable#
 						where #v.linksToMyID# = <cfqueryparam value="#this[v.myID]#" cfsqltype="cf_sql_#this.stColMetaData[v.myID].datatype#">
 							<cfif len(v.stRel.linkTableFilterField)>
-								and #v.stRel.linkTableFilterField# = <cfqueryparam value="#v.stRel.linkTableFilterValue#">
+								and #v.stRel.linkTableFilterField# = <cfqueryparam value="#v.stRel.linkTableFilterValue#" cfsqltype="cf_sql_#v.stRel.linkTableFilterSqlType#">
 							</cfif>
 					</cfquery>
 
@@ -1133,6 +1133,8 @@
 				hint="Filter linking table by this column">
 		<cfargument name="linkTableFilterValue" type="string" required="no" default=""
 				hint="Filter linking table by looking for this value in linkTableFilterField">
+		<cfargument name="linkTableFilterSqlType" type="string" required="no" default="char"
+				hint="This is the sql type of the filter field">
 
 		<cfset var v = structNew()>
 
@@ -1159,6 +1161,7 @@
 		<cfset v.stRel.myID = myID>
 		<cfset v.stRel.linkTableFilterField = linkTableFilterField>
 		<cfset v.stRel.linkTableFilterValue = linkTableFilterValue>
+		<cfset v.stRel.linkTableFilterSqlType = linkTableFilterSqlType>
 
 		<cfset v.stRel.idList = "">
 		<cfset v.stRel.loaded = 0>
