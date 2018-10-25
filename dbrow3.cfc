@@ -344,7 +344,7 @@
 					<cfset v.objForeignSet = createObject('component', '#application.objectMap#.#v.stRel.objectType#_set')>
 
 					<!--- Find the foreign key field in the other table - leon 4/22/08 --->
-					<cfset v.foreignKeyCol = v.objForeignObj.getForeignKeyCol(theID, theTable)>
+					<cfset v.foreignKeyCol = v.objForeignObj.getForeignKeyCol(theID, this.theTable)>
 
 
 					<!--- Remove entities from the relationship where appropriate - leon 4/22/08 --->
@@ -502,7 +502,7 @@
 
 			<!--- Set deleted in database ... --->
 			<cfquery name="delete#theObject#" datasource="#this.datasource#">
-				update #theTable#
+				update #this.theTable#
 				set deleted = <cfqueryparam value="1" cfsqltype="cf_sql_#this.stColMetaData['deleted'].datatype#">
 				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
 			</cfquery>
@@ -697,7 +697,7 @@
 		<cfset v.arErrors = arrayNew(1)>
 
 		<cfloop array="#variables.properties#" index="v.thisProp">
-			<cfif v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp))>
+			<cfif v.thisProp neq theID and not(listFindNoCase(this.theFieldsToSkip, v.thisProp))>
 
 				<cfset stMD = this.stColMetaData[v.thisProp]>
 
@@ -960,7 +960,7 @@
 					<cfif Len(v.stRel.linksToMyID)>
 						<cfset v.fkField = v.stRel.linksToMyID>
 					<cfelse>
-						<cfset v.fkField = v.objForeignObj.getForeignKeyCol(v.myID, theTable)>
+						<cfset v.fkField = v.objForeignObj.getForeignKeyCol(v.myID, this.theTable)>
 					</cfif>
 
 					<cfset v.rsForeign = v.objForeignSet.getAll(
@@ -1723,7 +1723,7 @@
 				</cfif>
 
 				<cfquery name="update#theObject#" datasource="#this.datasource#">
-					update #theTable#
+					update #this.theTable#
 					set
 						<cfloop array="#variables.properties#" index="local.i">
 							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
@@ -1791,7 +1791,7 @@
 				<cflock name="create#theObject#" type="exclusive" timeout="30">
 
 					<cfquery name="insert#theObject#" datasource="#this.datasource#">
-						insert into #theTable# (#this.fieldsToInsertList#)
+						insert into #this.theTable# (#this.fieldsToInsertList#)
 						values(
 							<cfloop array="#variables.properties#" index="local.i">
 								<cfif not(listFindNoCase(this.theFieldsToSkip, i))>
