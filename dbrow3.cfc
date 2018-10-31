@@ -1264,7 +1264,7 @@
 			<cfquery name="arguments.rsValues" datasource="#this.datasource#" cachedWithin="#cacheTime#">
 				select *
 				from #this.theTable#
-				where #this.theID# = <!--- <cfqueryparam value="#IDToLoad#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#"> - leon 2/7/06 --->
+				where #this.theID# =
 					<cfif isNumeric(arguments.ID)>#arguments.ID#<cfelse>'#arguments.ID#'</cfif>
 			</cfquery>
 
