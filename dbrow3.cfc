@@ -280,7 +280,7 @@
 			<cfif len(v.stRel.myID)>
 				<cfset v.myID = v.stRel.myID>
 			<cfelse>
-				<cfset v.myID = theID>
+				<cfset v.myID = this.theID>
 			</cfif>
 
 			<!--- Only need to store dirty records. - leon 4/22/08 --->
@@ -344,7 +344,7 @@
 					<cfset v.objForeignSet = createObject('component', '#application.objectMap#.#v.stRel.objectType#_set')>
 
 					<!--- Find the foreign key field in the other table - leon 4/22/08 --->
-					<cfset v.foreignKeyCol = v.objForeignObj.getForeignKeyCol(theID, this.theTable)>
+					<cfset v.foreignKeyCol = v.objForeignObj.getForeignKeyCol(this.theID, this.theTable)>
 
 
 					<!--- Remove entities from the relationship where appropriate - leon 4/22/08 --->
@@ -504,7 +504,7 @@
 			<cfquery name="delete#theObject#" datasource="#this.datasource#">
 				update #this.theTable#
 				set deleted = <cfqueryparam value="1" cfsqltype="cf_sql_#this.stColMetaData['deleted'].datatype#">
-				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[this.theID].datatype#">
 			</cfquery>
 
 			<!--- ... and in memory --->
@@ -515,7 +515,7 @@
 			<cfquery name="delete#theObject#" datasource="#this.datasource#">
 				delete
 				from #this.theTable#
-				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				where #this.theID# = <cfqueryparam value="#IDToDelete#" cfsqltype="cf_sql_#this.stColMetaData[this.theID].datatype#">
 			</cfquery>
 		</cfif>
 
@@ -697,7 +697,7 @@
 		<cfset v.arErrors = arrayNew(1)>
 
 		<cfloop array="#variables.properties#" index="v.thisProp">
-			<cfif v.thisProp neq theID and not(listFindNoCase(this.theFieldsToSkip, v.thisProp))>
+			<cfif v.thisProp neq this.theID and not(listFindNoCase(this.theFieldsToSkip, v.thisProp))>
 
 				<cfset stMD = this.stColMetaData[v.thisProp]>
 
@@ -772,7 +772,7 @@
 
 				</cfif> <!--- len(this[v.thisProp]) --->
 
-			</cfif> <!--- v.thisProp neq theID and not(listFindNoCase(theFieldsToSkip, v.thisProp)) --->
+			</cfif> <!--- v.thisProp neq this.theID and not(listFindNoCase(theFieldsToSkip, v.thisProp)) --->
 		</cfloop> <!--- variables.properties --->
 
 		<cfreturn v.arErrors>
@@ -922,7 +922,7 @@
 			<cfif len(v.stRel.myID)>
 				<cfset v.myID = v.stRel.myID>
 			<cfelse>
-				<cfset v.myID = theID>
+				<cfset v.myID = this.theID>
 			</cfif>
 
 			<cfset v.objForeignObj = createObject('component', '#application.objectMap#.#v.stRel.objectType#').new()>
@@ -1584,7 +1584,7 @@
 		<cfloop query="theQuery">
 			<cfquery name="v.rsOneRow" dbtype="query" maxrows="1">
 				select * from theQuery
-				where #this.theID# = <cfqueryparam value="#theQuery[theID][currentRow]#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+				where #this.theID# = <cfqueryparam value="#theQuery[this.theID][currentRow]#" cfsqltype="cf_sql_#this.stColMetaData[this.theID].datatype#">
 			</cfquery>
 			<cfset v.oTmp = createObject('component', theObjectPath ).new()>
 			<cfset v.oTmp.load(rsValues = v.rsOneRow, includeDeleted = true )>
@@ -1726,7 +1726,7 @@
 					update #this.theTable#
 					set
 						<cfloop array="#variables.properties#" index="local.i">
-							<cfif (i neq theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
+							<cfif (i neq this.theID) and not(listFindNoCase(this.theFieldsToSkip, i))>
 								<cfset thisVal = this[i]>
 								<cfif NOT IsBinary(thisVal) AND IsSimpleValue(thisVal)>
 									<!--- The following preserveSingleQuotes is necessary in CF 6 and below - Jared 2/5/07 --->
@@ -1770,7 +1770,7 @@
 									</cfif>
 							</cfif>
 						</cfloop>
-					where #this.theID# = <cfqueryparam value="#IDToUpdate#" cfsqltype="cf_sql_#this.stColMetaData[theID].datatype#">
+					where #this.theID# = <cfqueryparam value="#IDToUpdate#" cfsqltype="cf_sql_#this.stColMetaData[this.theID].datatype#">
 				</cfquery>
 
 			<!--- INSERT --->
