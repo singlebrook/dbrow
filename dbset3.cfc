@@ -22,6 +22,8 @@ Sample constructor code for use in child component:
 
 --->
 
+	<cfinclude template="mixins/check_remote_method_authorization.cfm">
+
 	<cffunction name="init" returntype="void" access="public"
 			hint="This is the new 'constructor' method. ">
 		<cfif not(isdefined('theObject'))>
@@ -97,12 +99,6 @@ Sample constructor code for use in child component:
 	<cffunction name="cacheTimeoutDefault" returntype="any" output="no" access="public"
 			hint="See dbrow3.cacheTimeoutDefault()">
 		<cfreturn CreateTimeSpan(0,2,0,0)>
-	</cffunction>
-
-
-	<cffunction name="checkRemoteMethodAuthorization" returntype="void" output="false" access="public"
-			hint="Called by all remote methods.  Override with authorization checks to get access to the methods.">
-		<cfthrow type="com.singlebrook.dbrow3.UnauthorizedAccessException" message="Unauthorized access" detail="You are not allowed to access this method">
 	</cffunction>
 
 

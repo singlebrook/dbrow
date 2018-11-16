@@ -25,6 +25,7 @@
 --->
 
 <cfcomponent name="dbrow3" hint="represents a database record">
+	<cfinclude template="mixins/check_remote_method_authorization.cfm">
 
 	<!--- Vars supporting logging - leon 9/27/09 --->
 	<!--- Set to 0 to disable logging. - leon 9/27/09 --->
@@ -434,13 +435,6 @@
 		<!--- Most RDBMSs use case-insensitive comparisons, so make that the default here. --->
 		<cfreturn false>
 	</cffunction>
-
-
-	<cffunction name="checkRemoteMethodAuthorization" returntype="void" output="false" access="public"
-			hint="Called by all remote methods.  Override with authorization checks to get access to the methods.">
-		<cfthrow type="com.singlebrook.dbrow3.UnauthorizedAccessException" message="Unauthorized access" detail="You are not allowed to access this method">
-	</cffunction>
-
 
 	<cfscript>
 	/* Clears this object's properties so that it can be safely

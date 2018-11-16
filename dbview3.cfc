@@ -25,6 +25,8 @@ This component depends on having the timespans request.timeLong and request.time
 
 --->
 
+	<cfinclude template="mixins/check_remote_method_authorization.cfm">
+
 	<cffunction name="init" returntype="void" access="public"
 			hint="This is the new 'constructor' method. ">
 		<cfif not(isdefined('theObject'))>
@@ -82,12 +84,6 @@ This component depends on having the timespans request.timeLong and request.time
 		<cfset this.isInitialized = 1>
 
 	</cffunction> <!--- initializeObject --->
-
-
-	<cffunction name="checkRemoteMethodAuthorization" returntype="void" output="false" access="public"
-			hint="Called by all remote methods.  Override with authorization checks to get access to the methods.">
-		<cfthrow type="com.singlebrook.dbrow3.UnauthorizedAccessException" message="Unauthorized access" detail="You are not allowed to access this method">
-	</cffunction>
 
 
 	<cffunction name="getAll" returnType="query" access="remote" output="no">
