@@ -4,7 +4,7 @@
   allow access to the methods. */
 public void function checkRemoteMethodAuthorization() {
   var contentType = 'text/html';
-  var content = 'Unauthorized'
+  var content = 'Unauthorized';
   if (getHTTPRequestData().headers.accept == 'application/json') {
     contentType = 'application/json';
     content = '{ "error": "Unauthorized" }';
