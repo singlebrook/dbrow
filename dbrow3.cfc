@@ -471,9 +471,10 @@
 
 		<cfargument name="ID" required="no">
 		<cfargument name="goto" type="string" required="no" default="#replace(cgi.script_name, '.cfc', '_set.cfc')#?method=list">
+		<cfargument name="skipRemoteAuthorization" required="no" default="no" hint="When, eg. authorization has already been performed by the controller">
 
 		<!--- Check to make sure the user has permissions --->
-		<cfif StructKeyExists( url, "method" ) and url.method eq "delete">
+		<cfif not skipRemoteAuthorization and StructKeyExists( url, "method" ) and url.method eq "delete">
 			<cfset checkRemoteMethodAuthorization() >
 		</cfif>
 
@@ -1683,10 +1684,8 @@
 	}
 	</cfscript>
 
-	<cffunction name="store"
-			returnType="boolean"
-			hint="Saves the object data in the object to the database">
-
+	<!--- Saves the object data in the object to the database --->
+	<cffunction name="store" returnType="boolean" access="public">
 		<cfargument name="bBreakCache" type="boolean" required="no" default="yes">
 		<cfargument name="getID" type="boolean" required="no" default="no">
 
