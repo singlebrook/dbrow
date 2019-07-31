@@ -218,7 +218,11 @@
 						})>
 					</cfif>
 					<cfcatch type="any">
-						<cfset logIt('Error: #v.objPath# #cfcatch.message#')>
+						<cfif cfcatch.message contains "org.osgi.framework.BundleException">
+							<cfrethrow>
+						<cfelse>
+							<cfset logIt('Error: #v.objPath# #cfcatch.message#')>
+						</cfif>
 					</cfcatch>
 				</cftry>
 			</cfif>
@@ -251,8 +255,12 @@
 			<cftry>
 				<cfset v.rootObject = false >
 				<cfset v.parentObj = createObject('component', v.parentName).init() >
-				<cfcatch>
-					<cfset v.rootObject = true >
+				<cfcatch type="any">
+					<cfif cfcatch.message contains "org.osgi.framework.BundleException">
+						<cfrethrow>
+					<cfelse>
+						<cfset v.rootObject = true >
+					</cfif>
 				</cfcatch>
 			</cftry>
 		</cfif>
@@ -320,7 +328,11 @@
 					</cfif>
 					<cfset v.stDbrowObjects[stCFC.objPath] = v.stObjData>
 					<cfcatch type="any">
-						<cfset logIt("Error: #stCFC.objPath# #cfcatch.message#")>
+						<cfif cfcatch.message contains "org.osgi.framework.BundleException">
+							<cfrethrow>
+						<cfelse>
+							<cfset logIt("Error: #stCFC.objPath# #cfcatch.message#")>
+						</cfif>
 					</cfcatch>
 				</cftry>
 			</cfif>
