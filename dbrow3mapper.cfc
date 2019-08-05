@@ -146,8 +146,13 @@
 	<cffunction name="isChildOfDbrow" returntype="boolean" output="no" access="public">
 		<cfargument name="obj" type="any" required="yes" hint="An instantiated CFC">
 		<cfset var v = structNew()>
+		<cfset var md = getMetaData(obj)>
 
-		<cfset v.parentName = getMetaData(obj).extends.name>
+		<cfif !StructKeyExists(md, 'extends')>
+			<cfreturn false>
+		</cfif>
+
+		<cfset v.parentName = md.extends.name>
 
 		<cfif v.parentName eq "WEB-INF.cftags.component">
 			<!--- A regular CFC with no defined parent - leon 5/16/08 --->
