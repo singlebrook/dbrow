@@ -335,6 +335,9 @@
 					<cfcatch type="any">
 						<cfif cfcatch.message contains "org.osgi.framework.BundleException">
 							<cfrethrow>
+						<cfelseif cfcatch.message contains "TCP/IP connection">
+							<!--- SQL Server driver error. Probably requires developer intervention. --->
+							<cfrethrow>
 						<cfelse>
 							<cfset logIt("Error: #stCFC.objPath# #cfcatch.message#")>
 						</cfif>
