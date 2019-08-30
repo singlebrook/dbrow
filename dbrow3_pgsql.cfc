@@ -159,15 +159,6 @@
 	</cffunction>	<!--- translateDefault --->
 
 
-	<cffunction name="useEscapedBackslashes" returnType="boolean" access="public" output="no"
-			hint="Blackslashes can be used to escape single-quotes and do mischief
-				in pgsql, so escape them for safety. Note that cfqueryparam should
-				do this for us, but we can't use it for text due to the single-quote
-				doubling problem.">
-	 <cfreturn 1>
-	</cffunction> <!--- useEscapedBackslashes --->
-
-
 	<cffunction name="useQueryParamForJson" returnType="boolean" access="public" output="no"
 			hint="PostgreSQL won't match a varchar type to json, but there is no cfsqltype for json,
 				so just pass the value in as a string and call it good I guess.">
