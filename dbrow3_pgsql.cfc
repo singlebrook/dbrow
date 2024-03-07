@@ -16,7 +16,7 @@
 		<cfquery name="rsMetaData" datasource="#this.datasource#" cachedwithin="#this.timeLong#">
 			select character_maximum_length, column_default, column_name, data_type, datetime_precision,
 				interval_precision, interval_type, is_nullable, numeric_precision, numeric_precision_radix,
-				numeric_scale, ordinal_position
+				numeric_scale, ordinal_position, udt_name
 			from information_schema.columns
 			where lower(table_name) = lower(<cfqueryparam value="#this.theTable#" cfsqltype="cf_sql_varchar">)
 		</cfquery>
@@ -29,7 +29,7 @@
 		<cfoutput query="rsMetaData">
 			<cfset stColMetaData[column_name] = structNew()>
 			<cfset thisCol = stColMetaData[column_name]>
-			<cfset thisCol.datatype = translateDataType(data_type)>
+			<cfset thisCol.datatype = translateDataType(data_type, udt_name)>
 			<cfset thisCol.maxlen = character_maximum_length>
 			<cfset thisCol.default = translateDefault(column_default,thisCol.datatype)>
 			<cfset thisCol.notNull = not(is_nullable)>
@@ -106,6 +106,7 @@
 
 	<cffunction name="translateDataType" returntype="string" access="private" output="yes">
 		<cfargument name="nativeType" type="string" required="yes">
+		<cfargument name="udtType" type="string" required="yes">
 
 		<cfscript>
 			switch (nativeType) {
@@ -130,11 +131,16 @@
 				case "timestamp with time zone" : return "timestamp"; break;
 				case "timestamp without time zone" : return "timestamp"; break;
 				case "uuid" : return "other"; break;
+				case "user-defined":
+					switch (udtType) {
+						case "citext": return "varchar"; break;
+					}
+					break;
 			}
 		</cfscript>
 
 		<!--- Execution should not reach this point. If it does, we've encountered an unhandled datatype. - leon 8/31/06 --->
-		<cfthrow message="dbrow3_pgsql.translateDataType() doesn't understand the native type '#nativeType#'">
+		<cfthrow message="dbrow3_pgsql.translateDataType() doesn't understand the native type '#nativeType#' with udt_type of '#udtType#'">
 
 	</cffunction> <!--- translateDataType --->
 
