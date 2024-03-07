@@ -8,11 +8,8 @@ public void function setUp() {
 
 
 public void function afterTests() {
-	qryService = new Query(datasource = application.datasource);
-	qryService.setSQL("truncate tblArthropod;");
-	qryService.execute();
-	qryService.setSQL("delete from tblSubphylum;");
-	qryService.execute();
+	QueryExecute("truncate tblArthropod cascade");
+	QueryExecute("truncate tblSubphylum cascade");
 }
 
 
