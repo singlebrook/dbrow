@@ -3,6 +3,7 @@ Setup dbrow Unit Tests
 
 1. Install mxunit submodule: `git submodule update --init`
 1. Install commandbox
+1. Install cfconfig `box install commandbox-cfconfig`
 
 Setup dbrow_test database
 -------------------------
@@ -20,14 +21,10 @@ In the root of the repo (i.e. the `dbrow` directory), run one of:
 
 - `box server start` (Uses Lucee 5, per server.json. It is default because it needs no config.)
 - `box server start cfengine=lucee@5` (Lucee)
-- `box server start cfengine=adobe@11` (Adobe ColdFusion 11, see config needs below)
+- `box server start cfengine=adobe@2021` (Adobe ColdFusion 2021, see config needs below)
 
-### Adobe ColdFusion 11 configuration steps
-1. Go to CF admin area at /CFIDE/administrator/. Login is admin/commandbox
-1. Disable Secure Profile in the Security Section. Without doing this, you
-  won't be able to see detailed errors.
-1. Enable Robust Exception Information in Debug Output Settings.
-1. Add a mapping for /dbrow pointing to the root of the dbrow repo. (I don't
-  know why the mapping in Application.cfc doesn't work.)
-1. Add a datasource `dbrow_test` pointing to the PostgreSQL database. (I don't
-  know why the datasource in Application.cfc doesn't work.)
+Running on Adobe
+----------------
+- In order to get robust exception output with newer ACF, you need to install the debugger package: `box cfpm install debugger`
+- `box cfpm install postgresql`
+- `box cfpm install caching`
