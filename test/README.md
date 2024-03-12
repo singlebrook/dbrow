@@ -1,8 +1,8 @@
 Setup dbrow Unit Tests
 ================
 
-1. Install mxunit submodule: `git submodule update --init`
 1. Install commandbox
+1. Install deps `box install`
 1. Install cfconfig `box install commandbox-cfconfig`
 
 Setup dbrow_test database

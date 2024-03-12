@@ -1,7 +1,7 @@
 {
     "cfconfigFile":"./.cfconfig.json",
     "app":{
-        "cfengine":"lucee@5"
+        "cfengine":"adobe@2021"
     },
     "web":{
         "webroot":"test"

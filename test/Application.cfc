@@ -9,7 +9,8 @@ variables.dbrowDir = ListDeleteAt(variables.testDir, ListLen(variables.testDir, 
 
 this.mappings = {
 	'/dbrow': variables.dbrowDir,
-	'/mxunit': variables.testDir & '/mxunit'
+	'/mxunit': expandPath("../testbox/system/compat"),
+	'/testbox': expandPath("../testbox")
 }
 
 this.componentPaths = [ testDir ];
