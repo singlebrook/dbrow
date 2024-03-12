@@ -1,7 +1,7 @@
 <cfcomponent extends="dbrow.test.units.abstract_testcase">
 <cfscript>
 
-public void function can_load() {
+public void function test_can_load() {
 	var createdObj = arthropod_factory.create();
 	obj = CreateObject('arthropod').load(createdObj.arthropodID);
 	assertTrue(obj.isStored);

@@ -2,7 +2,7 @@
 <cfscript>
 
 /* Test both setLabel() and getLabel() -Jared 2012-05-06 */
-public void function can_label() {
+public void function test_can_label() {
 	obj = CreateObject('arthropod');
 
 	/* Assuming that a label for arthropod_name has been set

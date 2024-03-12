@@ -7,14 +7,14 @@ public void function setUp() {
 }
 
 
-public void function drawFormField_customField() {
+public void function test_drawFormField_customField() {
 	var expected = 'Hexapods rule!  Everyone must have 6 legs.';
 	var actual = arthropod.drawFormField('legs');
 	assertEquals(expected, actual);
 }
 
 
-public void function drawFormField_standardField() {
+public void function test_drawFormField_standardField() {
 	var expected = arthropod.drawStandardFormField('venemous');
 	var actual = arthropod.drawFormField('venemous');
 	assertEquals(expected, actual);

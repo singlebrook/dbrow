@@ -7,7 +7,7 @@ public void function setUp() {
 }
 
 /* `addValidation` should store function name in `stCustomValidation` -Jared 2013 */
-public void function should_store_fn_name() {
+public void function test_should_store_fn_name() {
 	arthropod.addValidation(argumentCollection = {
 		'propertyName' = 'arthropod_name', 'fn' = 'foobar', 'errorText' = 'derp'
 	});

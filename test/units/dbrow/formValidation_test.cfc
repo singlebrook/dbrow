@@ -7,7 +7,7 @@ public void function setUp() {
 }
 
 
-public void function drawFormErrorSummary() {
+public void function test_drawFormErrorSummary() {
 	arthropod.legs = "banana suitcase";
 	arthropod.venemous = "cucumber bicycle";
 	expected = HTMLEditFormat(normalizeWhitespace(Trim(expectedErrorSummary())));
@@ -17,7 +17,7 @@ public void function drawFormErrorSummary() {
 }
 
 
-public void function drawErrorField() {
+public void function test_drawErrorField() {
 	arthropod.legs = "giraffe sundress";
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('<span id="legs_error" class="error hidden"></span>')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.drawErrorField('legs'))));
@@ -28,35 +28,35 @@ public void function drawErrorField() {
 /* The following five tests depend on application.dbrow3modernValAttrs = true.
 There are two other legacy options for validation attributes,
 but here we only test the most modern. - Jared 2012-07-06 */
-public void function getValidationAttribs_legs() {
+public void function test_getValidationAttribs_legs() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="legs" onchange="if (this.value != ' & "''" & ') this.value=math.round(math.pow(10,0) * this.value) / math.pow(10,0);" data-pattern="integer"')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('legs'))));
 	assertEquals(expected, actual);
 }
 
 
-public void function getValidationAttribs_arthropodID() {
+public void function test_getValidationAttribs_arthropodID() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="arthropodid" data-required="1" onchange="if (this.value != ' & "''" & ') this.value=math.round(math.pow(10,0) * this.value) / math.pow(10,0);" data-pattern="integer"')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('arthropodID'))));
 	assertEquals(expected, actual);
 }
 
 
-public void function getValidationAttribs_arthropod_name() {
+public void function test_getValidationAttribs_arthropod_name() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="creepy crawly" maxlength="50"')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('arthropod_name'))));
 	assertEquals(expected, actual);
 }
 
 
-public void function getValidationAttribs_venemous() {
+public void function test_getValidationAttribs_venemous() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="venemous"')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('venemous'))));
 	assertEquals(expected, actual);
 }
 
 
-public void function getValidationAttribs_subphylumID() {
+public void function test_getValidationAttribs_subphylumID() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('desc="subphylumid"')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.getValidationAttribs('subphylumID'))));
 	assertEquals(expected, actual);
