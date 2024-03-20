@@ -7,12 +7,12 @@ public void function setUp() {
 }
 
 
-public void function getDefaultTabIndex() {
+public void function test_getDefaultTabIndex() {
 	assertEquals(16383, arthropod.getDefaultTabIndex());
 }
 
 
-public void function getTabIndexAttr() {
+public void function test_getTabIndexAttr() {
 	var expected = 'tabindex="' & arthropod.getDefaultTabindex() & '"';
 	actual = arthropod.getTabIndexAttr('venemous');
 	assertEquals(expected, actual);
@@ -23,7 +23,7 @@ public void function getTabIndexAttr() {
 intended to provide a modicum of coverage so that we can delegate
 dbrow3.drawForm() to dbrow_renderer.drawForm(). -Jared 2012-05-06 */
 
-public void function drawForm() {
+public void function test_drawForm() {
 	var actual = normalizeWhitespace(Trim(arthropod.drawForm()));
 
 	var mkp_beginning = 'method=saveform" method="post" onSubmit="return showErrors(getFormErrors(this), this);" id="';
@@ -43,14 +43,14 @@ public void function drawForm() {
 }
 
 
-public void function drawFormStart() {
+public void function test_drawFormStart() {
 	expected = HTMLEditFormat(normalizeWhitespace(Trim('class="dbrow-error-summary error,hidden"> </div> <form action="" method="post" onsubmit="return showerrors(getformerrors(this), this);" id="')));
 	actual = HTMLEditFormat(normalizeWhitespace(Trim(arthropod.drawFormStart())));
 	assert(actual contains expected);
 }
 
 
-public void function drawFormEnd() {
+public void function test_drawFormEnd() {
 	assertEquals('</form>', arthropod.drawFormEnd());
 }
 

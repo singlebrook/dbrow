@@ -8,7 +8,7 @@ component extends="dbrow.test.units.abstract_testcase" {
 	}
 
 
-	public void function getAll_is_case_insensitive() {
+	public void function test_getAll_is_case_insensitive() {
 		found = set.getAll(filterField = 'subphylum_name', filterValue = 'crustacea 1');
 		assertEquals(1, found.recordcount);
 

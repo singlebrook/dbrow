@@ -1,21 +1,33 @@
 <cfcomponent>
+<cfscript>
+this.name = "TestApplication";
+this.sessionmanagement = false;
+this.applicationtimeout = CreateTimeSpan(0,0,0,5);
 
-<cfset this.name = "TestApplication">
-<cfset this.sessionmanagement = false>
-<cfset this.applicationtimeout = "#CreateTimeSpan(0,0,0,5)#">
+variables.testDir = ReReplace(GetDirectoryFromPath(GetCurrentTemplatePath()), '/?$', '');
+variables.dbrowDir = ListDeleteAt(variables.testDir, ListLen(variables.testDir, '/'), '/');
 
-<cfset testDir = GetDirectoryFromPath(GetCurrentTemplatePath())>
-<cfset dbrowDir = ListDeleteAt(testDir, ListLen(testDir, '/'), '/')>
+this.mappings = {
+	'/dbrow': variables.dbrowDir,
+	'/mxunit': expandPath("../testbox/system/compat"),
+	'/testbox': expandPath("../testbox")
+}
 
-<cfset this.mappings['dbrow'] = dbrowDir>
-<cfset this.mappings['mxunit'] = testDir & '/mxunit'>
+this.componentPaths = [ testDir ];
 
-<cfset this.componentPaths = [ testDir ]>
+this.datasources["dbrow_test"] = {
+	class: "org.postgresql.Driver",
+	bundleName: "org.postgresql.jdbc",
+	bundleVersion: "42.6.0",
+	connectionString: "jdbc:postgresql://localhost:5432/dbrow_test",
+	username: "dbrow_test",
+	password: "derp",
+    url: "jdbc:postgresql://localhost:5432/dbrow_test?user=dbrow_test&password=derp",
+	dbdriver: "PostgreSql"
+};
 
-<cfset this.datasources.dbrow_test = {
-	class: 'org.postgresql.Driver',
-	connectionString: 'jdbc:postgresql://localhost:5432/dbrow_test?user=dbrow_test&password=derp'
-}>
+this.datasource = "dbrow_test";
+</cfscript>
 
 <cffunction name="onApplicationStart">
 	<cflock scope="application" throwOnTimeout="yes" timeout="1">

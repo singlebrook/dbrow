@@ -7,7 +7,7 @@ component extends="dbrow.test.units.abstract_testcase" {
   }
 
 
-  public void function loadBy_is_case_insensitive() {
+  public void function test_loadBy_is_case_insensitive() {
     assert(arthropod2.loadBy(filterField = 'arthropod_name', filterValue = 'wasp'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 
@@ -21,7 +21,7 @@ component extends="dbrow.test.units.abstract_testcase" {
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
   }
 
-  public void function loadByName_is_case_insensitive() {
+  public void function test_loadByName_is_case_insensitive() {
     assert(arthropod2.loadByName('wasp'));
     assertEquals(arthropod.arthropodID, arthropod2.arthropodID);
 

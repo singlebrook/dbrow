@@ -8,7 +8,7 @@ public void function setUp() {
 
 /* `edit()` is a very brittle test, intended only to support the
 delegation of `dbrow3.edit()` to the renderer. - Jared 2012-07-06 */
-public void function edit() {
+public void function test_edit() {
 	savecontent variable="actual_raw" { arthropod.edit(arthropod.arthropodID); }
 	var actual = HTMLEditFormat(normalizeWhitespace(Trim(actual_raw)));
 

@@ -8,15 +8,12 @@ public void function setUp() {
 
 
 public void function afterTests() {
-	qryService = new Query(datasource = application.datasource);
-	qryService.setSQL("truncate tblArthropod;");
-	qryService.execute();
-	qryService.setSQL("delete from tblSubphylum;");
-	qryService.execute();
+	QueryExecute("truncate tblArthropod cascade");
+	QueryExecute("truncate tblSubphylum cascade");
 }
 
 
-public void function drawPropertyValue_bit() {
+public void function test_drawPropertyValue_bit() {
 	arthropod.venemous = '';
 	// Railo/Lucee and ACF behave differently when YesNoFormat()ing an empty value.
 	// ACF returns "No". Railo/Lucee return "false". Both are falsey, so assert that.
@@ -28,7 +25,7 @@ public void function drawPropertyValue_bit() {
 }
 
 
-public void function drawPropertyValue_foreignkey() {
+public void function test_drawPropertyValue_foreignkey() {
 	var subphylum_factory = CreateObject('support.factories.subphylum_factory');
 	var subphylum = subphylum_factory.create();
 	arthropod.subphylumID = subphylum.subphylumID;
@@ -37,7 +34,7 @@ public void function drawPropertyValue_foreignkey() {
 	assertEquals(expected, actual);
 }
 
-public void function drawPropertyValue_varchar() {
+public void function test_drawPropertyValue_varchar() {
 	var nasty_string = '<script type="text/javascript">alert("gotcha");</script>';
 	arthropod.arthropod_name = nasty_string;
 	var expected = HTMLEditFormat(nasty_string);
