@@ -4,10 +4,6 @@
 		dbrow3mapperLogging = false;
 		lastTick = getTickCount();
 
-		private string function getCacheFilePath(required string applicationName) {
-			return getTempDirectory() & '/dbrow3mapper_#arguments.applicationName#.xml';
-		}
-
 		private void function deleteFileIfExists(required string path) {
 			if (FileExists(arguments.path)) { FileDelete(arguments.path); }
 		}
@@ -17,8 +13,9 @@
 		<cfargument name="applicationName" type="string" required="true">
 		<cfargument name="useCacheFile" type="boolean" required="true">
 		<cfargument name="deleteCacheFile" type="boolean" required="true" hint="delete first, then rebuild">
+		<cfargument name="cacheDir" type="string" default="#getTempDirectory()#">
 
-		<cfset var cacheFile = getCacheFilePath(arguments.applicationName)>
+		<cfset var cacheFile = "#arguments.cacheDir#/dbrow3mapper_#arguments.applicationName#.xml">
 		<cfset var cacheXML = "">
 
 		<cfif arguments.deleteCacheFile>
