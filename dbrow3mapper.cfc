@@ -143,8 +143,6 @@
 	<cffunction name="isChildOfDbrow" returntype="boolean" output="no" access="public">
 		<cfargument name="objPath" type="string" required="yes" hint="A dotted object path">
 
-		<cfset logIt("isChildOfDbrow(#arguments.objPath#)")>
-
 		<cfset var v = structNew()>
 		<cfset var md = GetComponentMetaData(objPath)>
 
@@ -164,11 +162,26 @@
 			<!--- A direct descendant of dbrow! - leon 5/16/08 --->
 			<cfreturn true>
 		<cfelse>
-			<cfreturn isChildOfDbrow(v.parentName)>
+			<cfreturn isChildOfDbrowUsingCache(v.parentName)>
 		</cfif>
 
 		<cfreturn false>
 	</cffunction> <!--- isChildOfDbrow --->
+
+	<cffunction name="isChildOfDbrowUsingCache" returntype="boolean" output="no" access="public">
+		<cfargument name="objPath" type="string" required="yes" hint="A dotted object path">
+
+		<cfif variables.isChildOfDbrowCache.KeyExists(arguments.objPath)>
+			<cfset var isChild = variables.isChildOfDbrowCache[arguments.objPath]>
+			<cfset logIt("isChildOfDbrowUsingCache - cache hit for #arguments.objPath# - isChild = #isChild#")>
+			<cfreturn isChild>
+		<cfelse>
+			<cfset var isChild = isChildOfDbrow(arguments.objPath)>
+			<cfset logIt("isChildOfDbrowUsingCache - cache miss for #arguments.objPath# - setting cached value to #isChild#")>
+			<cfset variables.isChildOfDbrowCache[arguments.objPath] = isChild>
+			<cfreturn isChild>
+		</cfif>
+	</cffunction> <!--- isChildOfDbrowUsingCache --->
 
 
 	<cffunction name="logIt" returntype="void" output="no">
@@ -192,6 +205,8 @@
 		<cfset v.pathSep = pathSeparator()>
 		<cfset v.basePath = expandPath(v.pathSep & replace(application.objectMap, '.', v.pathSep, 'all'))>
 
+		<cfset variables.isChildOfDbrowCache = {}>
+
 		<cfdirectory action="list"
 				directory="#v.basePath#"
 				name="v.rsCFCs"
@@ -212,8 +227,10 @@
 
 				<!--- Does this CFC extend dbrow? --->
 				<cftry>
-					<cfif isChildOfDbrow(v.objPath)>
+					<cfif isChildOfDbrowUsingCache(v.objPath)>
+						<cfset logIt("dbrowChildren() instantiating #v.objPath#")>
 						<cfset v.obj = CreateObject('component', v.objPath)>
+						<cfset logIt("dbrowChildren() instantiating #v.objPath# - done")>
 						<cfset ArrayAppend(v.arCFCs, {
 							'name' = v.rsCFCs.name,
 							'obj' = v.obj,
