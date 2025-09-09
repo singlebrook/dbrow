@@ -141,9 +141,12 @@
 
 
 	<cffunction name="isChildOfDbrow" returntype="boolean" output="no" access="public">
-		<cfargument name="obj" type="any" required="yes" hint="An instantiated CFC">
+		<cfargument name="objPath" type="string" required="yes" hint="A dotted object path">
+
+		<cfset logIt("isChildOfDbrow(#arguments.objPath#)")>
+
 		<cfset var v = structNew()>
-		<cfset var md = getMetaData(obj)>
+		<cfset var md = GetComponentMetaData(objPath)>
 
 		<cfif !StructKeyExists(md, 'extends')>
 			<cfreturn false>
@@ -161,7 +164,7 @@
 			<!--- A direct descendant of dbrow! - leon 5/16/08 --->
 			<cfreturn true>
 		<cfelse>
-			<cfreturn isChildOfDbrow(createObject('component', v.parentName))>
+			<cfreturn isChildOfDbrow(v.parentName)>
 		</cfif>
 
 		<cfreturn false>
@@ -209,9 +212,8 @@
 
 				<!--- Does this CFC extend dbrow? --->
 				<cftry>
-					<cfset v.obj = CreateObject('component', v.objPath)>
-
-					<cfif isChildOfDbrow(v.obj)>
+					<cfif isChildOfDbrow(v.objPath)>
+						<cfset v.obj = CreateObject('component', v.objPath)>
 						<cfset ArrayAppend(v.arCFCs, {
 							'name' = v.rsCFCs.name,
 							'obj' = v.obj,
@@ -246,16 +248,21 @@
 
 
 	<cffunction name="isRootObject" returntype="boolean" output="no" access="private">
-		<cfargument name="obj" type="component" required="yes">
-		<cfset var v = {}>
+		<cfargument name="objPath" type="string" required="yes">
 
-		<cfset v.parentName = getMetaData(arguments.obj).extends.name >
+		<cfset logIt("isRootObject(#arguments.objPath#)")>
+
+		<cfset var v = {}>
+		<cfset var md = getComponentMetadata(arguments.objPath)>
+
+		<cfset v.parentName = md.extends.name>
 		<cfif v.parentName contains "dbrow3">
 			<cfset v.rootObject = true>
 		<cfelse>
 			<!--- Attempt to instantiate the parent. - leon 9/28/09 --->
 			<cftry>
 				<cfset v.rootObject = false >
+				<cfset logIt("Initial root object check for #arguments.objPath# was false. Instantiating parent #v.parentName#")>
 				<cfset v.parentObj = createObject('component', v.parentName).init() >
 				<cfcatch type="any">
 					<cfif cfcatch.message contains "org.osgi.framework.BundleException">
@@ -283,7 +290,7 @@
 		<cfloop array="#v.arCFCs#" index="stCFC">
 
 			<cfset logIt('Is #stCFC.name# a root object? (has abstract parent)')>
-			<cfset v.rootObject = isRootObject(stCFC.obj)>
+			<cfset v.rootObject = isRootObject(stCFC.objPath)>
 
 			<!--- This is not the root of the inheritance tree, skip adding it - dave 12/3/08 --->
 			<cfif not v.rootObject>
