@@ -12,15 +12,11 @@
 	<cffunction name="init" returntype="dbrow3mapper" output="yes" access="public">
 		<cfargument name="applicationName" type="string" required="true">
 		<cfargument name="useCacheFile" type="boolean" required="true">
-		<cfargument name="deleteCacheFile" type="boolean" required="true" hint="delete first, then rebuild">
+		<cfargument name="deleteCacheFile" type="boolean" required="true" hint="Regenerate and replace cache">
 		<cfargument name="cacheDir" type="string" default="#getTempDirectory()#">
 
 		<cfset var cacheFile = "#arguments.cacheDir#/dbrow3mapper_#arguments.applicationName#.xml">
 		<cfset var cacheXML = "">
-
-		<cfif arguments.deleteCacheFile>
-			<cfset deleteFileIfExists(cacheFile)>
-		</cfif>
 
 		<!--- Private variables - leon 12/12/07 --->
 		<cfset stObjInfo = structNew() />
@@ -36,7 +32,7 @@
 				but application.applicationName is not present, so we can't name the cache file.">
 		</cfif>
 
-		<cfif arguments.useCacheFile and fileExists(cacheFile)>
+		<cfif arguments.useCacheFile and not arguments.deleteCacheFile and fileExists(cacheFile)>
 			<cfset logIt("Reading cache file: #cacheFile#") />
 			<cffile action="read" file="#cacheFile#" variable="cacheXML" />
 
@@ -44,10 +40,10 @@
 			<cfwddx action="wddx2cfml" input="#cacheXML#" output="stObjInfo" />
 
 		<cfelse>
-			<cfset logIt('Cache file not present or being ignored. Scanning for objects.') />
+			<cfset logIt('Cache file not present, being ignored, or being replaced. Scanning for objects.') />
 			<cfset this.scanForObjects()>
 
-			<cfif arguments.useCacheFile>
+			<cfif arguments.useCacheFile or arguments.deleteCacheFile>
 				<cfset logIt('Serializing stObjInfo scope to XML') />
 				<cfwddx action="cfml2wddx" input="#stObjInfo#" output="cacheXML" />
 
