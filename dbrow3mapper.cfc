@@ -31,15 +31,9 @@
 		<cfset stObjInfo.stObjectToPath = structNew()>
 		<cfset stObjInfo.rsTypeTable = QueryNew( "tableName,immutableName,id,objPath" ) >
 
-		<!--- Figure out if we should use the cache file instead of instantiating
-			all of the objects.
-
-			This is much faster than instantiation, but won't include objects/
-			tables created after the cache file was last built. As such, the
-			default behavior is to not use the cache file. - leon 2/21/11 --->
 		<cfif arguments.useCacheFile AND NOT Len(Trim(arguments.applicationName))>
-			<cflog type="warning" text="App indicated that dbrow3mapper cache should be used,
-				but application.applicationName is not present, so we can't name the cache file and won't use it.">
+			<cfthrow message="App indicated that dbrow3mapper cache should be used,
+				but application.applicationName is not present, so we can't name the cache file.">
 		</cfif>
 
 		<cfif arguments.useCacheFile and fileExists(cacheFile)>
