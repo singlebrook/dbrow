@@ -1252,15 +1252,15 @@
 			<cfset IDToLoad = arguments.ID>
 
 			<!--- Strip surrounding quotes from pre-quoted non-numeric IDs - leon 9/27/07 --->
-			<cfif not(isNumeric(arguments.ID))>
-				<cfset arguments.ID = REReplace(arguments.ID, "(^'|'$)", "", "all")>
+			<cfif not(isNumeric(IDToLoad))>
+				<cfset IDToLoad = REReplace(IDToLoad, "(^'|'$)", "", "all")>
 			</cfif>
 
 			<cfquery name="arguments.rsValues" datasource="#this.datasource#" cachedWithin="#cacheTime#">
 				select *
 				from #this.theTable#
 				where #this.theID# =
-					<cfif isNumeric(arguments.ID)>#arguments.ID#<cfelse>'#arguments.ID#'</cfif>
+					<cfqueryparam value="#IDToLoad#" cfsqltype="#this.stColMetaData[this.theID].datatype#">
 			</cfquery>
 
 			<cfif not(arguments.rsValues.recordcount)>
