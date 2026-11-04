@@ -412,14 +412,13 @@
 	</cffunction> <!--- beforeStore --->
 
 
-	<cffunction name="cacheTimeout" returntype="date" output="no" access="public">
+	<!--- Railo/Lucee want "timestamp" as the returntype. ACF wants "date". Just make it "any"
+		so it works with both. --->
+	<cffunction name="cacheTimeout" returntype="any" output="no" access="public">
 		<cfargument name="useCache" type="boolean" required="yes">
 		<cfreturn IIF(arguments.useCache, this.timeLong, this.timeNone)>
 	</cffunction> <!--- cacheTimeout --->
 
-
-	<!--- Railo/Lucee want "timestamp" as the returntype. ACF wants "date". Just make it "any"
-		so it works with both. --->
 	<cffunction name="cacheTimeoutDefault" returntype="any" output="no" access="public"
 			hint="The default cache timeout.  Only used if request.timeLong is
 				undefined.  If a time span other than two hours is required, override
