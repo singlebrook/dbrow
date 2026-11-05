@@ -416,7 +416,7 @@
 		so it works with both. --->
 	<cffunction name="cacheTimeout" returntype="any" output="no" access="public">
 		<cfargument name="useCache" type="boolean" required="yes">
-		<cfreturn IIF(arguments.useCache, this.timeLong, this.timeNone)>
+		<cfreturn arguments.useCache ? this.timeLong : this.timeNone>
 	</cffunction> <!--- cacheTimeout --->
 
 	<cffunction name="cacheTimeoutDefault" returntype="any" output="no" access="public"
